@@ -20,97 +20,74 @@ public class MenuWindow extends Window{
         this.mainFrame = frame;
     }
 
-    //TODO: zaimplentowac wyglad okna + jego wyswietlanie (trzeba wyczyscic okno i namalowac od nowa)
-
     public void display() {
         mainFrame.getContentPane().removeAll();
+        mainFrame.getContentPane().setBackground( java.awt.Color.DARK_GRAY );
+        mainFrame.setLayout(new GridBagLayout());
 
-        GridBagLayout layout = new GridBagLayout();
-        mainFrame.setLayout(layout);
-        mainFrame.getContentPane().setBackground( Color.DARK_GRAY );
+        System.out.print("Drawing Menu window");
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.weighty = 0.5;
-        gbc.weightx = 0.5;
-        gbc.gridheight = 1;
-        gbc.gridwidth = 1;
-
-        JPanel upperPanel = new JPanel();
-        upperPanel.setPreferredSize(new Dimension(200,200));
-        upperPanel.setBackground(Color.DARK_GRAY);
-        JPanel lowerPanel = new JPanel();
-        lowerPanel.setPreferredSize(new Dimension(200,200));
-        lowerPanel.setBackground(Color.DARK_GRAY);
-
-        gbc.gridx = 1;
-        gbc.gridy = 1;
-        mainFrame.add(upperPanel, gbc);
-        gbc.gridx = 1;
-        gbc.gridy = 20;
-        mainFrame.add(lowerPanel, gbc);
-
-        gbc.ipady = 40;
-        gbc.ipadx = 100;
-
+        //Creating the Create New Game Button
         JButton createNewGameBTN = new JButton("Create New Game");
-        JButton joinGameBTN = new JButton("Join an existing game");
-        JButton exitBTN = new JButton("Exit");
-
         createNewGameBTN.addActionListener(actionListener);
-        joinGameBTN.addActionListener(actionListener);
-        exitBTN.addActionListener(actionListener);
-
-        createNewGameBTN.setPreferredSize(new Dimension(200,20));
-        joinGameBTN.setPreferredSize(new Dimension(200,20));
-        exitBTN.setPreferredSize(new Dimension(200,20));
-
         createNewGameBTN.setBackground(Color.BLACK);
-        joinGameBTN.setBackground(Color.BLACK);
-        exitBTN.setBackground(Color.BLACK);
-
         createNewGameBTN.setForeground(Color.white);
-        joinGameBTN.setForeground(Color.white);
-        exitBTN.setForeground(Color.white);
 
+        //Creating the Join Game Button
+        JButton joinGameBTN = new JButton("Join an existing game");
+        joinGameBTN.addActionListener(actionListener);
         joinGameBTN.setBackground(Color.BLACK);
         joinGameBTN.setForeground(Color.white);
 
+        //Creating the exit button
+        JButton exitBTN = new JButton("Exit");
+        exitBTN.addActionListener(actionListener);
         exitBTN.setBackground(Color.BLACK);
         exitBTN.setForeground(Color.white);
 
-        JTextField usernameTextField = new JTextField(15);
-        usernameTextField.setPreferredSize(new Dimension(200, 20));
+        //Creating the Username Label
+        JLabel username = new JLabel("Username");
+        username.setBackground(Color.BLACK);
+        username.setForeground(Color.white);
+        username.setOpaque(true);
+        username.setHorizontalAlignment(JLabel.CENTER);
 
-        JLabel usernameLabel = new JLabel("Username");
-        usernameLabel.setPreferredSize(new Dimension(200, 10));
-        usernameLabel.setHorizontalAlignment(JTextField.CENTER);
-        usernameLabel.setForeground(Color.white);
+        //Creating the textField for Username
+        JTextField text = new JTextField(15);
 
-        gbc.gridx = 1;
-        gbc.gridy = 2;
-        mainFrame.add(usernameLabel, gbc);
+        //Creating the title Label
+        JLabel title = new JLabel("Chinese Checkers");
+        title.setBackground(Color.DARK_GRAY);
+        title.setForeground(Color.white);
+        title.setOpaque(true);
+        title.setHorizontalAlignment(JLabel.CENTER);
+        title.setBorder(BorderFactory.createEmptyBorder(10,10,50,10));
+        title.setFont(new Font(title.getFont().getName(), Font.PLAIN, 50));
 
-        gbc.gridx = 1;
-        gbc.gridy = 3;
-        mainFrame.add(usernameTextField, gbc);
+        //Creating the Center Panel
+        JPanel panel = new JPanel(new GridLayout(5, 1, 20, 1));
+        panel.setBounds(0,0,500 ,500);
+        panel.setPreferredSize(new Dimension(300, 200));
+        panel.setBackground(Color.DARK_GRAY);
+        panel.add(username);
+        panel.add(text);
+        panel.add(createNewGameBTN);
+        panel.add(joinGameBTN);
+        panel.add(exitBTN);
 
-        gbc.gridx = 1;
-        gbc.gridy = 4;
-        mainFrame.add(createNewGameBTN, gbc);
+        //Creating the main (full) window
+        JPanel main = new JPanel();
+        main.setBounds(0,0,1000,800);
+        main.setLayout(new BorderLayout());
+        main.add(title, BorderLayout.NORTH);
+        main.add(panel, BorderLayout.CENTER);
 
-        gbc.gridx = 1;
-        gbc.gridy = 5;
-        mainFrame.add(joinGameBTN, gbc);
-
-        gbc.gridx = 1;
-        gbc.gridy = 6;
-        mainFrame.add(exitBTN, gbc);
+        mainFrame.add(main);
 
         mainFrame.revalidate();
         mainFrame.repaint();
         mainFrame.setVisible(true);
 
-        //TODO: chyba gridlayout bedzie lepszy
     }
 
 }
