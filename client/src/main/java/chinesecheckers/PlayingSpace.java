@@ -17,4 +17,14 @@ public class PlayingSpace {
     public int getY() {
         return coordinates.y;
     }
+
+    public void setCoordinates(Point coordinates) {
+        this.coordinates = coordinates;
+    }
+
+    PlayingSpace(Point point, Color color)
+    {
+        this.coordinates = point;
+        this.color = color;
+    }
 }

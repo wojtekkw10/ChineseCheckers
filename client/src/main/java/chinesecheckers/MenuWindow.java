@@ -11,16 +11,20 @@ import java.util.ArrayList;
 
 public class MenuWindow extends Window{
     private ActionListener actionListener;
+    private JFrame mainFrame;
     private ArrayList<JButton> buttons = new ArrayList<JButton>();
 
-    MenuWindow(ActionListener actionListener)
+    MenuWindow(ActionListener actionListener, JFrame frame)
     {
         this.actionListener = actionListener;
+        this.mainFrame = frame;
     }
 
     //TODO: zaimplentowac wyglad okna + jego wyswietlanie (trzeba wyczyscic okno i namalowac od nowa)
 
-    public void display(JFrame mainFrame) {
+    public void display() {
+        mainFrame.getContentPane().removeAll();
+
         GridBagLayout layout = new GridBagLayout();
         mainFrame.setLayout(layout);
         mainFrame.getContentPane().setBackground( Color.DARK_GRAY );
@@ -30,39 +34,43 @@ public class MenuWindow extends Window{
         gbc.weightx = 0.5;
         gbc.gridheight = 1;
         gbc.gridwidth = 1;
-        gbc.gridx = 1;
-        gbc.gridy = 1;
 
-        JPanel p = new JPanel();
-        p.setPreferredSize(new Dimension(200,200));
-        p.setBackground(Color.DARK_GRAY);
-        JPanel p2 = new JPanel();
-        p2.setPreferredSize(new Dimension(200,200));
-        p2.setBackground(Color.DARK_GRAY);
+        JPanel upperPanel = new JPanel();
+        upperPanel.setPreferredSize(new Dimension(200,200));
+        upperPanel.setBackground(Color.DARK_GRAY);
+        JPanel lowerPanel = new JPanel();
+        lowerPanel.setPreferredSize(new Dimension(200,200));
+        lowerPanel.setBackground(Color.DARK_GRAY);
 
         gbc.gridx = 1;
         gbc.gridy = 1;
-        mainFrame.add(p, gbc);
+        mainFrame.add(upperPanel, gbc);
         gbc.gridx = 1;
         gbc.gridy = 20;
-        mainFrame.add(p2, gbc);
+        mainFrame.add(lowerPanel, gbc);
 
         gbc.ipady = 40;
         gbc.ipadx = 100;
 
-
-        //gbc.fill = GridBagConstraints.HORIZONTAL;
-
         JButton createNewGameBTN = new JButton("Create New Game");
         JButton joinGameBTN = new JButton("Join an existing game");
         JButton exitBTN = new JButton("Exit");
-        createNewGameBTN.setPreferredSize(new Dimension(200,20));
+
         createNewGameBTN.addActionListener(actionListener);
         joinGameBTN.addActionListener(actionListener);
         exitBTN.addActionListener(actionListener);
 
+        createNewGameBTN.setPreferredSize(new Dimension(200,20));
+        joinGameBTN.setPreferredSize(new Dimension(200,20));
+        exitBTN.setPreferredSize(new Dimension(200,20));
+
         createNewGameBTN.setBackground(Color.BLACK);
+        joinGameBTN.setBackground(Color.BLACK);
+        exitBTN.setBackground(Color.BLACK);
+
         createNewGameBTN.setForeground(Color.white);
+        joinGameBTN.setForeground(Color.white);
+        exitBTN.setForeground(Color.white);
 
         joinGameBTN.setBackground(Color.BLACK);
         joinGameBTN.setForeground(Color.white);
@@ -70,25 +78,36 @@ public class MenuWindow extends Window{
         exitBTN.setBackground(Color.BLACK);
         exitBTN.setForeground(Color.white);
 
+        JTextField usernameTextField = new JTextField(15);
+        usernameTextField.setPreferredSize(new Dimension(200, 20));
+
+        JLabel usernameLabel = new JLabel("Username");
+        usernameLabel.setPreferredSize(new Dimension(200, 10));
+        usernameLabel.setHorizontalAlignment(JTextField.CENTER);
+        usernameLabel.setForeground(Color.white);
+
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        mainFrame.add(usernameLabel, gbc);
+
         gbc.gridx = 1;
         gbc.gridy = 3;
-        mainFrame.add(createNewGameBTN, gbc);
+        mainFrame.add(usernameTextField, gbc);
 
-        //gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridx = 1;
         gbc.gridy = 4;
-        mainFrame.add(joinGameBTN, gbc);
+        mainFrame.add(createNewGameBTN, gbc);
 
-        //gbc.fill = GridBagConstraints.HORIZONTAL;
-        //gbc.ipady = 100;
         gbc.gridx = 1;
         gbc.gridy = 5;
-        mainFrame.add(new JTextField(15), gbc);
+        mainFrame.add(joinGameBTN, gbc);
 
-        //gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridx = 1;
         gbc.gridy = 6;
         mainFrame.add(exitBTN, gbc);
+
+        mainFrame.revalidate();
+        mainFrame.repaint();
         mainFrame.setVisible(true);
 
         //TODO: chyba gridlayout bedzie lepszy

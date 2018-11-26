@@ -1,11 +1,14 @@
 package chinesecheckers;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 abstract class Board {
-    private BufferedImage background;
-    private ArrayList<PlayingSpace> board = new ArrayList<PlayingSpace>();
+    protected BufferedImage background;
+    protected ArrayList<PlayingSpace> board = new ArrayList<PlayingSpace>();
+
+    public abstract void getSampleBoard();
 
     public void setBackground(BufferedImage background) {
         this.background = background;
@@ -22,4 +25,10 @@ abstract class Board {
     public BufferedImage getBackground() {
         return background;
     }
+
+    public int getSize()
+    {
+        return board.size();
+    }
+
 }
