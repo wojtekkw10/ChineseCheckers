@@ -10,13 +10,12 @@ import java.util.ArrayList;
 public class BoardWindow extends Window{
     private ActionListener actionListener;
     private Board board;
-    private JFrame mainFrame;
 
     BoardWindow(Board board, ActionListener actionListener, JFrame frame)
     {
         this.actionListener = actionListener;
         this.board = board;
-        this.mainFrame = frame;
+        this.frame = frame;
     }
 
     //TODO: zaimplentowac wyglad okna + jego wyswietlanie (trzeba wyczyscic okno i namalowac od nowa)
@@ -27,47 +26,31 @@ public class BoardWindow extends Window{
 
     void display()
     {
-        mainFrame.getContentPane().removeAll();
+        frame.getContentPane().removeAll();
 
-        //drawBoard(mainFrame, getSampleBoard());
-        //drawBoard(mainFrame);
-        DrawingPanel drawingPanel = new DrawingPanel(mainFrame, board);
-        drawingPanel.setBounds(0,0,1000,800);
-        mainFrame.add(drawingPanel, null);
-        System.out.print(drawingPanel.getBounds().width);
+        JPanel p = new BoardWindow(board, actionListener, frame);
+        p.setBounds(0,0,1000,800);
 
-        //mainFrame.revalidate();
-
-        //mainFrame.setVisible(true);
-
-        System.out.print("Width: "+ drawingPanel.getBounds().width);
-        mainFrame.repaint();
+        frame.add(p, null);
+        frame.repaint();
     }
-    /*
-    void drawBoard(JFrame frame)
-    {
-        this.repaint();
-        this.setVisible(true);
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent ( g );
+        g.setColor ( Color.RED );
+        frame.getContentPane().removeAll();
 
-    }
+        board.getSampleBoard();
+        ArrayList<PlayingSpace> PS = board.getBoard();
 
-    public void paint(Graphics g) {
-        System.out.print("LOL");
-        getSampleBoard();
-        g.setColor(Color.yellow);
+        for(int i=0; i<PS.size(); i++)
+        {
+            int x=PS.get(i).getX();
+            int y=PS.get(i).getY();
+            int radius = 100;
 
-        for (int i = 0; i < board.getSize(); i++) {
-            ArrayList<PlayingSpace> list = board.getBoard();
-            PlayingSpace PS = list.get(i);
-            drawCircleByCenter(g, PS.getX(), PS.getY(), 10);
+            g.drawOval(x-radius, y-radius, 2*radius, 2*radius);
         }
     }
-
-    void drawCircleByCenter(Graphics g, int x, int y, int radius){
-        //g.setColor(Color.LIGHT_GRAY);
-        System.out.print("Drawing circle");
-        g.drawOval(x-radius, y-radius, 2*radius, 2*radius);
-    }
-    */
 
 }
