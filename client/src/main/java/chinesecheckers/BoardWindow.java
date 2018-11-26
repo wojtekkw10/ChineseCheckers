@@ -31,12 +31,17 @@ public class BoardWindow extends Window{
 
         //drawBoard(mainFrame, getSampleBoard());
         //drawBoard(mainFrame);
+        DrawingPanel drawingPanel = new DrawingPanel(mainFrame, board);
+        drawingPanel.setBounds(0,0,1000,800);
+        mainFrame.add(drawingPanel, null);
+        System.out.print(drawingPanel.getBounds().width);
 
+        //mainFrame.revalidate();
 
-        mainFrame.revalidate();
+        //mainFrame.setVisible(true);
+
+        System.out.print("Width: "+ drawingPanel.getBounds().width);
         mainFrame.repaint();
-        mainFrame.setVisible(true);
-
     }
     /*
     void drawBoard(JFrame frame)

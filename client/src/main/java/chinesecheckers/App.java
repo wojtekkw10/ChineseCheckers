@@ -49,8 +49,8 @@ public class App //implements WindowListener,ActionListener
 
             if( command.equals( "Create New Game" ))  {
                 //TODO: nie mozemy wykonywac boardwindow.display bo musimy nadpisac funkcje paint ktora jest w Jframe
-                //boardWindow.display();
-                this.repaint();
+                boardWindow.display();
+                //this.repaint();
                 System.out.print("Create New Game Button has been clicked\n");
             } else if( command.equals( "Join an existing game" ) ) {
                 joinWindow.display();
