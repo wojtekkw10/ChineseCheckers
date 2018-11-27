@@ -2,14 +2,8 @@ package chinesecheckers;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+import java.awt.event.*;
 import java.util.ArrayList;
-
-//TODO: README - Color nie wlasny, a z swing
-//TODO: seperate JFrame for each window setup
 
 public class App //implements WindowListener,ActionListener
 {
@@ -18,29 +12,36 @@ public class App //implements WindowListener,ActionListener
         JFrame frame = new JFrame("Chinese Checkers");
         frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
         frame.setSize(new Dimension(1000,800));
+        frame.setResizable(false);
 
         Server server = new Server();
-        Board board = new RegularBoard();
 
         MainWindow mainWindow = new MainWindow(frame);
         mainWindow.start();
 
     }
 
-    public static class MainWindow extends JFrame implements ActionListener {
+    public static class MainWindow extends JFrame implements ActionListener{
         Board board = new RegularBoard();
         JFrame frame;
+        FrameState state = FrameState.MENUWINDOW;
 
         Window joinWindow;
         Window menuWindow;
         Window boardWindow;
+        Window pauseWindow;
 
         MainWindow(JFrame frame)
         {
             this.frame = frame;
             joinWindow = new JoinWindow(this, frame);
             menuWindow = new MenuWindow(this, frame);
+            pauseWindow = new PauseWindow(this, frame);
             boardWindow = new BoardWindow(board, this, frame);
+            frame.addComponentListener(new ResizeListener());
+            KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new BoardWindowKeyListener());
+            //frame.addKeyListener(new BoardWindowKeyListener());
+            //boardWindow.addKeyListener(new BoardWindowKeyListener());
         }
 
         @Override
@@ -48,16 +49,27 @@ public class App //implements WindowListener,ActionListener
             String command = e.getActionCommand();
 
             if( command.equals( "Create New Game" ))  {
-                //TODO: nie mozemy wykonywac boardwindow.display bo musimy nadpisac funkcje paint ktora jest w Jframe
                 boardWindow.display();
-                //this.repaint();
+                state = FrameState.BOARDWINDOW;
                 System.out.print("Create New Game Button has been clicked\n");
             } else if( command.equals( "Join an existing game" ) ) {
                 joinWindow.display();
+                state = FrameState.JOINWINDOW;
                 System.out.print("Join Button has been clicked\n");
             }
-            else if( command.equals( "Back" ) )  {
+            else if( command.equals( "Back" ) ) {
                 menuWindow.display();
+                state = FrameState.MENUWINDOW;
+                System.out.print("Back Button has been clicked\n");
+            }
+            else if( command.equals( "Back to the Game" ) )  {
+                    boardWindow.display();
+                    state = FrameState.BOARDWINDOW;
+                    System.out.print("Back Button has been clicked\n");
+            }
+            else if( command.equals( "Back to Menu" ) )  {
+                menuWindow.display();
+                state = FrameState.MENUWINDOW;
                 System.out.print("Back Button has been clicked\n");
             } else {
                 System.exit(0);
@@ -65,27 +77,59 @@ public class App //implements WindowListener,ActionListener
 
         }
 
-        //TODO: w JFrame chyba nie mozna bezposrednio rysowac, trzeba JPanel
-        @Override
-        public void paint(Graphics g) {
-            frame.getContentPane().removeAll();
-            System.out.print("LOL\n");
+        class BoardWindowKeyListener implements KeyEventDispatcher {
+            /** Handle the key typed event from the text field. */
+            @Override
+            public boolean dispatchKeyEvent(final KeyEvent e) {
+                System.out.print("hdhd\n");
+                if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                    pauseWindow.display();
+                    state = FrameState.PAUSEWINDOW;
 
-            board.getSampleBoard();
-            ArrayList<PlayingSpace> PS = board.getBoard();
 
-            for(int i=0; i<PS.size(); i++)
-            {
-                int x=PS.get(i).getX();
-                int y=PS.get(i).getY();
-                int radius = 10;
-
-                g.drawOval(x-radius, y-radius, 2*radius, 2*radius);
+                }
+                return false;
             }
 
-            //super.paint(g);
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            /** Handle the key-pressed event from the text field. */
+            public void keyPressed(KeyEvent e) {
+
+            }
+
+            /** Handle the key-released event from the text field. */
+            public void keyReleased(KeyEvent e) {
+                System.out.print("Key has been pressed");
+                if(e.getKeyCode()== KeyEvent.VK_ESCAPE) pauseWindow.display();
+            }
         }
 
+
+        class ResizeListener implements ComponentListener {
+            public void componentResized(ComponentEvent e) {
+                if(state.equals(FrameState.BOARDWINDOW)) boardWindow.display();
+                System.out.print("Resizing\n");
+            }
+
+            @Override
+            public void componentMoved(ComponentEvent e) {
+                if(state.equals(FrameState.BOARDWINDOW)) boardWindow.display();
+            }
+
+            @Override
+            public void componentShown(ComponentEvent e) {
+
+            }
+
+            @Override
+            public void componentHidden(ComponentEvent e) {
+
+            }
+
+        }
 
         void start()
         {
