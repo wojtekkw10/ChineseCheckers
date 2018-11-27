@@ -4,11 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-
-import static java.rmi.server.LogStream.log;
 
 public class Game{
     //Client client = new Client();
@@ -32,7 +29,7 @@ public class Game{
         public Player(Socket socket, int clientNumber) {
             this.socket = socket;
             this.clientNumber = clientNumber;
-            System.out.print("New connection with client# " + clientNumber + " at " + socket);
+            System.out.print("New connection with client# " + clientNumber + " at " + socket+"\n");
 
             // Decorate the streams so we can send characters
             // and not just bytes.  Ensure output is flushed
@@ -56,7 +53,6 @@ public class Game{
 
                 // Repeatedly get commands from the client and process them.
                 while (true) {
-                    //if(cos) sendAllgames();
                     String command = input.readLine();
                     if(command.equals("9999999"))
                     {

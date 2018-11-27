@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class JoinWindow extends Window {
     private ActionListener actionListener;
@@ -33,25 +34,22 @@ public class JoinWindow extends Window {
         backBTN.setBackground(Color.BLACK);
         backBTN.setForeground(Color.white);
 
-        //Creating the button
-        JButton game1BTN = new JButton("Game1");
-        game1BTN.addActionListener(actionListener);
-        game1BTN.setBackground(Color.BLACK);
-        game1BTN.setForeground(Color.white);
-
-        //Creating the button
-        JButton game2BTN = new JButton("Game2");
-        game2BTN.addActionListener(actionListener);
-        game2BTN.setBackground(Color.BLACK);
-        game2BTN.setForeground(Color.white);
-
         //Creating the Center Panel
-        JPanel panel = new JPanel(new GridLayout(5, 1, 20, 1));
-        panel.setBounds(0,0,500 ,500);
-        panel.setPreferredSize(new Dimension(300, 200));
+        JPanel panel = new JPanel(new GridLayout(2+idList.size(), 1, 20, 1));
+        panel.setBounds(0,0,500 ,100+50*idList.size());
+        panel.setPreferredSize(new Dimension(300, 100+50*idList.size()));
         panel.setBackground(Color.DARK_GRAY);
-        panel.add(game1BTN);
-        panel.add(game2BTN);
+
+        for(int i=0; i<idList.size(); i++)
+        {
+            //Creating game buttons
+            JButton gameBTN = new JButton("Game "+i);
+            gameBTN.addActionListener(actionListener);
+            gameBTN.setBackground(Color.BLACK);
+            gameBTN.setForeground(Color.white);
+            panel.add(gameBTN);
+        }
+
         panel.add(backBTN);
 
         //Creating the main (full) window

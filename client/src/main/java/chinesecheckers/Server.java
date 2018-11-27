@@ -20,6 +20,7 @@ public class Server {
     //TODO: funkcja connect()
     public void connect(JFrame frame) throws IOException {
 
+            //Uncomment if the server is on a different computer
             /*// Get the server address from a dialog box.
             String serverAddress = JOptionPane.showInputDialog(
                     frame,
@@ -48,16 +49,24 @@ public class Server {
 
     }
 
+    void joinGame(int id)
+    {
+        out.println(id);
+    }
+
     //TODO: funkcja downloadBoardState()
     public void downloadBoardState() {
         //board = ?;
         //myMove = ?
     }
 
+    //You have to send something when you connect to get response from the server
     public void sendEmptyString()
     {
         out.println("9999999");
     }
+
+    //If you want to make sure that you are running in a seperate thread on the server
     public String getEmptyString()
     {
         out.println("9999999");
@@ -76,24 +85,26 @@ public class Server {
         return isMyMove;
     }
 
-    //TODO: funkcja downloadAllGames()
-    public String downloadAllGames(){
+    //Returns an arrays of IDs
+    public ArrayList<Id> downloadAllGames(){
         System.out.print("DownloadingAllgames\n");
         out.println("-2");
-        while(true)
+        String receivedGames = null;
+
+        try{ receivedGames = in.readLine();}
+        catch(IOException e ){ System.out.print("Error");}
+        ArrayList<Id> availableGameIDs = new ArrayList<>();
+        String[] parts = receivedGames.split(" ");
+        for(int i=0; i<parts.length; i++)
         {
-            try{ return(in.readLine());}
-            catch(IOException e ) { System.out.print("Error");}
+            availableGameIDs.add(new Id(Integer.parseInt(parts[i])));
         }
+        return availableGameIDs;
     }
 
+    //Unnecessary for now
     public ArrayList<GameInfo> getAllGames() {
         return listOfgames;
-    }
-
-    //TODO: funkcja join();
-    public void join(String username) {
-
     }
 
     //TODO: funkcja downloadGameVariation();

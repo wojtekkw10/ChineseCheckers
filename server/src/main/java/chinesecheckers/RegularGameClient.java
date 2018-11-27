@@ -10,4 +10,6 @@ public class RegularGameClient extends GameClient {
     void downloadMove(){
         //TODO: implement
     }
+
+    //TODO: To wszytsko bedzie w klasie Game.Player
 }

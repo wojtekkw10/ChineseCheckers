@@ -49,7 +49,6 @@ public class BoardWindow extends Window{
         frame.add(p, null);
 
         frame.repaint();
-        //frame.setVisible(true);
     }
     @Override
     protected void paintComponent(Graphics g) {
@@ -69,7 +68,6 @@ public class BoardWindow extends Window{
             int radius = 24;
 
             g.fillOval(x-radius, y-radius, 2*radius, 2*radius);
-            //g.drawOval(x-radius, y-radius, 2*radius, 2*radius);
         }
 
     }

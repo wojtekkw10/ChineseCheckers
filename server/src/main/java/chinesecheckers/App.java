@@ -7,7 +7,6 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class App
 {
@@ -47,7 +46,13 @@ public class App
                 else if(ID==-2)
                 {
                     System.out.print("AllGamesRequested");
-                    output.println("ID1 ID2 ID3 ID4");
+                    StringBuffer gameList = new StringBuffer();
+                    for(int i=0; i<listOfGames.size(); i++)
+                    {
+                        gameList.append(i);
+                        gameList.append(" ");
+                    }
+                    output.println(gameList.toString());
                     newPlayer.close();
                     //musimy zamknac bo nie mamy osobnego watku dla niego
                 }
@@ -60,21 +65,9 @@ public class App
                 }
                 else {
                     listOfGames.get(ID).addPlayer(defaultGame.new Player(newPlayer, clientNumber));
+                    System.out.print("Number OF Players in the Game: "+listOfGames.get(ID).players.size()+"\n");
                     clientNumber++;
                 }
-
-
-                /*
-                Game game = new Game();
-                Game.Player player1 = game.new Player(listener.accept(), 1, Color.green);
-                game.addPlayer(player1);
-                //Game.Player playerO = game.new Player(listener.accept(), 2);
-                //playerX.setOpponent(playerO);
-                //playerO.setOpponent(playerX);
-                //game.currentPlayer = playerX;
-                player1.start();
-                //playerO.start();
-                */
             }
         } catch (IOException ex) {
             System.out.print("SERVER: ERROR: couldn't connect");

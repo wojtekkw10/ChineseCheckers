@@ -19,4 +19,6 @@ public class RegularBoard extends Board {
     void checkVictory(){
         //TODO: implemnt
     }
+
+    //TODO: To chyba tez w klasie Game
 }
