@@ -18,6 +18,7 @@ public class Game{
     public void addPlayer(Player player)
     {
         players.add(player);
+        players.get(players.size()-1).start();
     }
 
     public class Player extends Thread {
@@ -51,12 +52,16 @@ public class Game{
         public void run() {
             try {
                 // The thread is only started after everyone connects.
-                output.println("MESSAGE All players connected");
+                //output.println("MESSAGE All players connected");
 
                 // Repeatedly get commands from the client and process them.
                 while (true) {
                     //if(cos) sendAllgames();
                     String command = input.readLine();
+                    if(command.equals("9999999"))
+                    {
+                        output.println("Received info from game");
+                    }
                     if (command.startsWith("MOVE")) {
                         int location = Integer.parseInt(command.substring(5));
                         //if (legalMove(location, this)) {

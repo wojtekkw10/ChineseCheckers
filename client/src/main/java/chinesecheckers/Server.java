@@ -39,7 +39,7 @@ public class Server {
 
     //TODO: funkcja requestnewGame()
     public void requestNewGame() {
-        out.print(-1);
+        out.println("-1");
 
     }
 
@@ -57,6 +57,15 @@ public class Server {
     public void sendEmptyString()
     {
         out.println("9999999");
+    }
+    public String getEmptyString()
+    {
+        out.println("9999999");
+        while(true)
+        {
+            try{ return(in.readLine());}
+            catch(IOException e ) { System.out.print("Error");}
+        }
     }
 
     public Board getboard() {

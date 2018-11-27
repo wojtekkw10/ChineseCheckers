@@ -51,11 +51,14 @@ public class App //implements WindowListener,ActionListener
             if( command.equals( "Create New Game" ))  {
                 try{ server.connect(frame);}
                 catch (IOException ex){System.out.print("CLIENT: ERROR: Couldn't connect to the server\n");}
-                server.downloadAllGames();
+                server.requestNewGame();
                 boardWindow.display();
                 state = FrameState.BOARDWINDOW;
                 System.out.print("CLIENT: Create New Game Button has been clicked\n");
             } else if( command.equals( "Join an existing game" ) ) {
+                try{ server.connect(frame);}
+                catch (IOException ex){System.out.print("CLIENT: ERROR: Couldn't connect to the server\n");}
+                System.out.print("Available games: "+server.downloadAllGames()+"\n");
                 joinWindow.display();
                 state = FrameState.JOINWINDOW;
                 System.out.print("CLIENT: Join Button has been clicked\n");
@@ -76,10 +79,7 @@ public class App //implements WindowListener,ActionListener
                 System.out.print("CLIENT: Back to Menu Button has been clicked\n");
             }
             else if( command.equals( "Skip" ) )  { //bede uzywal do testowania laczenia sie z serverem
-                    System.out.print("CLIENT: Skip Button has been clicked-1\n");
-                    try{ server.connect(frame);}
-                    catch (IOException ex){System.out.print("CLIENT: ERROR: Couldn't connect to the server\n");}
-                    System.out.print("Existing games: " + server.downloadAllGames()+"\n");
+                    System.out.print(server.getEmptyString()+"\n");
                     System.out.print("CLIENT: Skip Button has been clicked1\n");
             } else {
                 System.exit(0);

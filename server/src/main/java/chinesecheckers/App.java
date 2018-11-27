@@ -52,9 +52,11 @@ public class App
                     //musimy zamknac bo nie mamy osobnego watku dla niego
                 }
                 else if(ID==-1) {
+                    System.out.print("New Game Requested");
                     listOfGames.add(new Game());
                     listOfGames.get(listOfGames.size()-1).addPlayer(defaultGame.new Player(newPlayer, clientNumber));
                     clientNumber++;
+                    System.out.print("Number of games: "+listOfGames.size()+"\n");
                 }
                 else {
                     listOfGames.get(ID).addPlayer(defaultGame.new Player(newPlayer, clientNumber));
