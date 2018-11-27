@@ -17,35 +17,19 @@ public class BoardWindow extends Window{
     private ActionListener actionListener;
     private Board board;
     private BufferedImage image;
-    private FrameState state;
 
     BoardWindow(Board board, ActionListener actionListener, JFrame frame)
     {
         this.actionListener = actionListener;
         this.board = board;
         this.frame = frame;
-        state = FrameState.MENUWINDOW;
-
-        System.out.print("getDirectory");
-        Path currentRelativePath = Paths.get("");
-        String s = currentRelativePath.toAbsolutePath().toString();
-        System.out.println("Current relative path is: " + s);
-
-        //TODO: get image to the variable image
 
         try {
             image = ImageIO.read(new File("backtexture.jpg"));
         } catch (IOException ex) {
-            // handle exception...
+            System.out.print("CLIENT: ERROR: Couldn't find the backtexture.jpg image");
         }
     }
-
-    public void setFrameState(FrameState state)
-    {
-        this.state = state;
-    }
-
-    //TODO: zaimplentowac wyglad okna + jego wyswietlanie (trzeba wyczyscic okno i namalowac od nowa)
 
     void setBoard(Board board) {
         this.board = board;
@@ -55,6 +39,8 @@ public class BoardWindow extends Window{
     {
         frame.getContentPane().removeAll();
         frame.revalidate();
+
+        //System.out.print("CLIENT: Drawing Board window\n");
 
         JPanel p = new BoardWindow(board, actionListener, frame);
         p.setBounds(100,0,760,800);

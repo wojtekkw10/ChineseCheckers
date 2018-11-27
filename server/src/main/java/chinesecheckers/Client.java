@@ -1,6 +1,10 @@
 package chinesecheckers;
 
-public abstract class Client {
-    abstract void sendAllGames();
-    abstract void listen();
+import java.net.Socket;
+
+public abstract class Client extends Game{
+    void sendAllGames()
+    {
+
+    }
 }

@@ -1,5 +1,11 @@
 package chinesecheckers;
 
+import javax.swing.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.util.ArrayList;
 
 public class Server {
@@ -8,13 +14,32 @@ public class Server {
     private ArrayList<GameInfo> listOfgames = new ArrayList<GameInfo>();
     private GameVariation gameVariation;
 
+    private BufferedReader in;
+    private PrintWriter out;
+
     //TODO: funkcja connect()
-    public void connect(int id) {
+    public void connect(JFrame frame) throws IOException {
+
+            /*// Get the server address from a dialog box.
+            String serverAddress = JOptionPane.showInputDialog(
+                    frame,
+                    "Enter IP Address of the Server:",
+                    "Connect",
+                    JOptionPane.QUESTION_MESSAGE);
+
+*/
+            // Make connection and initialize streams
+            Socket socket = new Socket("127.0.0.1", 9898);
+            in = new BufferedReader(
+                    new InputStreamReader(socket.getInputStream()));
+            out = new PrintWriter(socket.getOutputStream(), true);
 
     }
 
+
     //TODO: funkcja requestnewGame()
     public void requestNewGame() {
+        out.print(-1);
 
     }
 
@@ -29,6 +54,11 @@ public class Server {
         //myMove = ?
     }
 
+    public void sendEmptyString()
+    {
+        out.println("9999999");
+    }
+
     public Board getboard() {
         return board;
     }
@@ -38,8 +68,14 @@ public class Server {
     }
 
     //TODO: funkcja downloadAllGames()
-    public void downloadAllGames(){
-        //listOfgames = ?
+    public String downloadAllGames(){
+        System.out.print("DownloadingAllgames\n");
+        out.println("-2");
+        while(true)
+        {
+            try{ return(in.readLine());}
+            catch(IOException e ) { System.out.print("Error");}
+        }
     }
 
     public ArrayList<GameInfo> getAllGames() {

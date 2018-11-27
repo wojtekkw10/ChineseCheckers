@@ -25,7 +25,7 @@ public class MenuWindow extends Window{
         mainFrame.getContentPane().setBackground( java.awt.Color.DARK_GRAY );
         mainFrame.setLayout(new GridBagLayout());
 
-        System.out.print("Drawing Menu window");
+        System.out.print("CLIENT: Drawing Menu window\n");
 
         //Creating the Create New Game Button
         JButton createNewGameBTN = new JButton("Create New Game");
