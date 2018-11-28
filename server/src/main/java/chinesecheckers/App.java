@@ -23,21 +23,21 @@ public class App
             System.out.print("Cannot create socket");
         }
 
-        Game defaultGame = new Game();
+        Game defaultGame = new Game("Default", 0);
         //default game jako soobna klasa ktora dzidziczy po game - zeby ladnie wygladalo
 
         try {
             while (true) {
                 //chyba tak zrobimy:
                 System.out.print("Waiting for player...\n");
-                Socket newPlayer = listener.accept();
+                Socket newPlayerSocket = listener.accept();
                 System.out.print("Client connected\n");
                 BufferedReader in = new BufferedReader(
-                        new InputStreamReader(newPlayer.getInputStream()));
+                        new InputStreamReader(newPlayerSocket.getInputStream()));
                 System.out.print("Downloading request\n");
                 String line = in.readLine();
                 System.out.print("Downloaded request\n");
-                PrintWriter output = new PrintWriter(newPlayer.getOutputStream(), true);
+                PrintWriter output = new PrintWriter(newPlayerSocket.getOutputStream(), true);
 
 
                 int ID = Integer.parseInt(line);
@@ -51,22 +51,37 @@ public class App
                     {
                         gameList.append(i);
                         gameList.append(" ");
+                        gameList.append(listOfGames.get(i).name);
+                        gameList.append(" ");
+                        gameList.append(listOfGames.get(i).numberOfBots);
+                        gameList.append(" ");
+                        gameList.append(listOfGames.get(i).getNumberOfPlayers());
+                        gameList.append(" ");
                     }
                     output.println(gameList.toString());
-                    newPlayer.close();
+                    newPlayerSocket.close();
                     //musimy zamknac bo nie mamy osobnego watku dla niego
                 }
                 else if(ID==-1) {
                     System.out.print("New Game Requested");
-                    listOfGames.add(new Game());
-                    listOfGames.get(listOfGames.size()-1).addPlayer(defaultGame.new Player(newPlayer, clientNumber));
-                    clientNumber++;
+                    String name = in.readLine();
+                    String numberOfBotsString = in.readLine();
+                    int numberOfBots = Integer.parseInt(numberOfBotsString);
+                    String username = in.readLine();
+
+                    listOfGames.add(new Game(name, numberOfBots));
+                    listOfGames.get(listOfGames.size()-1).addPlayer(defaultGame.new Player(newPlayerSocket, username));
+                    System.out.print("New game has been added. Name: "+name+" Number of Bots: "+numberOfBots+"\n");
+                    System.out.print("New Player: "+username+"\n");
                     System.out.print("Number of games: "+listOfGames.size()+"\n");
+                    //clientNumber++;
                 }
                 else {
-                    listOfGames.get(ID).addPlayer(defaultGame.new Player(newPlayer, clientNumber));
-                    System.out.print("Number OF Players in the Game: "+listOfGames.get(ID).players.size()+"\n");
-                    clientNumber++;
+                    String username = in.readLine();
+                    listOfGames.get(ID).addPlayer(defaultGame.new Player(newPlayerSocket, username));
+                    System.out.print("New Player: "+username+"\n");
+                    System.out.print("Number OF Players in the Game: "+listOfGames.get(ID).getNumberOfPlayers()+"\n");
+                    //clientNumber++;
                 }
             }
         } catch (IOException ex) {

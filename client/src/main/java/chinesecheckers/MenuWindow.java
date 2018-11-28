@@ -14,6 +14,10 @@ public class MenuWindow extends Window{
     private JFrame mainFrame;
     private ArrayList<JButton> buttons = new ArrayList<JButton>();
 
+    //Creating the textField for Username
+    JTextField usernameTextField = new JTextField(15);
+    String username;
+
     MenuWindow(ActionListener actionListener, JFrame frame)
     {
         this.actionListener = actionListener;
@@ -52,9 +56,6 @@ public class MenuWindow extends Window{
         username.setOpaque(true);
         username.setHorizontalAlignment(JLabel.CENTER);
 
-        //Creating the textField for Username
-        JTextField text = new JTextField(15);
-
         //Creating the title Label
         JLabel title = new JLabel("Chinese Checkers");
         title.setBackground(Color.DARK_GRAY);
@@ -70,7 +71,7 @@ public class MenuWindow extends Window{
         panel.setPreferredSize(new Dimension(300, 200));
         panel.setBackground(Color.DARK_GRAY);
         panel.add(username);
-        panel.add(text);
+        panel.add(usernameTextField);
         panel.add(createNewGameBTN);
         panel.add(joinGameBTN);
         panel.add(exitBTN);
@@ -88,6 +89,11 @@ public class MenuWindow extends Window{
         mainFrame.repaint();
         mainFrame.setVisible(true);
 
+    }
+
+    String getUsername()
+    {
+        return usernameTextField.getText();
     }
 
 }

@@ -5,11 +5,11 @@ import java.util.ArrayList;
 
 abstract class Window extends JPanel{
     protected JFrame frame;
-    protected ArrayList<Id> idList;
+    protected ArrayList<GameInfo> gameList;
 
     abstract void display();
 
-    public void setIdList(ArrayList<Id> idList) {
-        this.idList = idList;
+    public void setIdList(ArrayList<GameInfo> gameList) {
+        this.gameList = gameList;
     }
 }

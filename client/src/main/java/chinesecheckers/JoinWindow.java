@@ -35,15 +35,18 @@ public class JoinWindow extends Window {
         backBTN.setForeground(Color.white);
 
         //Creating the Center Panel
-        JPanel panel = new JPanel(new GridLayout(2+idList.size(), 1, 20, 1));
-        panel.setBounds(0,0,500 ,100+50*idList.size());
-        panel.setPreferredSize(new Dimension(300, 100+50*idList.size()));
+        JPanel panel = new JPanel(new GridLayout(2+gameList.size(), 1, 20, 1));
+        panel.setBounds(0,0,500 ,100+50*gameList.size());
+        panel.setPreferredSize(new Dimension(300, 100+50*gameList.size()));
         panel.setBackground(Color.DARK_GRAY);
 
-        for(int i=0; i<idList.size(); i++)
+        for(int i=0; i<gameList.size(); i++)
         {
             //Creating game buttons
-            JButton gameBTN = new JButton("Game "+i);
+            GameInfo gameInfo = gameList.get(i);
+
+            JButton gameBTN = new JButton("ID: "+gameInfo.id+" "
+                    +gameInfo.name+" Bots: "+gameInfo.numberOfBots+" Players: "+gameInfo.currentNumberOfPlayers+"/6");
             gameBTN.addActionListener(actionListener);
             gameBTN.setBackground(Color.BLACK);
             gameBTN.setForeground(Color.white);

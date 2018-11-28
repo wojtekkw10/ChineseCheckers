@@ -5,6 +5,9 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 //TODO: kominikacja na bazie: request od klienta - response od servera
@@ -27,13 +30,13 @@ public class App //implements WindowListener,ActionListener
         JFrame frame;
         FrameState state = FrameState.MENUWINDOW;
         Server server = new Server();
-        ArrayList<Id> idList;
+        ArrayList<GameInfo> gameList;
 
         Window joinWindow;
-        Window menuWindow;
+        MenuWindow menuWindow;
         Window boardWindow;
         Window pauseWindow;
-        Window requestNewGameWindow;
+        RequestNewGameWindow requestNewGameWindow;
 
         MainWindow(JFrame frame)
         {
@@ -64,8 +67,8 @@ public class App //implements WindowListener,ActionListener
             } else if( command.equals( "Join an existing game" ) ) {
                 try{ server.connect(frame);}
                 catch (IOException ex){System.out.print("CLIENT: ERROR: Couldn't connect to the server\n");}
-                idList = server.downloadAllGames();
-                joinWindow.setIdList(idList);
+                gameList = server.downloadAllGames();
+                joinWindow.setIdList(gameList);
                 joinWindow.display();
                 state = FrameState.JOINWINDOW;
                 System.out.print("CLIENT: Join Button has been clicked\n");
@@ -99,22 +102,22 @@ public class App //implements WindowListener,ActionListener
             }
 
             //Join selected game
-            else if( command.startsWith( "Game" ) )  {
-                for(int i =0; i<idList.size(); i++)
-                {
-                    if(command.endsWith(idList.get(i).id+""))
-                    {
-                        try{ server.connect(frame);}
-                        catch (IOException ex){System.out.print("CLIENT: ERROR: Couldn't connect to the server\n");}
-                        server.joinGame(idList.get(i).id);
+            else if( command.startsWith( "ID" ) )  {
+                int i = new Scanner(command).useDelimiter("\\D+").nextInt();
 
-                    }
-                }
+                try{ server.connect(frame);}
+                catch (IOException ex){System.out.print("CLIENT: ERROR: Couldn't connect to the server\n");}
+                server.joinGame(gameList.get(i).id, menuWindow.getUsername());
             }
             else if( command.equals( "Start" ))  {
                 try{ server.connect(frame);}
                 catch (IOException ex){System.out.print("CLIENT: ERROR: Couldn't connect to the server\n");}
-                server.requestNewGame();
+
+
+                GameInfo info = requestNewGameWindow.getGameInfo();
+                String username = menuWindow.getUsername();
+                server.requestNewGame(info.name, info.numberOfBots, username);
+
                 boardWindow.display();
                 state = FrameState.BOARDWINDOW;
                 System.out.print("CLIENT: Start Button has been clicked\n");

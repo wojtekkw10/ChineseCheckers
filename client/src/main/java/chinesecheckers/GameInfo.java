@@ -1,9 +1,11 @@
 package chinesecheckers;
 
 public class GameInfo {
-    private int id;
-    private int currentNumberOfPlayers;
+    int id;
+    int currentNumberOfPlayers;
     private int maxNumberOfPlayers;
+    int numberOfBots;
+    String name;
 
     public void setCurrentNumberOfPlayers(int currentNumberOfPlayers) {
         this.currentNumberOfPlayers = currentNumberOfPlayers;

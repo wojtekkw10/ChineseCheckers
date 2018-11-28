@@ -9,6 +9,10 @@ import java.text.NumberFormat;
 public class RequestNewGameWindow extends Window {
     private ActionListener actionListener;
     private JFrame mainFrame;
+    GameInfo gameInfo = new GameInfo();
+
+    JTextField gameNameTextField = new JTextField(15);
+    JFormattedTextField numberOfBotsTextField;
 
 
     RequestNewGameWindow(ActionListener actionListener, JFrame frame)
@@ -30,8 +34,6 @@ public class RequestNewGameWindow extends Window {
         gameNameLabel.setOpaque(true);
         gameNameLabel.setHorizontalAlignment(JLabel.CENTER);
 
-        JTextField gameNameTextField = new JTextField(15);
-
         JLabel numberOfBotsLabel = new JLabel("Enter the number of bots in your game");
         numberOfBotsLabel.setBackground(Color.BLACK);
         numberOfBotsLabel.setForeground(Color.white);
@@ -47,7 +49,7 @@ public class RequestNewGameWindow extends Window {
         formatter.setAllowsInvalid(false);
         // If you want the value to be committed on each keystroke instead of focus lost
         formatter.setCommitsOnValidEdit(true);
-        JFormattedTextField numberOfPlayersTextField = new JFormattedTextField(formatter);
+        numberOfBotsTextField = new JFormattedTextField(formatter);
 
         //Creating the Start Button
         JButton startBTN = new JButton("Start");
@@ -71,7 +73,7 @@ public class RequestNewGameWindow extends Window {
         panel.add(gameNameLabel);
         panel.add(gameNameTextField);
         panel.add(numberOfBotsLabel);
-        panel.add(numberOfPlayersTextField);
+        panel.add(numberOfBotsTextField);
 
 
         panel.add(backBTN);
@@ -87,5 +89,18 @@ public class RequestNewGameWindow extends Window {
         mainFrame.revalidate();
         mainFrame.repaint();
         mainFrame.setVisible(true);
+
+    }
+
+    GameInfo getGameInfo()
+    {
+        System.out.print(gameNameTextField.getText()+"\n");
+        gameInfo.name = gameNameTextField.getText();
+        System.out.print(numberOfBotsTextField.getText()+"\n");
+        String numberOfBotsString = numberOfBotsTextField.getText();
+        int numberOfBots = Integer.parseInt(numberOfBotsString);
+        gameInfo.numberOfBots = numberOfBots;
+        System.out.print("Poddano: "+gameInfo.name+" #Bots: "+ numberOfBots+"\n");
+        return gameInfo;
     }
 }

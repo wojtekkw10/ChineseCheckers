@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-
+/*
 public class RegularClient extends Client{
     private Socket socket;
     private int clientNumber;
@@ -64,3 +64,5 @@ public class RegularClient extends Client{
     }
 
 }
+
+*/

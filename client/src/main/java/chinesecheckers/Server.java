@@ -39,8 +39,12 @@ public class Server {
 
 
     //TODO: funkcja requestnewGame()
-    public void requestNewGame() {
+    public void requestNewGame(String name, int numberOfBots, String username) {
         out.println("-1");
+        System.out.print("Requested a new game\n");
+        out.println(name);
+        out.println(numberOfBots);
+        out.println(username);
 
     }
 
@@ -49,9 +53,10 @@ public class Server {
 
     }
 
-    void joinGame(int id)
+    void joinGame(int id, String username)
     {
         out.println(id);
+        out.println(username);
     }
 
     //TODO: funkcja downloadBoardState()
@@ -86,20 +91,29 @@ public class Server {
     }
 
     //Returns an arrays of IDs
-    public ArrayList<Id> downloadAllGames(){
+    public ArrayList<GameInfo> downloadAllGames(){
         System.out.print("DownloadingAllgames\n");
         out.println("-2");
         String receivedGames = null;
 
         try{ receivedGames = in.readLine();}
         catch(IOException e ){ System.out.print("Error");}
-        ArrayList<Id> availableGameIDs = new ArrayList<>();
+        ArrayList<GameInfo> availableGames = new ArrayList<>();
         String[] parts = receivedGames.split(" ");
-        for(int i=0; i<parts.length; i++)
+
+        System.out.print(receivedGames+"\n");
+
+        for(int i=0; i/4<parts.length/4; i+=4)
         {
-            availableGameIDs.add(new Id(Integer.parseInt(parts[i])));
+            GameInfo gameInfo = new GameInfo();
+            gameInfo.id = Integer.parseInt(parts[i]);
+            gameInfo.name = parts[i+1];
+            gameInfo.numberOfBots = Integer.parseInt(parts[i+2]);
+            gameInfo.currentNumberOfPlayers = Integer.parseInt(parts[i+3]);
+            availableGames.add(gameInfo);
+
         }
-        return availableGameIDs;
+        return availableGames;
     }
 
     //Unnecessary for now

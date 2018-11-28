@@ -9,13 +9,26 @@ import java.util.ArrayList;
 
 public class Game{
     //Client client = new Client();
-    ArrayList<SimpleBot> bots = new ArrayList<SimpleBot>();
-    ArrayList<Player> players = new ArrayList<>();
+    private ArrayList<SimpleBot> bots = new ArrayList<SimpleBot>();
+    private ArrayList<Player> players = new ArrayList<>();
+    String name;
+    int numberOfBots;
 
     public void addPlayer(Player player)
     {
         players.add(player);
         players.get(players.size()-1).start();
+    }
+
+    Game(String name, int numberOfBots)
+    {
+        this.name = name;
+        this.numberOfBots = numberOfBots;
+    }
+
+    public int getNumberOfPlayers()
+    {
+        return players.size();
     }
 
     public class Player extends Thread {
@@ -25,11 +38,13 @@ public class Game{
         private int clientNumber;
         BufferedReader input;
         private PrintWriter output;
+        String username;
 
-        public Player(Socket socket, int clientNumber) {
+        public Player(Socket socket, String username) {
             this.socket = socket;
-            this.clientNumber = clientNumber;
-            System.out.print("New connection with client# " + clientNumber + " at " + socket+"\n");
+            this.username = username;
+            //this.clientNumber = clientNumber;
+            System.out.print("New connection at " + socket+"\n");
 
             // Decorate the streams so we can send characters
             // and not just bytes.  Ensure output is flushed
@@ -48,8 +63,6 @@ public class Game{
 
         public void run() {
             try {
-                // The thread is only started after everyone connects.
-                //output.println("MESSAGE All players connected");
 
                 // Repeatedly get commands from the client and process them.
                 while (true) {
