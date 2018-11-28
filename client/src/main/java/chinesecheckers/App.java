@@ -33,6 +33,7 @@ public class App //implements WindowListener,ActionListener
         Window menuWindow;
         Window boardWindow;
         Window pauseWindow;
+        Window requestNewGameWindow;
 
         MainWindow(JFrame frame)
         {
@@ -41,6 +42,7 @@ public class App //implements WindowListener,ActionListener
             menuWindow = new MenuWindow(this, frame);
             pauseWindow = new PauseWindow(this, frame);
             boardWindow = new BoardWindow(board, this, frame);
+            requestNewGameWindow = new RequestNewGameWindow(this, frame);
             frame.addComponentListener(new ResizeListener());
             KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new BoardWindowKeyListener());
         }
@@ -51,11 +53,11 @@ public class App //implements WindowListener,ActionListener
 
             //Create New Game
             if( command.equals( "Create New Game" ))  {
-                try{ server.connect(frame);}
-                catch (IOException ex){System.out.print("CLIENT: ERROR: Couldn't connect to the server\n");}
-                server.requestNewGame();
-                boardWindow.display();
-                state = FrameState.BOARDWINDOW;
+                //try{ server.connect(frame);}
+                //catch (IOException ex){System.out.print("CLIENT: ERROR: Couldn't connect to the server\n");}
+                //server.requestNewGame();
+                requestNewGameWindow.display();
+                state = FrameState.REQUESTNEWGAMEWINDOW;
                 System.out.print("CLIENT: Create New Game Button has been clicked\n");
 
             //Show available games
@@ -108,6 +110,15 @@ public class App //implements WindowListener,ActionListener
 
                     }
                 }
+            }
+            else if( command.equals( "Start" ))  {
+                try{ server.connect(frame);}
+                catch (IOException ex){System.out.print("CLIENT: ERROR: Couldn't connect to the server\n");}
+                server.requestNewGame();
+                boardWindow.display();
+                state = FrameState.BOARDWINDOW;
+                System.out.print("CLIENT: Start Button has been clicked\n");
+
             } else {
                 System.exit(0);
             }
