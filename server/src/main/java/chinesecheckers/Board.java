@@ -3,13 +3,14 @@ package chinesecheckers;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 public abstract class Board {
     ArrayList<Player> ListOfPlayers = new ArrayList<Player>();
 
     abstract void checkMove(Move move);
     abstract void movePin(Move move);
-    abstract void checkVictory();
+    abstract Optional<Color> checkVictory(Character board[][]);
     abstract ArrayList<Move> getPossibleMoves();
     void changeCurrentPlayer() {
         //TODO: implement changeCurrentPlayer()

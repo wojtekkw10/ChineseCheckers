@@ -3,9 +3,11 @@ package chinesecheckers;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 public class RegularBoard extends Board {
 
+    private static final int HEIGHT = 18;
 
     ArrayList<Move> getPossibleMoves() {
         //TODO: implement
@@ -20,11 +22,9 @@ public class RegularBoard extends Board {
         //TODO: implement
     }
 
-    void checkVictory() {
-        //TODO: implemnt
-    }
 
     private int numberOfPlayers = 6;
+    private int turnIndex = 1;
 
     private HashMap<Color, List<Field>> corners = new HashMap<Color, List<Field>>()     //setting default coordinates for pins at the beginning
     {
@@ -127,6 +127,17 @@ public class RegularBoard extends Board {
 
     }};
 
+    private HashMap<Color, Color> mapOfOppositeColors = new HashMap<Color, Color>() {{ //map of opposite colors for checking victory
+
+        put(Color.red, Color.green);
+        put(Color.green, Color.red);
+        put(Color.yellow, Color.black);
+        put(Color.black, Color.yellow);
+        put(Color.white, Color.blue);
+        put(Color.blue, Color.white);
+
+    }};
+
     /*
     setting board
     a - available field
@@ -226,7 +237,9 @@ public class RegularBoard extends Board {
         return board;
     }
 
-    public Character getCheckerByTurn(int turnIndex)  //check who's turn is it
+    //check who's turn is it
+
+    public Character getCheckerByTurn(int turnIndex)
     {
         int counter = turnIndex % numberOfPlayers;
 
@@ -264,9 +277,7 @@ public class RegularBoard extends Board {
                 case 0:
                     return colorsWithItsCharacterRepresentation.get(Color.black);
             }
-        }
-
-       else{
+        } else {
             switch (counter) {
                 default:
                 case 1:
@@ -286,4 +297,197 @@ public class RegularBoard extends Board {
         }
 
     }
+
+    /*
+    checking victory, if anyone hasn't won returns 'Optional null' otherwise
+    returns Color of winner
+    */
+
+    public Optional<Color> checkVictory(Character board[][]) {
+        HashMap<Color, List<Field>> mapOfPreFilledCorners = getPlayerMap(numberOfPlayers);
+
+        for (Color currentColorChecking : mapOfPreFilledCorners.keySet()) {
+            int counter = 0;
+
+            List<Field> oppositeCorner = corners.get(mapOfOppositeColors.get(currentColorChecking));
+
+            for (int j = 0; j < 10; j++) {
+                if (board[oppositeCorner.get(j).x][oppositeCorner.get(j).y] != colorsWithItsCharacterRepresentation.get(currentColorChecking)) {
+                    break;
+                }
+                counter++;
+            }
+
+            if (counter == 10) {
+                return Optional.of(currentColorChecking);
+            }
+
+        }
+
+        return Optional.ofNullable(null);
+    }
+
+    /*
+        returning valid position for making next move
+    */
+
+    public List<Field> getValidFromPositions(Character[][] board, int turnIndex) {
+        Character turnChecker = getCheckerByTurn(turnIndex);
+
+        List<Field> validPositions = new ArrayList<Field>();
+
+        for (int i = 0; i < 18; i++) {
+
+            for (int j = 0; j < board[i].length; j++) {
+
+                if (board[i][j] == turnChecker)
+                    validPositions.add(new Field(j, i));
+            }
+
+
+        }
+
+        return validPositions;
+    }
+
+
+    public boolean isValidPosition(Field field, Character[][] board) {
+        if (field.x >= 0 && field.x <= HEIGHT && field.y <= board[field.x].length && board[field.x][field.y] == ' ')
+            return false;
+
+        return true;
+    }
+
+    /*
+     checking if it's one step move, without jumps
+     */
+
+    public boolean isOneStepMove(Field oldfField, Field newField) {
+
+        if (Math.abs(oldfField.x - newField.x) + Math.abs(oldfField.y - newField.y) == 1 ||
+                (newField.x == oldfField.x + 1 && newField.y == oldfField.y + 1) ||
+                (newField.x == oldfField.x - 1 && newField.y == oldfField.y - 1)) {
+
+            return true;
+
+        }
+
+        return false;
+    }
+
+    /*
+     checking if any jumps are possible and returning them
+     */
+
+    public List<Field> getValidJumps(Field field, Character[][] board) {
+        List<Field> validJumps = new ArrayList<Field>();
+
+        if (field.x >= 0 && field.x <= HEIGHT && field.y >= 0 && field.y <= board[field.x].length &&
+                board[field.x][field.y + 1] != ' ' && board[field.x][field.y + 1] != 'a' && board[field.x][field.y + 2] == 'a') {
+
+            validJumps.add(new Field(field.y + 2, field.x));
+        }
+
+        if (field.x + 1 <= HEIGHT && field.y >= 0 && field.y <= board[field.x].length &&
+                board[field.x + 1][field.y + 1] != ' ' && board[field.x + 1][field.y + 1] != 'a' && board[field.x + 2][field.y + 2] == 'a') {
+
+            validJumps.add(new Field(field.y + 2, field.x + 2));
+        }
+
+        if (field.x + 1 <= HEIGHT && field.y >= 0 && field.y <= board[field.x].length &&
+                board[field.x + 1][field.y] != ' ' && board[field.x + 1][field.y] != 'a' && board[field.x + 2][field.y] == 'a') {
+
+            validJumps.add(new Field(field.y, field.x + 2));
+        }
+
+        if (field.x >= 0 && field.x <= HEIGHT && field.y >= 0 && field.y <= board[field.x].length &&
+                board[field.x][field.y - 1] != ' ' && board[field.x][field.y - 1] != 'a' && board[field.x][field.y - 2] == 'a') {
+
+            validJumps.add(new Field(field.y - 2, field.x));
+        }
+
+        if (field.x - 1 >= 0 && field.x - 1 <= HEIGHT && field.y >= 0 && field.y <= board[field.x].length &&
+                board[field.x - 1][field.y - 1] != ' ' && board[field.x - 1][field.y - 1] != 'a' && board[field.x - 2][field.y - 2] == 'a') {
+
+            validJumps.add(new Field(field.y - 2, field.x - 2));
+        }
+
+        if (field.x - 1 >= 0 && field.x - 1 <= HEIGHT && field.y >= 0 && field.y <= board[field.x].length &&
+                board[field.x - 1][field.y] != ' ' && board[field.x - 1][field.y] != 'a' && board[field.x - 2][field.y] == 'a') {
+
+            validJumps.add(new Field(field.y, field.x - 2));
+        }
+
+        return validJumps;
+    }
+
+    // interface for metod in isMultiStepMove
+
+    interface SubfunctionHelper {
+        boolean isValidHopMove(Field newField);
+
+
+    }
+
+    public boolean isPositionInList(List<Field> list, Field field  )
+    {
+        return false;
+    }
+
+    /*
+        checking if it's multi step move - with jumps,
+        and returning possible moves
+        returns empty ArrayList if it's not Multi Step Move
+     */
+
+    public List<Field> isMultiStepMove(Field oldField, Field field, Character board[][]) {
+
+        List<Field> hops = new ArrayList<Field>();
+
+        SubfunctionHelper isValidHopMove = new SubfunctionHelper() {
+
+            public boolean isValidHopMove(Field pos) {
+                    if (pos.x == field.x && pos.y == field.y) {
+                        return true;
+                    }
+                    else if (!isValidPosition(pos, board))
+                    {
+                        return false;
+                    }
+
+                 hops.add(pos);
+                 List<Field> jumps = getValidJumps(pos, board);
+                 boolean valid = false;
+                 for (int i = 0; i < jumps.size(); i++){
+
+                        if (!isPositionInList(hops, jumps.get(i)))
+                        {
+                                valid |= isValidHopMove(jumps.get(i));
+                        }
+
+                 }
+                 if ( !valid ) {
+
+                     hops.remove(hops.size() - 1);
+
+                 }
+                 return valid;
+
+            }
+
+
+
+        };
+
+        if (  isValidHopMove.isValidHopMove(oldField))
+        {
+
+            return hops;
+
+        }
+
+        return new ArrayList<Field>(); // returns empty ArrayList if it's not Multi Step Move
+    }
+
+
 }

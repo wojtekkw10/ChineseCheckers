@@ -2,14 +2,14 @@ package chinesecheckers;
 
 public class Field {
 
-    public int x;
-    public int y;
+    public int y; // columns
+    public int x; // rows
 
-    public Field (int x, int y)
+
+    public Field (int y, int x)
     {
-        this.x = x;
         this.y = y;
-
+        this.x = x;
     }
 
     public Field (){}
