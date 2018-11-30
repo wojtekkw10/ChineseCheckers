@@ -428,11 +428,7 @@ public class RegularBoard extends Board {
 
 
     }
-
-    public boolean isPositionInList(List<Field> list, Field field  )
-    {
-        return false;
-    }
+    
 
     /*
         checking if it's multi step move - with jumps,
@@ -460,7 +456,7 @@ public class RegularBoard extends Board {
                  boolean valid = false;
                  for (int i = 0; i < jumps.size(); i++){
 
-                        if (!isPositionInList(hops, jumps.get(i)))
+                        if (!hops.contains(jumps.get(i)))
                         {
                                 valid |= isValidHopMove(jumps.get(i));
                         }
