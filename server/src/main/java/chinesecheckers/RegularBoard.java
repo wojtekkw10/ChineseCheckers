@@ -9,20 +9,6 @@ public class RegularBoard extends Board {
 
     private static final int HEIGHT = 18;
 
-    ArrayList<Move> getPossibleMoves() {
-        //TODO: implement
-        return new ArrayList<Move>();
-    }
-
-    void checkMove(Move move) {
-        //TODO: implement
-    }
-
-    void movePin(Move move) {
-        //TODO: implement
-    }
-
-
     private int numberOfPlayers = 6;
     private int turnIndex = 1;
 
@@ -428,7 +414,7 @@ public class RegularBoard extends Board {
 
 
     }
-    
+
 
     /*
         checking if it's multi step move - with jumps,
@@ -468,7 +454,6 @@ public class RegularBoard extends Board {
 
                  }
                  return valid;
-
             }
 
 
@@ -477,13 +462,43 @@ public class RegularBoard extends Board {
 
         if (  isValidHopMove.isValidHopMove(oldField))
         {
-
             return hops;
-
         }
 
         return new ArrayList<Field>(); // returns empty ArrayList if it's not Multi Step Move
     }
 
+    HashMap<Field, List<Field>> getPossibleMoves(Character[][] board, int turnIndex){
+
+        HashMap<Field, List<Field>> possibleMoves = new HashMap<Field, List<Field>>();
+        List<Field> validFromPosition = getValidFromPositions(board, turnIndex);
+
+        for (Field pos : validFromPosition) {
+
+            possibleMoves.put(pos, new ArrayList<Field>());
+            List<Field> movesForPin = possibleMoves.get(pos);
+
+            for (int j = 0; j < 18; j++) {
+                for (int k = 1; k < board[j].length; k++) {
+
+                    Field newField = new Field(j,k);
+                    movesForPin.addAll(isMultiStepMove(pos, newField, board));
+
+                    if (isOneStepMove(pos, newField)){
+                        movesForPin.add(newField);
+                    }
+                }
+            }
+        }
+        return possibleMoves;
+    }
+
+
+    void movePin(Field oldField, Field newField) {
+
+        board[newField.x][newField.y] = board[oldField.x][oldField.y];
+        board[oldField.x][newField.y] = 'a';
+
+    }
 
 }
