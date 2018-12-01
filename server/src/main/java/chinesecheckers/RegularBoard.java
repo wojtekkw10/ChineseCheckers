@@ -225,7 +225,7 @@ public class RegularBoard extends Board {
 
     //check who's turn is it
 
-    public Character getCheckerByTurn(int turnIndex)
+    public Character getCheckerByTurn()
     {
         int counter = turnIndex % numberOfPlayers;
 
@@ -317,8 +317,8 @@ public class RegularBoard extends Board {
         returning valid position for making next move
     */
 
-    public List<Field> getValidFromPositions(Character[][] board, int turnIndex) {
-        Character turnChecker = getCheckerByTurn(turnIndex);
+    public List<Field> getValidFromPositions(Character[][] board) {
+        Character turnChecker = getCheckerByTurn();
 
         List<Field> validPositions = new ArrayList<Field>();
 
@@ -468,10 +468,10 @@ public class RegularBoard extends Board {
         return new ArrayList<Field>(); // returns empty ArrayList if it's not Multi Step Move
     }
 
-    HashMap<Field, List<Field>> getPossibleMoves(Character[][] board, int turnIndex){
+    HashMap<Field, List<Field>> getPossibleMoves(Character[][] board){
 
         HashMap<Field, List<Field>> possibleMoves = new HashMap<Field, List<Field>>();
-        List<Field> validFromPosition = getValidFromPositions(board, turnIndex);
+        List<Field> validFromPosition = getValidFromPositions(board);
 
         for (Field pos : validFromPosition) {
 
@@ -494,10 +494,17 @@ public class RegularBoard extends Board {
     }
 
 
-    void movePin(Field oldField, Field newField) {
+    Field[] movePin(Field oldField, Field newField) {
 
         board[newField.x][newField.y] = board[oldField.x][oldField.y];
         board[oldField.x][newField.y] = 'a';
+        turnIndex++;
+
+        Field[] delta = new Field[2];
+        delta[0] = oldField;
+        delta[1] = newField;
+
+        return delta;
 
     }
 

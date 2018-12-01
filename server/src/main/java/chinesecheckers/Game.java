@@ -1,5 +1,6 @@
 package chinesecheckers;
 
+import java.awt.event.ComponentAdapter;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -13,6 +14,8 @@ public class Game{
     private ArrayList<Player> players = new ArrayList<>();
     String name;
     int numberOfBots;
+    Board regularBoard = new RegularBoard();
+
 
     public void addPlayer(Player player)
     {
@@ -66,26 +69,43 @@ public class Game{
 
                 // Repeatedly get commands from the client and process them.
                 while (true) {
-                    String command = input.readLine();
-                    if(command.equals("9999999"))
-                    {
-                        output.println("Received info from game");
-                    }
-                    if (command.startsWith("MOVE")) {
-                        int location = Integer.parseInt(command.substring(5));
-                        //if (legalMove(location, this)) {
-                        //    output.println("VALID_MOVE");
-                        //    output.println(hasWinner() ? "VICTORY"
-                        //            : boardFilledUp() ? "TIE"
-                        //            : "");
-                        //} else {
-                        //    output.println("MESSAGE ?");
-                        // }
-                    } else if (command.startsWith("QUIT")) {
-                        return;
-                    }
+                    String commandAsJSON = input.readLine();
+                    Command command = Command.fromJSON(commandAsJSON);
 
-                }
+                    switch(command.commandType){
+
+                        case NINES:
+
+                        output.println("Received info from game");
+                        break;
+
+
+                        case GET_BOARD_AND_POSSIBLE_MOVES:
+                            FullBoardWithPossibleMoves fullBoardWithPossibleMoves = new FullBoardWithPossibleMoves();
+                            fullBoardWithPossibleMoves.board = regularBoard.getBoard();
+                            fullBoardWithPossibleMoves.possibleMoves = regularBoard.getPossibleMoves(regularBoard.getBoard());
+                            fullBoardWithPossibleMoves.currentPlayer = regularBoard.getCheckerByTurn();
+                            Command reply = new Command();
+                            reply.commandType = CommandType.FULL_BOARD_AND_POSSIBLE_MOVES;
+                            reply.content = fullBoardWithPossibleMoves.toJSON();
+                            output.println(reply);
+                            break;
+                        case MOVE_PIN:
+                            Move move = Move.fromJSON(command.content);
+                            DeltaAndNextPossibleMoves deltaAndNextPossibleMoves = new DeltaAndNextPossibleMoves();
+                            deltaAndNextPossibleMoves.delta = regularBoard.movePin(move.oldField, move.newField);
+                            deltaAndNextPossibleMoves.possibleMoves = regularBoard.getPossibleMoves(regularBoard.getBoard());
+                            deltaAndNextPossibleMoves.currentPlayer = regularBoard.getCheckerByTurn();
+                            Command deltaReply = new Command();
+                            deltaReply.commandType = CommandType.DELTA_AND_NEXT_POSSIBLE_MOVES;
+                            deltaReply.content = deltaAndNextPossibleMoves.toJSON();
+                            output.println(deltaReply);
+                            break;
+                        case QUIT:
+                            return;
+
+
+                }}
             } catch (IOException e) {
                 System.out.println("Player died: " + e);
             } finally {

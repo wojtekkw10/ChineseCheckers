@@ -1,15 +1,17 @@
 package chinesecheckers;
 
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
 
-public class Move {
+public class DeltaAndNextPossibleMoves {
 
-    public Field oldField;
-    public Field newField;
+    public Field[] delta;
+    public HashMap<Field, List<Field>> possibleMoves;
+    public Character currentPlayer;
 
     public String toJSON(){
 
@@ -27,16 +29,16 @@ public class Move {
         return json;
     }
 
-    public static Move fromJSON(String JSON){
+    public static DeltaAndNextPossibleMoves fromJSON(String JSON){
 
-        Move move = null;
+        DeltaAndNextPossibleMoves deltaAndNextPossibleMoves = null;
 
         try {
-            move = new ObjectMapper().readValue(JSON, Move.class);
+            deltaAndNextPossibleMoves = new ObjectMapper().readValue(JSON, DeltaAndNextPossibleMoves.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return move;
+        return deltaAndNextPossibleMoves;
     }
 }

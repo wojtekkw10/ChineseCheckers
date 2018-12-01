@@ -1,15 +1,18 @@
 package chinesecheckers;
 
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
 
-public class Move {
+public class FullBoardWithPossibleMoves {
 
-    public Field oldField;
-    public Field newField;
+    public Character[][] board;
+    public HashMap<Field, List<Field>> possibleMoves;
+    public Character currentPlayer;
 
     public String toJSON(){
 
@@ -27,16 +30,17 @@ public class Move {
         return json;
     }
 
-    public static Move fromJSON(String JSON){
+    public static FullBoardWithPossibleMoves fromJSON(String JSON){
 
-        Move move = null;
+        FullBoardWithPossibleMoves fullBoardWithPossibleMoves = null;
 
         try {
-            move = new ObjectMapper().readValue(JSON, Move.class);
+            fullBoardWithPossibleMoves = new ObjectMapper().readValue(JSON, FullBoardWithPossibleMoves.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return move;
+        return fullBoardWithPossibleMoves;
     }
+
 }
