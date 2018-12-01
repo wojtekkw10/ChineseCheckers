@@ -10,16 +10,16 @@ public abstract class Board {
 
 
     abstract Field[] movePin(Field oldField, Field newField);
-    abstract Optional<Color> checkVictory(Character board[][]);
-    abstract HashMap<Field, List<Field>> getPossibleMoves(Character[][] board);
-    abstract HashMap<Color, List<Field>> getPlayerMap(int numberOfPlayers);
-    abstract void setNumberOfPlayers(int numberOfPlayers);
+    abstract Optional<Color> checkVictory();
+    abstract HashMap<Field, List<Field>> getPossibleMoves();
+    abstract HashMap<Color, List<Field>> getPlayerMap();
+    abstract void setNumberOfPlayers();
     abstract Character[][] getBoard();
     abstract Character[][] initializeHomeCorner();
     abstract Character getCheckerByTurn();
-    abstract List<Field> getValidJumps(Field field, Character[][] board);
+    abstract List<Field> getValidJumps(Field field);
     abstract boolean isOneStepMove(Field oldfField, Field newField);
-    abstract boolean isValidPosition(Field field, Character[][] board);
-    abstract List<Field> getValidFromPositions(Character[][] board);
+    abstract boolean isValidPosition(Field field);
+    abstract List<Field> getValidFromPositions();
 
 }

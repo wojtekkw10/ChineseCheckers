@@ -1,14 +1,25 @@
 package chinesecheckers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class SimpleBot extends Bot {
-    ArrayList<Move> getPossibleMoves() {
-        //TODO: implement
-        return new ArrayList<Move>();
+    HashMap<Field, List<Field>> getPossibleMoves() {
+
+        Board regularBoard = new RegularBoard();
+
+        HashMap<Field, List<Field>> possibleMoves = regularBoard.getPossibleMoves();
+
+        return possibleMoves;
     }
-    Move getTheBestMove(){
-        //TODO: implemnt
-        return new Move();
+
+    Field[] getTheBestMove(){
+
+        Field[] bestMove = new Field[2];
+
+
+
+        return bestMove;
     } //scores every move and returns the best one
 }

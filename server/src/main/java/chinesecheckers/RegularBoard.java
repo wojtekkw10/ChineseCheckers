@@ -12,6 +12,11 @@ public class RegularBoard extends Board {
     private int numberOfPlayers = 6;
     private int turnIndex = 1;
 
+    public RegularBoard()
+    {
+        board = initializeHomeCorner();
+    }
+
     private HashMap<Color, List<Field>> corners = new HashMap<Color, List<Field>>()     //setting default coordinates for pins at the beginning
     {
         {
@@ -130,8 +135,8 @@ public class RegularBoard extends Board {
     ' ' - not available field
     */
 
-
-    private Character[][] board = {{' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+    private Character[][] board;
+    private Character[][] baseboard = {{' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', 'a', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', 'a', 'a', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', 'a', 'a', 'a', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -153,7 +158,7 @@ public class RegularBoard extends Board {
     };
 
 
-    public HashMap<Color, List<Field>> getPlayerMap(int numberOfPlayers)    //which corners should be filled with pins
+    public HashMap<Color, List<Field>> getPlayerMap()    //which corners should be filled with pins
     {
         switch (numberOfPlayers) {
             case 2:
@@ -198,7 +203,7 @@ public class RegularBoard extends Board {
         }
     }
 
-    public void setNumberOfPlayers(int numberOfPlayers) {
+    public void setNumberOfPlayers() {
         this.numberOfPlayers = numberOfPlayers;
     }
 
@@ -209,7 +214,7 @@ public class RegularBoard extends Board {
 
     public Character[][] initializeHomeCorner()         // filling corners with pins
     {
-        HashMap<Color, List<Field>> mapOfCorners = getPlayerMap(numberOfPlayers);
+        HashMap<Color, List<Field>> mapOfCorners = getPlayerMap();
         Character pin;
 
         for (Color color : colorsWithItsCharacterRepresentation.keySet()) {
@@ -217,10 +222,10 @@ public class RegularBoard extends Board {
             List<Field> corner = mapOfCorners.get(color);
 
             for (int j = 0; j < 10; j++) {
-                board[corner.get(j).x][corner.get(j).y] = pin;
+                baseboard[corner.get(j).x][corner.get(j).y] = pin;
             }
         }
-        return board;
+        return baseboard;
     }
 
     //check who's turn is it
@@ -289,8 +294,8 @@ public class RegularBoard extends Board {
     returns Color of winner
     */
 
-    public Optional<Color> checkVictory(Character board[][]) {
-        HashMap<Color, List<Field>> mapOfPreFilledCorners = getPlayerMap(numberOfPlayers);
+    public Optional<Color> checkVictory() {
+        HashMap<Color, List<Field>> mapOfPreFilledCorners = getPlayerMap();
 
         for (Color currentColorChecking : mapOfPreFilledCorners.keySet()) {
             int counter = 0;
@@ -317,7 +322,7 @@ public class RegularBoard extends Board {
         returning valid position for making next move
     */
 
-    public List<Field> getValidFromPositions(Character[][] board) {
+    public List<Field> getValidFromPositions() {
         Character turnChecker = getCheckerByTurn();
 
         List<Field> validPositions = new ArrayList<Field>();
@@ -337,7 +342,7 @@ public class RegularBoard extends Board {
     }
 
 
-    public boolean isValidPosition(Field field, Character[][] board) {
+    public boolean isValidPosition(Field field) {
         if (field.x >= 0 && field.x <= HEIGHT && field.y <= board[field.x].length && board[field.x][field.y] == ' ')
             return false;
 
@@ -365,7 +370,7 @@ public class RegularBoard extends Board {
      checking if any jumps are possible and returning them
      */
 
-    public List<Field> getValidJumps(Field field, Character[][] board) {
+    public List<Field> getValidJumps(Field field) {
         List<Field> validJumps = new ArrayList<Field>();
 
         if (field.x >= 0 && field.x <= HEIGHT && field.y >= 0 && field.y <= board[field.x].length &&
@@ -414,15 +419,13 @@ public class RegularBoard extends Board {
 
 
     }
-
-
     /*
         checking if it's multi step move - with jumps,
         and returning possible moves
         returns empty ArrayList if it's not Multi Step Move
      */
 
-    public List<Field> isMultiStepMove(Field oldField, Field field, Character board[][]) {
+    public List<Field> isMultiStepMove(Field oldField, Field field) {
 
         List<Field> hops = new ArrayList<Field>();
 
@@ -432,13 +435,13 @@ public class RegularBoard extends Board {
                     if (pos.x == field.x && pos.y == field.y) {
                         return true;
                     }
-                    else if (!isValidPosition(pos, board))
+                    else if (!isValidPosition(pos))
                     {
                         return false;
                     }
 
                  hops.add(pos);
-                 List<Field> jumps = getValidJumps(pos, board);
+                 List<Field> jumps = getValidJumps(pos);
                  boolean valid = false;
                  for (int i = 0; i < jumps.size(); i++){
 
@@ -468,10 +471,10 @@ public class RegularBoard extends Board {
         return new ArrayList<Field>(); // returns empty ArrayList if it's not Multi Step Move
     }
 
-    HashMap<Field, List<Field>> getPossibleMoves(Character[][] board){
+    HashMap<Field, List<Field>> getPossibleMoves(){
 
         HashMap<Field, List<Field>> possibleMoves = new HashMap<Field, List<Field>>();
-        List<Field> validFromPosition = getValidFromPositions(board);
+        List<Field> validFromPosition = getValidFromPositions();
 
         for (Field pos : validFromPosition) {
 
@@ -482,7 +485,7 @@ public class RegularBoard extends Board {
                 for (int k = 1; k < board[j].length; k++) {
 
                     Field newField = new Field(j,k);
-                    movesForPin.addAll(isMultiStepMove(pos, newField, board));
+                    movesForPin.addAll(isMultiStepMove(pos, newField));
 
                     if (isOneStepMove(pos, newField)){
                         movesForPin.add(newField);

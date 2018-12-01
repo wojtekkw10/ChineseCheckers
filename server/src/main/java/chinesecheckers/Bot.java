@@ -1,10 +1,12 @@
 package chinesecheckers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public abstract class Bot {
-    protected ArrayList<Move> possibleMoves = new ArrayList<Move>();
+    protected HashMap<Field, List<Field>> possibleMoves = new HashMap<Field, List<Field>>();
 
-    abstract ArrayList<Move> getPossibleMoves();
-    abstract Move getTheBestMove(); //scores every move and returns the best one
+    abstract HashMap<Field, List<Field>> getPossibleMoves();
+    abstract Field[] getTheBestMove(); //scores every move and returns the best one
 }

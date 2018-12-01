@@ -83,7 +83,7 @@ public class Game{
                         case GET_BOARD_AND_POSSIBLE_MOVES:
                             FullBoardWithPossibleMoves fullBoardWithPossibleMoves = new FullBoardWithPossibleMoves();
                             fullBoardWithPossibleMoves.board = regularBoard.getBoard();
-                            fullBoardWithPossibleMoves.possibleMoves = regularBoard.getPossibleMoves(regularBoard.getBoard());
+                            fullBoardWithPossibleMoves.possibleMoves = regularBoard.getPossibleMoves();
                             fullBoardWithPossibleMoves.currentPlayer = regularBoard.getCheckerByTurn();
                             Command reply = new Command();
                             reply.commandType = CommandType.FULL_BOARD_AND_POSSIBLE_MOVES;
@@ -94,7 +94,7 @@ public class Game{
                             Move move = Move.fromJSON(command.content);
                             DeltaAndNextPossibleMoves deltaAndNextPossibleMoves = new DeltaAndNextPossibleMoves();
                             deltaAndNextPossibleMoves.delta = regularBoard.movePin(move.oldField, move.newField);
-                            deltaAndNextPossibleMoves.possibleMoves = regularBoard.getPossibleMoves(regularBoard.getBoard());
+                            deltaAndNextPossibleMoves.possibleMoves = regularBoard.getPossibleMoves();
                             deltaAndNextPossibleMoves.currentPlayer = regularBoard.getCheckerByTurn();
                             Command deltaReply = new Command();
                             deltaReply.commandType = CommandType.DELTA_AND_NEXT_POSSIBLE_MOVES;
