@@ -7,11 +7,8 @@ import java.util.List;
 public class SimpleBot extends Bot {
     HashMap<Field, List<Field>> getPossibleMoves() {
 
-        Board regularBoard = new RegularBoard();
-
-        HashMap<Field, List<Field>> possibleMoves = regularBoard.getPossibleMoves();
-
-        return possibleMoves;
+        //TODO: to się będzie odbywało w Game.Player w komunikacji, jak będzie ruch bota
+        return null;
     }
 
     Field[] getTheBestMove(){
