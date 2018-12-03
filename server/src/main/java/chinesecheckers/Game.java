@@ -58,7 +58,7 @@ public class Game{
                 output = new PrintWriter(socket.getOutputStream(), true);
 
                 // Send a welcome message to the client.
-                output.println("Hello, you are client #" + clientNumber + ".");
+                //output.println("Hello, you are client #" + clientNumber + ".");
             } catch (IOException e) {
                 System.out.print(("SERVER: ERROR: Couldn't connect"));
             }
@@ -76,8 +76,8 @@ public class Game{
 
                         case NINES:
 
-                        output.println("Received info from game");
-                        break;
+                            output.println("Received info from game");
+                            break;
 
 
                         case GET_BOARD_AND_POSSIBLE_MOVES:
@@ -88,7 +88,15 @@ public class Game{
                             Command reply = new Command();
                             reply.commandType = CommandType.FULL_BOARD_AND_POSSIBLE_MOVES;
                             reply.content = fullBoardWithPossibleMoves.toJSON();
-                            output.println(reply);
+
+                            Packet packet = new Packet();
+                            packet.board = regularBoard.getBoard();
+                            reply.commandType = CommandType.GET_BOARD_AND_POSSIBLE_MOVES;
+                            reply.content = packet.toJSON();
+
+                            System.out.println(reply.content);
+
+                            output.println(reply.toJSON());
                             break;
                         case MOVE_PIN:
                             Move move = Move.fromJSON(command.content);
@@ -99,13 +107,13 @@ public class Game{
                             Command deltaReply = new Command();
                             deltaReply.commandType = CommandType.DELTA_AND_NEXT_POSSIBLE_MOVES;
                             deltaReply.content = deltaAndNextPossibleMoves.toJSON();
-                            output.println(deltaReply);
+                            output.println(deltaReply.toJSON());
                             break;
                         case QUIT:
                             return;
 
 
-                }}
+                    }}
             } catch (IOException e) {
                 System.out.println("Player died: " + e);
             } finally {

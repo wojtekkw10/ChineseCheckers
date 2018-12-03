@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -34,7 +35,7 @@ public class App //implements WindowListener,ActionListener
 
         Window joinWindow;
         MenuWindow menuWindow;
-        Window boardWindow;
+        BoardWindow boardWindow;
         Window pauseWindow;
         RequestNewGameWindow requestNewGameWindow;
 
@@ -56,14 +57,31 @@ public class App //implements WindowListener,ActionListener
 
             //Create New Game
             if( command.equals( "Create New Game" ))  {
+
+                //W CELACH TESTOWYCH
+                try{ server.connect(frame);}
+                catch (IOException ex){System.out.print("CLIENT: ERROR: Couldn't connect to the server\n");}
+                server.requestNewGame("default", 1, "Username");
+
+                Packet packet = server.downloadBoardState();
+                boardWindow.charBoard = packet.board.clone();
+
+                boardWindow.display();
+                state = FrameState.BOARDWINDOW;
+                System.out.print("CLIENT: Start Button has been clicked\n");
+                //W CELACH TESTOWYCH
+
                 //try{ server.connect(frame);}
                 //catch (IOException ex){System.out.print("CLIENT: ERROR: Couldn't connect to the server\n");}
                 //server.requestNewGame();
+
+                /* UNCOMMENT LATER
                 requestNewGameWindow.display();
                 state = FrameState.REQUESTNEWGAMEWINDOW;
                 System.out.print("CLIENT: Create New Game Button has been clicked\n");
+                */
 
-            //Show available games
+                //Show available games
             } else if( command.equals( "Join an existing game" ) ) {
                 try{ server.connect(frame);}
                 catch (IOException ex){System.out.print("CLIENT: ERROR: Couldn't connect to the server\n");}
@@ -97,8 +115,8 @@ public class App //implements WindowListener,ActionListener
 
             //Skip this round
             else if( command.equals( "Skip" ) )  { //bede uzywal do testowania laczenia sie z serverem
-                    System.out.print(server.getEmptyString()+"\n");
-                    System.out.print("CLIENT: Skip Button has been clicked1\n");
+                System.out.print(server.getEmptyString()+"\n");
+                System.out.print("CLIENT: Skip Button has been clicked1\n");
             }
 
             //Join selected game
@@ -118,6 +136,9 @@ public class App //implements WindowListener,ActionListener
                 String username = menuWindow.getUsername();
                 server.requestNewGame(info.name, info.numberOfBots, username);
 
+                Packet packet = server.downloadBoardState();
+                boardWindow.charBoard = packet.board.clone();
+
                 boardWindow.display();
                 state = FrameState.BOARDWINDOW;
                 System.out.print("CLIENT: Start Button has been clicked\n");
@@ -135,6 +156,17 @@ public class App //implements WindowListener,ActionListener
                 if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
                     pauseWindow.display();
                     state = FrameState.PAUSEWINDOW;
+
+                }
+                if (e.getKeyCode() == KeyEvent.VK_E) {
+                    pauseWindow.display();
+                    state = FrameState.PAUSEWINDOW;
+
+                    System.out.print("E Button Pressed");
+
+
+                    Packet packet = server.downloadBoardState();
+
 
                 }
                 return false;

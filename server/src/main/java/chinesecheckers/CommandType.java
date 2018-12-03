@@ -8,7 +8,12 @@ public enum CommandType {
         GET_DELTA_AND_NEXT_POSSIBLE_MOVES,
         FULL_BOARD_AND_POSSIBLE_MOVES,
         DELTA_AND_NEXT_POSSIBLE_MOVES,
-        MOVE_PIN
+        MOVE_PIN,
+
+        REQUEST_NEW_GAME,
+        JOIN_A_GAME,
+        REQUEST_ALL_GAMES,
+
 
 
 }
