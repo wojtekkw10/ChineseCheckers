@@ -8,6 +8,8 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import static java.lang.Thread.sleep;
+
 public class Server {
     private Board board;
     private boolean isMyMove;
@@ -39,12 +41,38 @@ public class Server {
 
 
     //TODO: funkcja requestnewGame()
-    public void requestNewGame(String name, int numberOfBots, String username) {
-        out.println("-1");
+    public String requestNewGame(String name, int numberOfBots, String username) {
+        //out.println("-1");
         System.out.print("Requested a new game\n");
-        out.println(name);
-        out.println(numberOfBots);
-        out.println(username);
+        //out.println(name);
+        //out.println(numberOfBots);
+        //out.println(username);
+
+        Packet packet = new Packet();
+        packet.username = username;
+        packet.gameName = name;
+        packet.numberOfBots = numberOfBots;
+
+        Command command = new Command();
+        command.commandType = CommandType.REQUEST_NEW_GAME;
+        command.content = packet.toJSON();
+
+        out.println(command.toJSON());
+        while(true)
+        {
+            try{ sleep(1000);} catch (InterruptedException e){}
+            String commandAsJSON = new String();
+
+            try{ commandAsJSON = in.readLine();}
+            catch(IOException e ) { System.out.print("Error\n");}
+
+            System.out.print(commandAsJSON);
+
+            Command command1 = Command.fromJSON(commandAsJSON);
+            Packet packet1 = new Packet();
+            packet1 = packet1.fromJSON(command.content);
+            return "";
+        }
 
     }
 
@@ -74,11 +102,18 @@ public class Server {
     //If you want to make sure that you are running in a seperate thread on the server
     public String getEmptyString()
     {
-        out.println("9999999");
+        Command command = new Command();
+        command.commandType = CommandType.NINES;
+        Packet packet = new Packet();
+        command.content = packet.toJSON();
+
+        out.println(command.toJSON());
         while(true)
         {
+            try{ sleep(1000);} catch (InterruptedException e){}
+
             try{ return(in.readLine());}
-            catch(IOException e ) { System.out.print("Error");}
+            catch(IOException e ) { System.out.print("Error\n");}
         }
     }
 

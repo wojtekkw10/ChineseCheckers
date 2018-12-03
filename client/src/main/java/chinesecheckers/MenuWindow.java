@@ -1,6 +1,6 @@
 package chinesecheckers;
 
-import sun.awt.resources.awt;
+//import sun.awt.resources.awt;
 
 import javax.swing.*;
 import java.awt.*;

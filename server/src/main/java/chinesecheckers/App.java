@@ -35,53 +35,68 @@ public class App
                 BufferedReader in = new BufferedReader(
                         new InputStreamReader(newPlayerSocket.getInputStream()));
                 System.out.print("Downloading request\n");
-                String line = in.readLine();
+                //String line = in.readLine();
+
+                String commandAsJSON = in.readLine();
+                System.out.print(commandAsJSON);
+                Command command = Command.fromJSON(commandAsJSON);
+                Packet packet = new Packet();
+                packet = packet.fromJSON(command.content);
+
                 System.out.print("Downloaded request\n");
                 PrintWriter output = new PrintWriter(newPlayerSocket.getOutputStream(), true);
 
 
-                int ID = Integer.parseInt(line);
-                System.out.print("Input: "+ID+"\n");
-                if(ID==9999999) {System.out.print("Received empty string\n");}
-                else if(ID==-2)
-                {
-                    System.out.print("AllGamesRequested");
-                    StringBuffer gameList = new StringBuffer();
-                    for(int i=0; i<listOfGames.size(); i++)
-                    {
-                        gameList.append(i);
-                        gameList.append(" ");
-                        gameList.append(listOfGames.get(i).name);
-                        gameList.append(" ");
-                        gameList.append(listOfGames.get(i).numberOfBots);
-                        gameList.append(" ");
-                        gameList.append(listOfGames.get(i).getNumberOfPlayers());
-                        gameList.append(" ");
+                //int ID = Integer.parseInt(line);
+                //System.out.print("Input: "+ID+"\n");
+                switch(command.commandType) {
+                    case NINES: {
+                        System.out.print("Received empty string\n");
+                        //output.println("99999");
+                        break;
                     }
-                    output.println(gameList.toString());
-                    newPlayerSocket.close();
-                    //musimy zamknac bo nie mamy osobnego watku dla niego
-                }
-                else if(ID==-1) {
-                    System.out.print("New Game Requested");
-                    String name = in.readLine();
-                    String numberOfBotsString = in.readLine();
-                    int numberOfBots = Integer.parseInt(numberOfBotsString);
-                    String username = in.readLine();
+                    case REQUEST_ALL_GAMES: {
+                        System.out.print("AllGamesRequested");
+                        StringBuffer gameList = new StringBuffer();
+                        for (int i = 0; i < listOfGames.size(); i++) {
+                            gameList.append(i);
+                            gameList.append(" ");
+                            gameList.append(listOfGames.get(i).name);
+                            gameList.append(" ");
+                            gameList.append(listOfGames.get(i).numberOfBots);
+                            gameList.append(" ");
+                            gameList.append(listOfGames.get(i).getNumberOfPlayers());
+                            gameList.append(" ");
+                        }
+                        output.println(gameList.toString());
+                        newPlayerSocket.close();
+                        //musimy zamknac bo nie mamy osobnego watku dla niego
+                    }
+                    case REQUEST_NEW_GAME: {
+                        System.out.print("New Game Requested");
+                        //String name = in.readLine();
+                        //String numberOfBotsString = in.readLine();
+                        //int numberOfBots = Integer.parseInt(numberOfBotsString);
+                        //String username = in.readLine();
 
-                    listOfGames.add(new Game(name, numberOfBots));
-                    listOfGames.get(listOfGames.size()-1).addPlayer(defaultGame.new Player(newPlayerSocket, username));
-                    System.out.print("New game has been added. Name: "+name+" Number of Bots: "+numberOfBots+"\n");
-                    System.out.print("New Player: "+username+"\n");
-                    System.out.print("Number of games: "+listOfGames.size()+"\n");
-                    //clientNumber++;
-                }
-                else {
-                    String username = in.readLine();
-                    listOfGames.get(ID).addPlayer(defaultGame.new Player(newPlayerSocket, username));
-                    System.out.print("New Player: "+username+"\n");
-                    System.out.print("Number OF Players in the Game: "+listOfGames.get(ID).getNumberOfPlayers()+"\n");
-                    //clientNumber++;
+                        listOfGames.add(new Game(packet.gameName, packet.numberOfBots));
+                        listOfGames.get(listOfGames.size() - 1).addPlayer(defaultGame.new Player(newPlayerSocket, packet.username));
+                        System.out.print("New game has been added. Name: " + packet.gameName + " Number of Bots: " + packet.numberOfBots + "\n");
+                        System.out.print("New Player: " + packet.username + "\n");
+                        System.out.print("Number of games: " + listOfGames.size() + "\n");
+                        Packet id = new Packet();
+                        id.id = listOfGames.size();
+                        command.content = id.toJSON();
+                        output.println(command.toJSON());
+                        //clientNumber++;
+                    }
+                    case JOIN_A_GAME: {
+                        String username = in.readLine();
+                        int ID = Integer.parseInt(command.content);
+                        listOfGames.get(ID).addPlayer(defaultGame.new Player(newPlayerSocket, username));
+                        System.out.print("New Player: " + username + "\n");
+                        System.out.print("Number OF Players in the Game: " + listOfGames.get(ID).getNumberOfPlayers() + "\n");
+                    }
                 }
             }
         } catch (IOException ex) {
