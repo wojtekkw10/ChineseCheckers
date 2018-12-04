@@ -2,6 +2,8 @@ package chinesecheckers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -10,6 +12,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Packet {
     //Requesting new Game
@@ -22,9 +25,11 @@ public class Packet {
 
     //deltaAndNextPossibleMoves
     //public Field[] delta;
-    public String possibleMovesASJSON;
+    //public String possibleMovesASJSON;
     public Character currentPlayer;
-    public HashMap<Field, Field[]> possibleMoves;
+    @JsonSerialize(keyUsing = FieldSerializer.class)
+    @JsonDeserialize(keyUsing = FieldDeserializer.class)
+    public Map<Field, Field[]> possibleMoves;
 
     //FullBoardWithPossibleMoves
     public Character[][] board;
@@ -39,7 +44,7 @@ public class Packet {
         String json = null;
 
         try {
-            json = mapper.writeValueAsString(this);
+            json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
