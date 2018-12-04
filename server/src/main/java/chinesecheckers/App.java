@@ -35,13 +35,12 @@ public class App
                 BufferedReader in = new BufferedReader(
                         new InputStreamReader(newPlayerSocket.getInputStream()));
                 System.out.print("Downloading request\n");
-                //String line = in.readLine();
 
                 String commandAsJSON = in.readLine();
                 System.out.print(commandAsJSON);
                 Command command = Command.fromJSON(commandAsJSON);
                 Packet packet = new Packet();
-                packet = packet.fromJSON(command.content);
+                packet = Packet.fromJSON(command.content);
 
                 System.out.print("Downloaded request\n");
                 PrintWriter output = new PrintWriter(newPlayerSocket.getOutputStream(), true);

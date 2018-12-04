@@ -1,12 +1,15 @@
 package chinesecheckers;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.awt.event.ComponentAdapter;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.ArrayList;
+import java.util.*;
 
 public class Game{
     //Client client = new Client();
@@ -91,6 +94,17 @@ public class Game{
 
                             Packet packet = new Packet();
                             packet.board = regularBoard.getBoard();
+
+                            //Converting HashMap<Field, List<Field>> do HashMap<Field, Field[]>
+                            HashMap<Field, Field[]> possibleMovesArray = new HashMap<Field, Field[]>();
+                            for (Map.Entry<Field, List<Field>> entry : regularBoard.getPossibleMoves().entrySet()) {
+                                System.out.println(entry.getKey() + " = " + entry.getValue());
+                                possibleMovesArray.put(entry.getKey(), entry.getValue().toArray(new Field[0]));
+                            }
+
+                            //packet.possibleMoves = possibleMovesArray;
+
+
                             reply.commandType = CommandType.GET_BOARD_AND_POSSIBLE_MOVES;
                             reply.content = packet.toJSON();
 

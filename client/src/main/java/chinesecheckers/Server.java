@@ -99,7 +99,7 @@ public class Server {
         {
             String commandAsJSON = new String();
 
-            try{ sleep(1000);} catch (InterruptedException e){}
+            try{ sleep(100);} catch (InterruptedException e){}
 
             try{  commandAsJSON = in.readLine();}
             catch(IOException e ) { System.out.print("Error\n");}

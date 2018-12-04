@@ -13,6 +13,8 @@ import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class BoardWindow extends Window{
     private ActionListener actionListener;
@@ -22,6 +24,7 @@ public class BoardWindow extends Window{
 
     public Character[][] charBoard = new Character[18][18];
     public Ellipse2D[][] ovalBoard = new Ellipse2D[18][18];
+    public  HashMap<Field, Field[]> possibleMoves;
 
     BoardWindow(Board board, ActionListener actionListener, MouseListener mouseListener, JFrame frame)
     {
@@ -36,6 +39,10 @@ public class BoardWindow extends Window{
         } catch (IOException ex) {
             System.out.print("CLIENT: ERROR: Couldn't find the backtexture.jpg image");
         }
+
+        this.setBounds(100,0,760,800);
+        frame.add(this, null);
+
     }
 
     void setBoard(Board board) {
@@ -44,10 +51,9 @@ public class BoardWindow extends Window{
 
     void display()
     {
+        if(this.mouseListener!=null) frame.removeMouseListener(mouseListener);
         frame.getContentPane().removeAll();
         frame.revalidate();
-
-        //System.out.print("CLIENT: Drawing Board window\n");
 
         JPanel p = new BoardWindow(board, actionListener,mouseListener, frame);
         p.addMouseListener(mouseListener);
@@ -55,10 +61,9 @@ public class BoardWindow extends Window{
 
         ((BoardWindow) p).charBoard = charBoard;
         ((BoardWindow) p).ovalBoard = ovalBoard;
+
         p.setBounds(100,0,760,800);
         frame.getContentPane().setBackground(Color.white);
-
-        frame.add(p, null);
 
         frame.repaint();
     }
@@ -66,6 +71,7 @@ public class BoardWindow extends Window{
     protected void paintComponent(Graphics g) {
         super.paintComponent ( g );
         Graphics2D g2d = (Graphics2D) g;
+        //frame.getContentPane().setBackground(Color.white);
 
         /*
         g.setColor ( Color.RED );
@@ -104,7 +110,6 @@ public class BoardWindow extends Window{
                 else if(k == 'w') g2d.setColor ( Color.GRAY );
                 int radius = 24;
 
-                if(i==9 && j==10) { x=10; y=20; } //do testowania
                 //White
                 if(i==5 && j==1) { x=24; y=200; }
                 else if(i==5 && j==2) { x=84; y=200; }
@@ -242,7 +247,7 @@ public class BoardWindow extends Window{
                 }
 
                 if(k!=' ' && !(k=='y'||k=='b'||k=='c'||k=='g'||k=='r'||k=='w')) {
-                    System.out.println(i+" "+j);
+                    //System.out.println(i+" "+j);
                     g2d.setColor(Color.CYAN);
                 }
 
