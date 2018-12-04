@@ -5,6 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.Color;
 import java.awt.event.*;
+import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -15,16 +16,20 @@ import java.util.ArrayList;
 
 public class BoardWindow extends Window{
     private ActionListener actionListener;
+    private MouseListener mouseListener;
     private Board board;
     private BufferedImage image;
 
     public Character[][] charBoard = new Character[18][18];
+    public Ellipse2D[][] ovalBoard = new Ellipse2D[18][18];
 
-    BoardWindow(Board board, ActionListener actionListener, JFrame frame)
+    BoardWindow(Board board, ActionListener actionListener, MouseListener mouseListener, JFrame frame)
     {
         this.actionListener = actionListener;
         this.board = board;
         this.frame = frame;
+        this.mouseListener = mouseListener;
+        this.addMouseListener(mouseListener);
 
         try {
             image = ImageIO.read(new File("backtexture.jpg"));
@@ -44,8 +49,12 @@ public class BoardWindow extends Window{
 
         //System.out.print("CLIENT: Drawing Board window\n");
 
-        JPanel p = new BoardWindow(board, actionListener, frame);
+        JPanel p = new BoardWindow(board, actionListener,mouseListener, frame);
+        p.addMouseListener(mouseListener);
+        frame.addMouseListener(mouseListener);
+
         ((BoardWindow) p).charBoard = charBoard;
+        ((BoardWindow) p).ovalBoard = ovalBoard;
         p.setBounds(100,0,760,800);
         frame.getContentPane().setBackground(Color.white);
 
@@ -56,6 +65,7 @@ public class BoardWindow extends Window{
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent ( g );
+        Graphics2D g2d = (Graphics2D) g;
 
         /*
         g.setColor ( Color.RED );
@@ -77,21 +87,21 @@ public class BoardWindow extends Window{
         frame.getContentPane().removeAll();
         g.drawImage(image, 0, 0, this);
 
+        int x = 0;
+        int y = 0;
+
         //Mapowanie
         for(int i =0; i<charBoard.length; i++)
         {
-            int x = 0;
-            int y = 0;
-
             for(int j=0; j<charBoard[i].length; j++)
             {
                 char k = charBoard[i][j];
-                if(k == 'b') g.setColor ( Color.BLUE );
-                else if(k == 'y') g.setColor ( Color.YELLOW );
-                else if(k == 'c') { g.setColor ( Color.BLACK ); }
-                else if(k == 'g') { g.setColor ( Color.GREEN ); System.out.println(i+" "+j);}
-                else if(k == 'r') g.setColor ( Color.RED );
-                else if(k == 'w') g.setColor ( Color.GRAY );
+                if(k == 'b') { g2d.setPaint ( Color.BLUE );  }
+                else if(k == 'y') {g2d.setColor ( Color.YELLOW );}
+                else if(k == 'c') { g2d.setColor ( Color.BLACK ); }
+                else if(k == 'g') { g2d.setColor ( Color.GREEN );}
+                else if(k == 'r') {g2d.setColor ( Color.RED );}
+                else if(k == 'w') g2d.setColor ( Color.GRAY );
                 int radius = 24;
 
                 if(i==9 && j==10) { x=10; y=20; } //do testowania
@@ -128,16 +138,148 @@ public class BoardWindow extends Window{
                 else if(i==16 && j==12) { x=350; y=704; }
                 else if(i==16 && j==13) { x=410; y=704; }
                 else if(i==17 && j==13) { x=380; y=750; }
-                //...
+                //Blue
+                else if(i==10 && j==14) { x=650; y=428; }
+                else if(i==11 && j==14) { x=620; y=474; }
+                else if(i==11 && j==15) { x=680; y=474; }
+                else if(i==12 && j==14) { x=590; y=520; }
+                else if(i==12 && j==15) { x=650; y=520; }
+                else if(i==12 && j==16) { x=710; y=520; }
+                else if(i==13 && j==14) { x=560; y=564; }
+                else if(i==13 && j==15) { x=620; y=564; }
+                else if(i==13 && j==16) { x=680; y=564; }
+                else if(i==13 && j==17) { x=740; y=564; }
+                //Yellow
+                else if(i==5 && j==10) { x=560; y=200; }
+                else if(i==5 && j==11) { x=620; y=200; }
+                else if(i==5 && j==12) { x=680; y=200; }
+                else if(i==5 && j==13) { x=740; y=200; }
+                else if(i==6 && j==11) { x=590; y=246; }
+                else if(i==6 && j==12) { x=650; y=246; }
+                else if(i==6 && j==13) { x=710; y=246; }
+                else if(i==7 && j==12) { x=620; y=292; }
+                else if(i==7 && j==13) { x=680; y=292; }
+                else if(i==8 && j==13) { x=650; y=336; }
+                //Red
+                else if(i==1 && j==5) { x=380; y=16; }
+                else if(i==2 && j==5) { x=350; y=62; }
+                else if(i==2 && j==6) { x=410; y=62; }
+                else if(i==3 && j==5) { x=320; y=108; }
+                else if(i==3 && j==6) { x=380; y=108; }
+                else if(i==3 && j==7) { x=440; y=108; }
+                else if(i==4 && j==5) { x=290; y=154; }
+                else if(i==4 && j==6) { x=350; y=154; }
+                else if(i==4 && j==7) { x=410; y=154; }
+                else if(i==4 && j==8) { x=470; y=154; }
+                //Center
+                else if(i==5 && j==5) { x=264; y=200; }
+                else if(i==5 && j==6) { x=324; y=200; }
+                else if(i==5 && j==7) { x=384; y=200; }
+                else if(i==5 && j==8) { x=444; y=200; }
+                else if(i==5 && j==9) { x=504; y=200; }
+                else if(i==6 && j==5) { x=234; y=244; }
+                else if(i==6 && j==6) { x=294; y=244; }
+                else if(i==6 && j==7) { x=354; y=244; }
+                else if(i==6 && j==8) { x=414; y=244; }
+                else if(i==6 && j==9) { x=474; y=244; }
+                else if(i==6 && j==10) { x=534; y=244; }
+                else if(i==7 && j==5) { x=204; y=288; }
+                else if(i==7 && j==6) { x=264; y=288; }
+                else if(i==7 && j==7) { x=324; y=288; }
+                else if(i==7 && j==8) { x=384; y=288; }
+                else if(i==7 && j==9) { x=444; y=288; }
+                else if(i==7 && j==10) { x=504; y=288; }
+                else if(i==7 && j==11) { x=564; y=288; }
+                else if(i==8 && j==5) { x=174; y=334; }
+                else if(i==8 && j==6) { x=234; y=334; }
+                else if(i==8 && j==7) { x=294; y=334; }
+                else if(i==8 && j==8) { x=354; y=334; }
+                else if(i==8 && j==9) { x=414; y=334; }
+                else if(i==8 && j==10) { x=474; y=334; }
+                else if(i==8 && j==11) { x=534; y=334; }
+                else if(i==8 && j==12) { x=594; y=334; }
+                else if(i==9 && j==5) { x=144; y=380; }
+                else if(i==9 && j==6) { x=204; y=380; }
+                else if(i==9 && j==7) { x=264; y=380; }
+                else if(i==9 && j==8) { x=324; y=380; }
+                else if(i==9 && j==9) { x=384; y=380; }
+                else if(i==9 && j==10) { x=444; y=380; }
+                else if(i==9 && j==11) { x=504; y=380; }
+                else if(i==9 && j==12) { x=564; y=380; }
+                else if(i==9 && j==13) { x=624; y=380; }
+                else if(i==10 && j==6) { x=174; y=426; }
+                else if(i==10 && j==7) { x=234; y=426; }
+                else if(i==10 && j==8) { x=294; y=426; }
+                else if(i==10 && j==9) { x=354; y=426; }
+                else if(i==10 && j==10) { x=414; y=426; }
+                else if(i==10 && j==11) { x=474; y=426; }
+                else if(i==10 && j==12) { x=534; y=426; }
+                else if(i==10 && j==13) { x=594; y=426; }
+                else if(i==11 && j==7) { x=204; y=472; }
+                else if(i==11 && j==8) { x=264; y=472; }
+                else if(i==11 && j==9) { x=324; y=472; }
+                else if(i==11 && j==10) { x=384; y=472; }
+                else if(i==11 && j==11) { x=444; y=472; }
+                else if(i==11 && j==12) { x=504; y=472; }
+                else if(i==11 && j==13) { x=564; y=472; }
+                else if(i==12 && j==8) { x=234; y=518; }
+                else if(i==12 && j==9) { x=294; y=518; }
+                else if(i==12 && j==10) { x=354; y=518; }
+                else if(i==12 && j==11) { x=414; y=518; }
+                else if(i==12 && j==12) { x=474; y=518; }
+                else if(i==12 && j==13) { x=534; y=518; }
+                else if(i==13 && j==9) { x=264; y=564; }
+                else if(i==13 && j==10) { x=324; y=564; }
+                else if(i==13 && j==11) { x=384; y=564; }
+                else if(i==13 && j==12) { x=444; y=564; }
+                else if(i==13 && j==13) { x=504; y=564; }
 
                 else {
+
                     x = 20-((int) ((i * 30) * Math.cos(Math.toRadians(90))) - (int) ((j * 46) * Math.sin(Math.toRadians(90))));
                     y = ((int) ((j * 46) * Math.cos(Math.toRadians(90))) + (int) ((i * 30) * Math.sin(Math.toRadians(90))));
+
+                }
+
+                if(k!=' ' && !(k=='y'||k=='b'||k=='c'||k=='g'||k=='r'||k=='w')) {
+                    System.out.println(i+" "+j);
+                    g2d.setColor(Color.CYAN);
                 }
 
 
-                if(k!=' ' && (k=='y'||k=='b'||k=='c'||k=='g'||k=='r'||k=='w'))
-                    g.fillOval(x-radius, y-radius, 2*radius, 2*radius);
+
+                //&& (k=='y'||k=='b'||k=='c'||k=='g'||k=='r'||k=='w')
+                if(k!=' ' )
+                {
+                    //g.fillOval(x-radius, y-radius, 2*radius, 2*radius);
+                    ovalBoard[i][j] = new Ellipse2D.Double(x-radius, y-radius, 48, 48);
+                }
+
+
+
+            }
+
+
+        }
+        //Rysowanie
+        for(int i=0; i<18; i++)
+        {
+            for(int j=0; j<18; j++)
+            {
+                if(ovalBoard[i][j]!=null){
+                    char k = charBoard[i][j];
+                    if(k == 'b') { g2d.setPaint ( Color.BLUE );  }
+                    else if(k == 'y') {g2d.setPaint ( Color.YELLOW );}
+                    else if(k == 'c') { g2d.setPaint ( Color.BLACK ); }
+                    else if(k == 'g') { g2d.setPaint ( Color.GREEN );}
+                    else if(k == 'r') {g2d.setPaint ( Color.RED );}
+                    else if(k == 'w') g2d.setPaint ( Color.GRAY );
+                    else g2d.setPaint(Color.CYAN);
+                    g2d.fill(ovalBoard[i][j]);
+                }
+
+
+
             }
         }
 

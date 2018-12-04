@@ -45,7 +45,7 @@ public class App //implements WindowListener,ActionListener
             joinWindow = new JoinWindow(this, frame);
             menuWindow = new MenuWindow(this, frame);
             pauseWindow = new PauseWindow(this, frame);
-            boardWindow = new BoardWindow(board, this, frame);
+            boardWindow = new BoardWindow(board, this, new MainWindow.MouseEventListener(), frame);
             requestNewGameWindow = new RequestNewGameWindow(this, frame);
             frame.addComponentListener(new ResizeListener());
             KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new BoardWindowKeyListener());
@@ -192,6 +192,46 @@ public class App //implements WindowListener,ActionListener
             @Override
             public void componentHidden(ComponentEvent e) {
 
+            }
+
+        }
+
+        public class MouseEventListener implements MouseListener {
+
+            public void mousePressed(MouseEvent e) {
+                //System.out.println("Mouse pressed; # of clicks: "
+                      //  + e.getClickCount());
+            }
+
+            public void mouseReleased(MouseEvent e) {
+                //System.out.println("Mouse released; # of clicks: "
+                    //    + e.getClickCount());
+            }
+
+            public void mouseEntered(MouseEvent e) {
+                //System.out.println("Mouse entered");
+            }
+
+            public void mouseExited(MouseEvent e) {
+                //System.out.println("Mouse exited");
+            }
+
+            public void mouseClicked(MouseEvent e) {
+                //System.out.println("Mouse clicked (# of clicks: "
+                       // + e.getClickCount() + ")");
+
+                for(int i=0; i<18; i++)
+                {
+                    for(int j=0; j<18; j++)
+                    {
+                        if(boardWindow.ovalBoard[i][j]!=null && boardWindow.charBoard[i][j]!=null)
+                        {//(e.getButton() == 1 &&)
+                            if ( boardWindow.ovalBoard[i][j].contains(e.getX(), e.getY()) ) {
+                                System.out.println("oval.x: " + i + " oval.y: " + j);
+                            }
+                        }
+                    }
+                }
             }
 
         }
