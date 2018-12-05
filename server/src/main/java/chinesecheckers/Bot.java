@@ -8,5 +8,5 @@ public abstract class Bot {
     protected HashMap<Field, List<Field>> possibleMoves = new HashMap<Field, List<Field>>();
 
     abstract HashMap<Field, List<Field>> getPossibleMoves();
-    abstract Field[] getTheBestMove(); //scores every move and returns the best one
+    abstract Field[] getTheBestMove( HashMap<Field, List<Field>> possibleMoves); //scores every move and returns the best one
 }

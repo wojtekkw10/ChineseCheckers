@@ -135,8 +135,8 @@ public class RegularBoard extends Board {
     ' ' - not available field
     */
 
-    private Character[][] board;
-    private Character[][] baseboard = {{' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+
+    private Character[][] board = {{' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', 'a', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', 'a', 'a', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', 'a', 'a', 'a', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -222,10 +222,10 @@ public class RegularBoard extends Board {
             List<Field> corner = mapOfCorners.get(color);
 
             for (int j = 0; j < 10; j++) {
-                baseboard[corner.get(j).x][corner.get(j).y] = pin;
+                board[corner.get(j).x][corner.get(j).y] = pin;
             }
         }
-        return baseboard;
+        return board;
     }
 
     //check who's turn is it
