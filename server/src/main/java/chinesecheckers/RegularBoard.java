@@ -17,6 +17,16 @@ public class RegularBoard extends Board {
         board = initializeHomeCorner();
     }
 
+    public void setTurnIndex()
+    {
+        turnIndex--;
+    }
+
+    public int getturnIndex ()
+    {
+        return turnIndex;
+    }
+
     private HashMap<Color, List<Field>> corners = new HashMap<Color, List<Field>>()     //setting default coordinates for pins at the beginning
     {
         {
@@ -343,7 +353,7 @@ public class RegularBoard extends Board {
 
 
     public boolean isValidPosition(Field field) {
-        if (field.x >= 0 && field.x <= HEIGHT && field.y <= board[field.x].length && board[field.x][field.y] == ' ')
+        if (field.x <= 0 || field.x >= HEIGHT || field.y >= board[field.x].length || board[field.x][field.y] == ' ')
             return false;
 
         return true;
@@ -355,11 +365,15 @@ public class RegularBoard extends Board {
 
     public boolean isOneStepMove(Field oldfField, Field newField) {
 
-        if (Math.abs(oldfField.x - newField.x) + Math.abs(oldfField.y - newField.y) == 1 ||
+        if (oldfField.equals(newField)){
+            return false;
+        }
+        if ((Math.abs(oldfField.x - newField.x) + Math.abs(oldfField.y - newField.y) == 1 ||
                 (newField.x == oldfField.x + 1 && newField.y == oldfField.y + 1) ||
-                (newField.x == oldfField.x - 1 && newField.y == oldfField.y - 1)) {
+                (newField.x == oldfField.x - 1 && newField.y == oldfField.y - 1)) && isValidPosition(newField) && board[newField.x][newField.y] == 'a') {
 
             return true;
+
 
         }
 
@@ -412,7 +426,7 @@ public class RegularBoard extends Board {
         return validJumps;
     }
 
-    // interface for metod in isMultiStepMove
+    // interface for method in isMultiStepMove
 
     interface SubfunctionHelper {
         boolean isValidHopMove(Field newField);
@@ -429,9 +443,14 @@ public class RegularBoard extends Board {
 
         List<Field> hops = new ArrayList<Field>();
 
+        if (oldField.equals(field)){
+            return hops;
+        }
+
         SubfunctionHelper isValidHopMove = new SubfunctionHelper() {
 
             public boolean isValidHopMove(Field pos) {
+
                     if (pos.x == field.x && pos.y == field.y) {
                         return true;
                     }
@@ -485,7 +504,13 @@ public class RegularBoard extends Board {
                 for (int k = 1; k < board[j].length; k++) {
 
                     Field newField = new Field(j,k);
-                    movesForPin.addAll(isMultiStepMove(pos, newField));
+                    if (pos.equals(newField)){
+                        continue;
+                    }
+                    List<Field> var = isMultiStepMove(pos, newField);
+                    if (var.size() > 0){
+                    movesForPin.addAll(var);
+                    }
 
                     if (isOneStepMove(pos, newField)){
                         movesForPin.add(newField);
@@ -499,8 +524,9 @@ public class RegularBoard extends Board {
 
     Field[] movePin(Field oldField, Field newField) {
 
+
         board[newField.x][newField.y] = board[oldField.x][oldField.y];
-        board[oldField.x][newField.y] = 'a';
+        board[oldField.x][oldField.y] = 'a';
         turnIndex++;
 
         Field[] delta = new Field[2];
