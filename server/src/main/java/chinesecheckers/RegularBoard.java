@@ -387,37 +387,37 @@ public class RegularBoard extends Board {
     public List<Field> getValidJumps(Field field) {
         List<Field> validJumps = new ArrayList<Field>();
 
-        if (field.x >= 0 && field.x <= HEIGHT && field.y >= 0 && field.y <= board[field.x].length &&
+        if (field.x >= 0 && field.x <= HEIGHT && field.y >= 0 && field.y + 2 <= board[field.x].length &&
                 board[field.x][field.y + 1] != ' ' && board[field.x][field.y + 1] != 'a' && board[field.x][field.y + 2] == 'a') {
 
             validJumps.add(new Field(field.y + 2, field.x));
         }
 
-        if (field.x + 1 <= HEIGHT && field.y >= 0 && field.y <= board[field.x].length &&
+        if (field.x + 2 <= HEIGHT && field.y >= 0 && field.y + 2 <= board[field.x].length &&
                 board[field.x + 1][field.y + 1] != ' ' && board[field.x + 1][field.y + 1] != 'a' && board[field.x + 2][field.y + 2] == 'a') {
 
             validJumps.add(new Field(field.y + 2, field.x + 2));
         }
 
-        if (field.x + 1 <= HEIGHT && field.y >= 0 && field.y <= board[field.x].length &&
+        if (field.x + 2 <= HEIGHT && field.y >= 0 && field.y <= board[field.x].length &&
                 board[field.x + 1][field.y] != ' ' && board[field.x + 1][field.y] != 'a' && board[field.x + 2][field.y] == 'a') {
 
             validJumps.add(new Field(field.y, field.x + 2));
         }
 
-        if (field.x >= 0 && field.x <= HEIGHT && field.y >= 0 && field.y <= board[field.x].length &&
+        if (field.x >= 0 && field.x <= HEIGHT && field.y - 2 >= 0 && field.y <= board[field.x].length &&
                 board[field.x][field.y - 1] != ' ' && board[field.x][field.y - 1] != 'a' && board[field.x][field.y - 2] == 'a') {
 
             validJumps.add(new Field(field.y - 2, field.x));
         }
 
-        if (field.x - 1 >= 0 && field.x - 1 <= HEIGHT && field.y >= 0 && field.y <= board[field.x].length &&
+        if (field.x - 2 >= 0 && field.x <= HEIGHT && field.y - 2 >= 0 && field.y <= board[field.x].length &&
                 board[field.x - 1][field.y - 1] != ' ' && board[field.x - 1][field.y - 1] != 'a' && board[field.x - 2][field.y - 2] == 'a') {
 
             validJumps.add(new Field(field.y - 2, field.x - 2));
         }
 
-        if (field.x - 1 >= 0 && field.x - 1 <= HEIGHT && field.y >= 0 && field.y <= board[field.x].length &&
+        if (field.x - 2 >= 0 && field.x <= HEIGHT && field.y >= 0 && field.y <= board[field.x].length &&
                 board[field.x - 1][field.y] != ' ' && board[field.x - 1][field.y] != 'a' && board[field.x - 2][field.y] == 'a') {
 
             validJumps.add(new Field(field.y, field.x - 2));
