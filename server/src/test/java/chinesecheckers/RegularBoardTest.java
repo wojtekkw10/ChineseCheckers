@@ -83,7 +83,7 @@ public class RegularBoardTest {
         Field newField = new Field(6,5);
 
 
-      // regularBoard.movePin(oldField, newField);
+   //    regularBoard.movePin(oldField, newField);
 
         PrintBoard();
         HashMap<Field, List<Field>> possibleMoves = regularBoard.getPossibleMoves();
@@ -111,12 +111,15 @@ public class RegularBoardTest {
     @Test
     public void testValidJumps(){
 
-        Field oldField = new Field(5,4);
+        Field oldField = new Field(6,4);
         Field newField = new Field(6,5);
 
 
         regularBoard.movePin(oldField, newField);
 
+
+
+        PrintBoard();
         Field a = new Field(5,5);
 
         List<Field> jumpsy = regularBoard.getValidJumps(a);
@@ -134,20 +137,21 @@ public class RegularBoardTest {
     public void testMultiStepMove(){
 
 
-        Field as = new Field(6,4);
-        Field bs= new Field(5,5);
+        Field oldField = new Field(6,4);
+        Field newField = new Field(6,5);
 
 
-        regularBoard.movePin(as, bs);
+        regularBoard.movePin(oldField, newField);
+
         PrintBoard();
         Field a = new Field(5,3);
         Field b = new Field(7,5);
 
-        List<Field> jumpsy = regularBoard.isMultiStepMove(a,b);
+        List<Field> multiMove = regularBoard.isMultiStepMove(a,b);
 
 
 
-        for (Field f : jumpsy)
+        for (Field f : multiMove)
         {
 
             System.out.println(f.x + " " + f.y );

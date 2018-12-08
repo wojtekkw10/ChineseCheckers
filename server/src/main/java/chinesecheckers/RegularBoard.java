@@ -484,6 +484,7 @@ public class RegularBoard extends Board {
 
         if (  isValidHopMove.isValidHopMove(oldField))
         {
+            hops.add(field);
             return hops;
         }
 
@@ -516,14 +517,15 @@ public class RegularBoard extends Board {
                         movesForPin.add(newField);
                     }
                 }
+                while(movesForPin.remove(pos)){}
             }
         }
+
         return possibleMoves;
     }
 
 
     Field[] movePin(Field oldField, Field newField) {
-
 
         board[newField.x][newField.y] = board[oldField.x][oldField.y];
         board[oldField.x][oldField.y] = 'a';
