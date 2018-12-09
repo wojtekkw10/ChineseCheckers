@@ -7,6 +7,7 @@ import org.junit.Test;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -83,7 +84,7 @@ public class RegularBoardTest {
         Field newField = new Field(6,5);
 
 
-   //    regularBoard.movePin(oldField, newField);
+       regularBoard.movePin(oldField, newField);
 
         PrintBoard();
         HashMap<Field, List<Field>> possibleMoves = regularBoard.getPossibleMoves();
@@ -157,6 +158,94 @@ public class RegularBoardTest {
             System.out.println(f.x + " " + f.y );
 
         }
+
+    }
+
+    @Test
+    public void changePlayerTest(){
+
+        char player1 = regularBoard.getCheckerByTurn();
+
+        Field oldField = new Field(6,4);
+        Field newField = new Field(6,5);
+
+
+        regularBoard.movePin(oldField, newField);
+
+        char player2 = regularBoard.getCheckerByTurn();
+
+        regularBoard.movePin(oldField, newField);
+
+        char player3 = regularBoard.getCheckerByTurn();
+
+        regularBoard.movePin(oldField, newField);
+
+        char player4 = regularBoard.getCheckerByTurn();
+
+        regularBoard.movePin(oldField, newField);
+
+        char player5 = regularBoard.getCheckerByTurn();
+
+        regularBoard.movePin(oldField, newField);
+
+        char player6 = regularBoard.getCheckerByTurn();
+
+        regularBoard.movePin(oldField, newField);
+
+        char player7 = regularBoard.getCheckerByTurn();
+
+        Assert.assertEquals(player1, 'r');
+        Assert.assertEquals(player2, 'y');
+        Assert.assertEquals(player3, 'b');
+        Assert.assertEquals(player4, 'g');
+        Assert.assertEquals(player5, 'c');
+        Assert.assertEquals(player6, 'w');
+        Assert.assertEquals(player7, 'r');
+
+    }
+
+    @Test
+    public void checkVictoryTest(){
+
+        Field a1 = new Field(5, 1);
+        Field a2 = new Field(5, 2);
+        Field a3 = new Field(6, 2);
+        Field a4 = new Field(5, 3);
+        Field a5 = new Field(6, 3);
+        Field a6 = new Field(7, 3);
+        Field a7 = new Field(5, 4);
+        Field a8 = new Field(6, 4);
+        Field a9 = new Field(7, 4);
+        Field a10 = new Field(8, 4);
+
+        Field b1 = new Field(13, 17);
+        Field b2 = new Field(12, 16);
+        Field b3 = new Field(13, 16);
+        Field b4 = new Field(11, 15);
+        Field b5 = new Field(12, 15);
+        Field b6 = new Field(13, 15);
+        Field b7 = new Field(10, 14);
+        Field b8 = new Field(11, 14);
+        Field b9 = new Field(12, 14);
+        Field b10 = new Field(13, 14);
+
+        Assert.assertEquals(regularBoard.checkVictory(), Optional.ofNullable(null));
+
+        regularBoard.movePin(a1, b1);
+        regularBoard.movePin(a2, b2);
+        regularBoard.movePin(a3, b3);
+        regularBoard.movePin(a4, b4);
+        regularBoard.movePin(a5, b5);
+
+        Assert.assertEquals(regularBoard.checkVictory(), Optional.ofNullable(null));
+
+        regularBoard.movePin(a6, b6);
+        regularBoard.movePin(a7, b7);
+        regularBoard.movePin(a8, b8);
+        regularBoard.movePin(a9, b9);
+        regularBoard.movePin(a10, b10);
+
+        Assert.assertEquals(regularBoard.checkVictory(), Optional.of(Color.red));
 
     }
 }
