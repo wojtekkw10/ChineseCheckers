@@ -115,49 +115,37 @@ public class RegularBoardTest {
         Field oldField = new Field(6,4);
         Field newField = new Field(6,5);
 
-
         regularBoard.movePin(oldField, newField);
 
-
-
-        PrintBoard();
-        Field a = new Field(5,5);
+        Field a = new Field(5,3);
 
         List<Field> jumpsy = regularBoard.getValidJumps(a);
+        List<Field> expected = new ArrayList<Field>();
 
-        for (Field f : jumpsy)
-        {
+        expected.add(new Field(5,5));
 
-            System.out.println(f.x + " " + f.y );
-
-        }
-
+        Assert.assertEquals(jumpsy, expected);
     }
 
     @Test
     public void testMultiStepMove(){
 
-
         Field oldField = new Field(6,4);
         Field newField = new Field(6,5);
 
-
         regularBoard.movePin(oldField, newField);
 
-        PrintBoard();
         Field a = new Field(5,3);
         Field b = new Field(7,5);
 
         List<Field> multiMove = regularBoard.isMultiStepMove(a,b);
+        List<Field> expected = new ArrayList<Field>();
 
+        expected.add(new Field(5,3));
+        expected.add(new Field(5,5));
+        expected.add(new Field(7,5));
 
-
-        for (Field f : multiMove)
-        {
-
-            System.out.println(f.x + " " + f.y );
-
-        }
+        Assert.assertEquals(multiMove, expected);
 
     }
 

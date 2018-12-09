@@ -5,11 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 
 public class SimpleBot extends Bot {
-    HashMap<Field, List<Field>> getPossibleMoves() {
-
-        //TODO: to się będzie odbywało w Game.Player w komunikacji, jak będzie ruch bota
-        return null;
-    }
 
     /*
     returns array of Field - Field[0] - coordinates of pin, Field[1] - coordinates of bestMove
