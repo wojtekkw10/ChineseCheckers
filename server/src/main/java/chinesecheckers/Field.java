@@ -8,6 +8,7 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 import java.lang.reflect.Type;
+import java.util.Objects;
 
 public class Field  {
 
@@ -23,7 +24,26 @@ public class Field  {
 
     public Field (){}
 
+    @Override
+    public String toString() {
+        return String.format("(%d,%d)", y, x);
+    }
 
+    @Override
+    public boolean equals(Object object)
+    {
+        if (object instanceof Field)
+        {
+            Field field = (Field)object;
+            return field.x == this.x && field.y == this.y;
+        }
 
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(y, x);
+    }
 
 }

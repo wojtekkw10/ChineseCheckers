@@ -84,7 +84,7 @@ public class RegularBoardTest {
         Field newField = new Field(6,5);
 
 
-       regularBoard.movePin(oldField, newField);
+       //regularBoard.movePin(oldField, newField);
 
         PrintBoard();
         HashMap<Field, List<Field>> possibleMoves = regularBoard.getPossibleMoves();
