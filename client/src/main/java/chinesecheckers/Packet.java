@@ -31,6 +31,8 @@ public class Packet {
     @JsonDeserialize(keyUsing = FieldDeserializer.class)
     public Map<Field, Field[]> possibleMoves;
 
+    public Move move;
+
     //FullBoardWithPossibleMoves
     public Character[][] board;
 

@@ -170,7 +170,6 @@ public class App //implements WindowListener,ActionListener
 
                     Packet packet = server.downloadBoardState();
 
-
                 }
                 return false;
             }
@@ -229,12 +228,38 @@ public class App //implements WindowListener,ActionListener
                     {
                         if(boardWindow.ovalBoard[i][j]!=null && boardWindow.charBoard[i][j]!=null)
                         {//(e.getButton() == 1 &&)
-                            if ( boardWindow.ovalBoard[i][j].contains(e.getX()-96, e.getY()-30) ) {
+                            //Sprawdzanie ktory przycisk zostal nacisniety
+                            if ( boardWindow.ovalBoard[i][j].contains(e.getX()-108, e.getY()-30) ) {
+                                //wtedy narysuj x,y tego pinu
                                 System.out.println("oval.x: " + boardWindow.ovalBoard[i][j].getX() +
                                         " oval.y: " + boardWindow.ovalBoard[i][j].getX());
                                 System.out.println("x: "+i+" y: "+j);
+
+
+                                Field clicked = new Field();
+                                clicked.setX(i);
+                                clicked.setY(j);
+
+                                System.out.println("Previously clicked:  x: "+boardWindow.clickedField.getX()+" y: "+boardWindow.clickedField.getY());
+                                System.out.println("Now clicked:  x: "+clicked.getX()+" y: "+clicked.getY());
+
+                                if(boardWindow.isPossibleMoveField(clicked))
+                                {
+                                    System.out.println("Move has been done");
+                                    Move move = new Move();
+                                    move.oldField = boardWindow.clickedField;
+                                    move.newField = clicked;
+                                    server.uploadMove(move);
+
+                                    Packet packet = server.downloadBoardState();
+                                    boardWindow.charBoard = packet.board.clone();
+                                    boardWindow.possibleMoves = packet.possibleMoves;
+                                }
+
+                                    //Ustaw do boardWindow zeby moglo wyrysowac possibleMoves
                                 boardWindow.clickedField.setX(i);
                                 boardWindow.clickedField.setY(j);
+
                                 boardWindow.display();
                             }
                         }

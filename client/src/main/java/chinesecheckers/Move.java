@@ -1,24 +1,41 @@
 package chinesecheckers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.awt.*;
+import java.io.IOException;
 
 public class Move {
-    private Point startPoint = new Point();
-    private Point endPoint = new Point();
+    public Field oldField;
+    public Field newField;
 
-    public Point getEndPoint() {
-        return endPoint;
+    public String toJSON(){
+
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        String json = null;
+
+        try {
+            json = mapper.writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        return json;
     }
 
-    public Point getStartPoint() {
-        return startPoint;
-    }
+    public static Move fromJSON(String JSON){
 
-    public void setEndPoint(Point endPoint) {
-        this.endPoint = endPoint;
-    }
+        Move move = null;
 
-    public void setStartPoint(Point startPoint) {
-        this.startPoint = startPoint;
+        try {
+            move = new ObjectMapper().readValue(JSON, Move.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return move;
     }
 }

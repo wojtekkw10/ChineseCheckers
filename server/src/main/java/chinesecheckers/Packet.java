@@ -28,6 +28,8 @@ public class Packet {
     public Character currentPlayer;
     public HashMap<Field, Field[]> possibleMoves;
 
+    public Move move;
+
     @JsonSerialize(keyUsing = FieldSerializer.class)
     @JsonDeserialize(keyUsing = FieldDeserializer.class)
 

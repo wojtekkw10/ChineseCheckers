@@ -112,7 +112,7 @@ public class Game{
 
                             output.println(reply.toJSON());
                             break;
-                        case MOVE_PIN:
+                        case MOVE_PIN:/*
                             Move move = Move.fromJSON(command.content);
                             DeltaAndNextPossibleMoves deltaAndNextPossibleMoves = new DeltaAndNextPossibleMoves();
                             deltaAndNextPossibleMoves.delta = regularBoard.movePin(move.oldField, move.newField);
@@ -121,7 +121,14 @@ public class Game{
                             Command deltaReply = new Command();
                             deltaReply.commandType = CommandType.DELTA_AND_NEXT_POSSIBLE_MOVES;
                             deltaReply.content = deltaAndNextPossibleMoves.toJSON();
-                            output.println(deltaReply.toJSON());
+                            output.println(deltaReply.toJSON());*/
+
+
+                            System.out.print(command.content);
+                            Packet receivedPacket = Packet.fromJSON(command.content);
+                            Move move = receivedPacket.move;
+                            regularBoard.movePin(move.oldField, move.newField);
+                            output.println("Move received");
                             break;
                         case QUIT:
                             return;

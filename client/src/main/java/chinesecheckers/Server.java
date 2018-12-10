@@ -75,8 +75,27 @@ public class Server {
     }
 
     //TODO: funkcja uploadBoard
-    public void uploadBoard(Board board) {
+    public int uploadMove(Move move) {
+        System.out.println("Uploading Move");
+        Command command = new Command();
+        command.commandType = CommandType.MOVE_PIN;
+        Packet packet = new Packet();
+        packet.move = move;
+        command.content = packet.toJSON();
+        System.out.println(command.toJSON());
+        out.println(command.toJSON());
 
+        String feedback = new String();
+
+        while(true)
+        {
+            try{ sleep(1000);} catch (InterruptedException e){}
+
+            try{  feedback = in.readLine();}
+            catch(IOException e ) { System.out.print("Error: Didnt start a new game\n");}
+            System.out.println(feedback);
+            return 0;
+        }
     }
 
     void joinGame(int id, String username)
