@@ -2,6 +2,8 @@ package chinesecheckers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -22,9 +24,12 @@ public class Packet {
 
     //deltaAndNextPossibleMoves
     //public Field[] delta;
-    public String possibleMovesASJSON;
+    //public String possibleMovesASJSON;
     public Character currentPlayer;
     public HashMap<Field, Field[]> possibleMoves;
+
+    @JsonSerialize(keyUsing = FieldSerializer.class)
+    @JsonDeserialize(keyUsing = FieldDeserializer.class)
 
     //FullBoardWithPossibleMoves
     public Character[][] board;

@@ -66,7 +66,8 @@ public class App //implements WindowListener,ActionListener
                 Packet packet = server.downloadBoardState();
                 boardWindow.charBoard = packet.board.clone();
                 System.out.println("Received possible moves");
-                //boardWindow.possibleMoves = packet.getPossibleMoves();
+                //TODO: przesylanie possible moves
+                boardWindow.possibleMoves = packet.possibleMoves;
 
                 boardWindow.display();
                 state = FrameState.BOARDWINDOW;
@@ -228,10 +229,13 @@ public class App //implements WindowListener,ActionListener
                     {
                         if(boardWindow.ovalBoard[i][j]!=null && boardWindow.charBoard[i][j]!=null)
                         {//(e.getButton() == 1 &&)
-                            if ( boardWindow.ovalBoard[i][j].contains(e.getX()-48, e.getY()-30) ) {
+                            if ( boardWindow.ovalBoard[i][j].contains(e.getX()-96, e.getY()-30) ) {
                                 System.out.println("oval.x: " + boardWindow.ovalBoard[i][j].getX() +
                                         " oval.y: " + boardWindow.ovalBoard[i][j].getX());
                                 System.out.println("x: "+i+" y: "+j);
+                                boardWindow.clickedField.setX(i);
+                                boardWindow.clickedField.setY(j);
+                                boardWindow.display();
                             }
                         }
                     }

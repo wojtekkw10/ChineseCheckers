@@ -14,7 +14,7 @@ import java.util.*;
 public class Game{
     //Client client = new Client();
     private ArrayList<SimpleBot> bots = new ArrayList<SimpleBot>();
-    private ArrayList<Player> players = new ArrayList<>();
+    private ArrayList<Player> players = new ArrayList<Player>();
     String name;
     int numberOfBots;
     Board regularBoard = new RegularBoard();
@@ -102,7 +102,7 @@ public class Game{
                                 possibleMovesArray.put(entry.getKey(), entry.getValue().toArray(new Field[0]));
                             }
 
-                            //packet.possibleMoves = possibleMovesArray;
+                            packet.possibleMoves = possibleMovesArray;
 
 
                             reply.commandType = CommandType.GET_BOARD_AND_POSSIBLE_MOVES;

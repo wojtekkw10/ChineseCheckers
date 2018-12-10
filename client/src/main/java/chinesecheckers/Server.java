@@ -58,13 +58,14 @@ public class Server {
         command.content = packet.toJSON();
         String welcomeMessage = new String();
 
+        System.out.println(command.toJSON());
         out.println(command.toJSON());
         while(true)
         {
             try{ sleep(1000);} catch (InterruptedException e){}
 
             try{  welcomeMessage = in.readLine();}
-            catch(IOException e ) { System.out.print("Error\n");}
+            catch(IOException e ) { System.out.print("Error: Didnt start a new game\n");}
             System.out.println(welcomeMessage);
             return "";
         }
@@ -87,10 +88,12 @@ public class Server {
     //TODO: funkcja downloadBoardState()
     public Packet downloadBoardState() {
 
+        System.out.println("Downloading BoardState");
         Command command = new Command();
         command.commandType = CommandType.GET_BOARD_AND_POSSIBLE_MOVES;
         Packet packet = new Packet();
         command.content = packet.toJSON();
+        System.out.println(command.toJSON());
         out.println(command.toJSON());
 
         Packet receivedPacket = new Packet();
@@ -102,7 +105,7 @@ public class Server {
             try{ sleep(100);} catch (InterruptedException e){}
 
             try{  commandAsJSON = in.readLine();}
-            catch(IOException e ) { System.out.print("Error\n");}
+            catch(IOException e ) { System.out.print("Error: Didnt receive BoardState\n");}
             System.out.print(commandAsJSON);
             Command receivedCommand = Command.fromJSON(commandAsJSON);
             System.out.print(receivedCommand.content);
