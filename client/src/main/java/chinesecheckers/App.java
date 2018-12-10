@@ -271,13 +271,13 @@ public class App //implements WindowListener,ActionListener
                                         move.newField = clicked;
                                         server.uploadMove(move);
 
-                                        /*
+
                                         Packet packet = server.downloadBoardState();
                                         boardWindow.charBoard = packet.board.clone();
                                         boardWindow.possibleMoves = packet.possibleMoves;
                                         isMyMove = packet.isMyMove;
                                         System.out.println("IsMyMove: "+isMyMove);
-                                        */
+
                                     }
 
                                     //Ustaw do boardWindow zeby moglo wyrysowac possibleMoves
