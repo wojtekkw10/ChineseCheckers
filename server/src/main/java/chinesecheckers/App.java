@@ -81,7 +81,8 @@ public class App
 
                         listOfGames.add(new Game(packet.gameName, packet.numberOfBots));
                         int lastGameIndex = listOfGames.size()-1;
-                        listOfGames.get(listOfGames.size() - 1).addPlayer(listOfGames.get(lastGameIndex).new Player(newPlayerSocket, packet.username));
+                        int newPlayerID = listOfGames.get(listOfGames.size() - 1).getNumberOfPlayers();
+                        listOfGames.get(listOfGames.size() - 1).addPlayer(listOfGames.get(lastGameIndex).new Player(newPlayerSocket, packet.username, 'w'));
                         System.out.print("New game has been added. Name: " + packet.gameName + " Number of Bots: " + packet.numberOfBots + "\n");
                         System.out.print("New Player: " + packet.username + "\n");
                         System.out.print("Number of games: " + listOfGames.size() + "\n");
@@ -97,7 +98,16 @@ public class App
                     case JOIN_A_GAME: {
                         int ID = Integer.parseInt(in.readLine());
                         String username = in.readLine();
-                        listOfGames.get(ID).addPlayer(listOfGames.get(ID).new Player(newPlayerSocket, username));
+                        int newPlayerID = listOfGames.get(ID).getNumberOfPlayers();
+                        Character color;
+                        if(newPlayerID==1) color='r';
+                        else if(newPlayerID==2) color='y';
+                        else if(newPlayerID==3) color='b';
+                        else if(newPlayerID==4) color='g';
+                        else if(newPlayerID==5) color='c';
+                        else color='w';
+
+                        listOfGames.get(ID).addPlayer(listOfGames.get(ID).new Player(newPlayerSocket, username, color));
                         System.out.print("New Player: " + username + "\n");
                         System.out.print("Number OF Players in the Game: " + listOfGames.get(ID).getNumberOfPlayers() + "\n");
                         output.println("You have been added to the game");

@@ -27,6 +27,7 @@ public class Packet {
     //public String possibleMovesASJSON;
     public Character currentPlayer;
     public HashMap<Field, Field[]> possibleMoves;
+    public boolean isMyMove;
 
     public Move move;
 

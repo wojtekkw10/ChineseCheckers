@@ -89,7 +89,7 @@ public class Server {
 
         while(true)
         {
-            try{ sleep(1000);} catch (InterruptedException e){}
+            try{ sleep(100);} catch (InterruptedException e){}
 
             try{  feedback = in.readLine();}
             catch(IOException e ) { System.out.print("Error: Didnt start a new game\n");}
@@ -149,7 +149,7 @@ public class Server {
             catch(IOException e ) { System.out.print("Error: Didnt receive BoardState\n");}
             System.out.print(commandAsJSON);
             Command receivedCommand = Command.fromJSON(commandAsJSON);
-            System.out.print(receivedCommand.content);
+            System.out.println(receivedCommand.content);
             receivedPacket = Packet.fromJSON(receivedCommand.content);
 
             return receivedPacket;
@@ -181,6 +181,19 @@ public class Server {
         }
     }
 
+    String listen(BoardWindow BW)
+    {
+        while(true)
+        {
+            try{ sleep(100);} catch (InterruptedException e){}
+
+            BW.display();
+
+            try{ return(in.readLine());}
+            catch(IOException e ) { System.out.print("Error\n");}
+        }
+    }
+
     public Board getboard() {
         return board;
     }
@@ -206,14 +219,14 @@ public class Server {
 
         String receivedGames = null;
         try{ receivedGames = in.readLine();}
-        catch(IOException e ){ System.out.print("Error");}
+        catch(IOException e ){ System.out.println("Error");}
 
 
         //Parsowanie
         ArrayList<GameInfo> availableGames = new ArrayList<>();
         String[] parts = receivedGames.split(" ");
 
-        System.out.print(receivedGames+"\n");
+        System.out.println(receivedGames);
 
         for(int i=0; i/4<parts.length/4; i+=4)
         {

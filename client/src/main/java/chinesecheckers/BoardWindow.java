@@ -55,6 +55,7 @@ public class BoardWindow extends Window{
 
     void display()
     {
+        //System.out.println("drawingBoardWindow...");
         if(this.mouseListener!=null) frame.removeMouseListener(mouseListener);
         frame.getContentPane().removeAll();
         frame.revalidate();
@@ -68,11 +69,14 @@ public class BoardWindow extends Window{
         ((BoardWindow) p).possibleMoves = possibleMoves;
         ((BoardWindow) p).clickedField = clickedField;
         ((BoardWindow) p).possibleMovesCirclesBoard = possibleMovesCirclesBoard;
+        ((BoardWindow) p).frame = frame;
 
         p.setBounds(100,0,760,800);
         frame.getContentPane().setBackground(Color.white);
 
         frame.repaint();
+        //p.repaint();
+        //System.out.println("BoardWindow drawn");
     }
 
     boolean isPossibleMoveField(Field field)
@@ -93,6 +97,7 @@ public class BoardWindow extends Window{
     }
     @Override
     protected void paintComponent(Graphics g) {
+        //System.out.println("painting component...");
         super.paintComponent ( g );
         Graphics2D g2d = (Graphics2D) g;
         //frame.getContentPane().setBackground(Color.white);
@@ -570,6 +575,8 @@ public class BoardWindow extends Window{
             }
         }
         */
+
+        //System.out.println("Component drawn...");
 
 
     }

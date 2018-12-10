@@ -41,14 +41,15 @@ public class Game{
         Color color;
 
         private Socket socket;
-        private int clientNumber;
+        private Character playerColor;
         BufferedReader input;
         private PrintWriter output;
         String username;
 
-        public Player(Socket socket, String username) {
+        public Player(Socket socket, String username, Character playerColor) {
             this.socket = socket;
             this.username = username;
+            this.playerColor = playerColor;
             //this.clientNumber = clientNumber;
             System.out.print("New connection at " + socket+"\n");
 
@@ -97,6 +98,10 @@ public class Game{
 
                             System.out.println("Name of the game: " + name);
 
+                            if(regularBoard.getCheckerByTurn().equals(this.playerColor)) packet.isMyMove = true;
+                            else packet.isMyMove = false;
+
+
                             //Converting HashMap<Field, List<Field>> do HashMap<Field, Field[]>
                             HashMap<Field, Field[]> possibleMovesArray = new HashMap<Field, Field[]>();
                             for (Map.Entry<Field, List<Field>> entry : regularBoard.getPossibleMoves().entrySet()) {
@@ -113,6 +118,8 @@ public class Game{
                             System.out.println(reply.content);
 
                             output.println(reply.toJSON());
+
+
                             break;
                         case MOVE_PIN:/*
                             Move move = Move.fromJSON(command.content);
@@ -126,11 +133,14 @@ public class Game{
                             output.println(deltaReply.toJSON());*/
 
 
+
                             System.out.print(command.content);
                             Packet receivedPacket = Packet.fromJSON(command.content);
                             Move move = receivedPacket.move;
                             regularBoard.movePin(move.oldField, move.newField);
                             output.println("Move received");
+
+
                             break;
                         case QUIT:
                             return;

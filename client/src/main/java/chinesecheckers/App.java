@@ -32,12 +32,15 @@ public class App //implements WindowListener,ActionListener
         FrameState state = FrameState.MENUWINDOW;
         Server server = new Server();
         ArrayList<GameInfo> gameList;
+        boolean isMyMove = false;
 
         Window joinWindow;
         MenuWindow menuWindow;
         BoardWindow boardWindow;
         Window pauseWindow;
         RequestNewGameWindow requestNewGameWindow;
+
+
 
         MainWindow(JFrame frame)
         {
@@ -49,6 +52,7 @@ public class App //implements WindowListener,ActionListener
             requestNewGameWindow = new RequestNewGameWindow(this, frame);
             frame.addComponentListener(new ResizeListener());
             KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new BoardWindowKeyListener());
+
         }
 
         @Override
@@ -134,6 +138,10 @@ public class App //implements WindowListener,ActionListener
                 Packet packet = server.downloadBoardState();
                 boardWindow.charBoard = packet.board;
                 boardWindow.possibleMoves = packet.possibleMoves;
+                isMyMove = packet.isMyMove;
+
+                System.out.println("IsMyMove: "+isMyMove);
+
                 boardWindow.display();
                 state = FrameState.BOARDWINDOW;
             }
@@ -149,6 +157,8 @@ public class App //implements WindowListener,ActionListener
                 Packet packet = server.downloadBoardState();
                 boardWindow.charBoard = packet.board.clone();
                 boardWindow.possibleMoves = packet.possibleMoves;
+                isMyMove = packet.isMyMove;
+                System.out.println("IsMyMove: "+isMyMove);
 
                 boardWindow.display();
                 state = FrameState.BOARDWINDOW;
@@ -230,49 +240,58 @@ public class App //implements WindowListener,ActionListener
                 //System.out.println("Mouse clicked (# of clicks: "
                        // + e.getClickCount() + ")");
 
-                for(int i=0; i<18; i++)
+                if(isMyMove)
                 {
-                    for(int j=0; j<18; j++)
+                    for(int i=0; i<18; i++)
                     {
-                        if(boardWindow.ovalBoard[i][j]!=null && boardWindow.charBoard[i][j]!=null)
-                        {//(e.getButton() == 1 &&)
-                            //Sprawdzanie ktory przycisk zostal nacisniety
-                            if ( boardWindow.ovalBoard[i][j].contains(e.getX()-108, e.getY()-30) ) {
-                                //wtedy narysuj x,y tego pinu
-                                System.out.println("oval.x: " + boardWindow.ovalBoard[i][j].getX() +
-                                        " oval.y: " + boardWindow.ovalBoard[i][j].getX());
-                                System.out.println("x: "+i+" y: "+j);
+                        for(int j=0; j<18; j++)
+                        {
+                            if(boardWindow.ovalBoard[i][j]!=null && boardWindow.charBoard[i][j]!=null)
+                            {//(e.getButton() == 1 &&)
+                                //Sprawdzanie ktory przycisk zostal nacisniety
+                                if ( boardWindow.ovalBoard[i][j].contains(e.getX()-108, e.getY()-30) ) {
+                                    //wtedy narysuj x,y tego pinu
+                                    System.out.println("oval.x: " + boardWindow.ovalBoard[i][j].getX() +
+                                            " oval.y: " + boardWindow.ovalBoard[i][j].getX());
+                                    System.out.println("x: "+i+" y: "+j);
 
 
-                                Field clicked = new Field();
-                                clicked.setX(i);
-                                clicked.setY(j);
+                                    Field clicked = new Field();
+                                    clicked.setX(i);
+                                    clicked.setY(j);
 
-                                System.out.println("Previously clicked:  x: "+boardWindow.clickedField.getX()+" y: "+boardWindow.clickedField.getY());
-                                System.out.println("Now clicked:  x: "+clicked.getX()+" y: "+clicked.getY());
+                                    System.out.println("Previously clicked:  x: "+boardWindow.clickedField.getX()+" y: "+boardWindow.clickedField.getY());
+                                    System.out.println("Now clicked:  x: "+clicked.getX()+" y: "+clicked.getY());
 
-                                if(boardWindow.isPossibleMoveField(clicked))
-                                {
-                                    System.out.println("Move has been done");
-                                    Move move = new Move();
-                                    move.oldField = boardWindow.clickedField;
-                                    move.newField = clicked;
-                                    server.uploadMove(move);
+                                    if(boardWindow.isPossibleMoveField(clicked))
+                                    {
+                                        System.out.println("Move has been done");
+                                        Move move = new Move();
+                                        move.oldField = boardWindow.clickedField;
+                                        move.newField = clicked;
+                                        server.uploadMove(move);
 
-                                    Packet packet = server.downloadBoardState();
-                                    boardWindow.charBoard = packet.board.clone();
-                                    boardWindow.possibleMoves = packet.possibleMoves;
-                                }
+                                        /*
+                                        Packet packet = server.downloadBoardState();
+                                        boardWindow.charBoard = packet.board.clone();
+                                        boardWindow.possibleMoves = packet.possibleMoves;
+                                        isMyMove = packet.isMyMove;
+                                        System.out.println("IsMyMove: "+isMyMove);
+                                        */
+                                    }
 
                                     //Ustaw do boardWindow zeby moglo wyrysowac possibleMoves
-                                boardWindow.clickedField.setX(i);
-                                boardWindow.clickedField.setY(j);
+                                    boardWindow.clickedField.setX(i);
+                                    boardWindow.clickedField.setY(j);
 
-                                boardWindow.display();
+                                    boardWindow.display();
+                                }
                             }
                         }
                     }
                 }
+
+
             }
 
         }
