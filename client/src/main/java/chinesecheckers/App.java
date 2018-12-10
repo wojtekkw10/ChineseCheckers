@@ -59,6 +59,7 @@ public class App //implements WindowListener,ActionListener
             if( command.equals( "Create New Game" ))  {
 
                 //W CELACH TESTOWYCH
+                /*
                 try{ server.connect(frame);}
                 catch (IOException ex){System.out.print("CLIENT: ERROR: Couldn't connect to the server\n");}
                 server.requestNewGame("default", 1, "Username");
@@ -72,17 +73,18 @@ public class App //implements WindowListener,ActionListener
                 boardWindow.display();
                 state = FrameState.BOARDWINDOW;
                 System.out.print("CLIENT: Start Button has been clicked\n");
+                */
                 //W CELACH TESTOWYCH
 
                 //try{ server.connect(frame);}
                 //catch (IOException ex){System.out.print("CLIENT: ERROR: Couldn't connect to the server\n");}
                 //server.requestNewGame();
 
-                /* UNCOMMENT LATER
+                // UNCOMMENT LATER
                 requestNewGameWindow.display();
                 state = FrameState.REQUESTNEWGAMEWINDOW;
                 System.out.print("CLIENT: Create New Game Button has been clicked\n");
-                */
+
 
                 //Show available games
             } else if( command.equals( "Join an existing game" ) ) {
@@ -129,6 +131,11 @@ public class App //implements WindowListener,ActionListener
                 try{ server.connect(frame);}
                 catch (IOException ex){System.out.print("CLIENT: ERROR: Couldn't connect to the server\n");}
                 server.joinGame(gameList.get(i).id, menuWindow.getUsername());
+                Packet packet = server.downloadBoardState();
+                boardWindow.charBoard = packet.board;
+                boardWindow.possibleMoves = packet.possibleMoves;
+                boardWindow.display();
+                state = FrameState.BOARDWINDOW;
             }
             else if( command.equals( "Start" ))  {
                 try{ server.connect(frame);}
@@ -141,6 +148,7 @@ public class App //implements WindowListener,ActionListener
 
                 Packet packet = server.downloadBoardState();
                 boardWindow.charBoard = packet.board.clone();
+                boardWindow.possibleMoves = packet.possibleMoves;
 
                 boardWindow.display();
                 state = FrameState.BOARDWINDOW;

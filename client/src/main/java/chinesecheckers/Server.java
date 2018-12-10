@@ -98,10 +98,32 @@ public class Server {
         }
     }
 
-    void joinGame(int id, String username)
+    String joinGame(int id, String username)
     {
+        System.out.print("Joining a game\n");
+
+
+        Packet packet = new Packet();
+
+        Command command = new Command();
+        command.commandType = CommandType.JOIN_A_GAME;
+        command.content = packet.toJSON();
+
+        out.println(command.toJSON());
+
         out.println(id);
         out.println(username);
+
+        String feedback = new String();
+        while(true)
+        {
+            try{ sleep(1000);} catch (InterruptedException e){}
+
+            try{  feedback = in.readLine();}
+            catch(IOException e ) { System.out.print("Error: Didnt start a new game\n");}
+            System.out.println(feedback);
+            return "";
+        }
     }
 
     //TODO: funkcja downloadBoardState()
@@ -169,12 +191,25 @@ public class Server {
 
     //Returns an arrays of IDs
     public ArrayList<GameInfo> downloadAllGames(){
-        System.out.print("DownloadingAllgames\n");
-        out.println("-2");
-        String receivedGames = null;
+        System.out.print("Requested all games\n");
 
+
+        Packet packet = new Packet();
+
+        Command command = new Command();
+        command.commandType = CommandType.REQUEST_ALL_GAMES;
+        command.content = packet.toJSON();
+
+        out.println(command.toJSON());
+
+
+
+        String receivedGames = null;
         try{ receivedGames = in.readLine();}
         catch(IOException e ){ System.out.print("Error");}
+
+
+        //Parsowanie
         ArrayList<GameInfo> availableGames = new ArrayList<>();
         String[] parts = receivedGames.split(" ");
 

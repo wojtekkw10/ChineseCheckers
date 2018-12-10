@@ -80,7 +80,8 @@ public class App
                         //String username = in.readLine();
 
                         listOfGames.add(new Game(packet.gameName, packet.numberOfBots));
-                        listOfGames.get(listOfGames.size() - 1).addPlayer(defaultGame.new Player(newPlayerSocket, packet.username));
+                        int lastGameIndex = listOfGames.size()-1;
+                        listOfGames.get(listOfGames.size() - 1).addPlayer(listOfGames.get(lastGameIndex).new Player(newPlayerSocket, packet.username));
                         System.out.print("New game has been added. Name: " + packet.gameName + " Number of Bots: " + packet.numberOfBots + "\n");
                         System.out.print("New Player: " + packet.username + "\n");
                         System.out.print("Number of games: " + listOfGames.size() + "\n");
@@ -94,11 +95,12 @@ public class App
                         //clientNumber++;
                     }
                     case JOIN_A_GAME: {
+                        int ID = Integer.parseInt(in.readLine());
                         String username = in.readLine();
-                        int ID = Integer.parseInt(command.content);
-                        listOfGames.get(ID).addPlayer(defaultGame.new Player(newPlayerSocket, username));
+                        listOfGames.get(ID).addPlayer(listOfGames.get(ID).new Player(newPlayerSocket, username));
                         System.out.print("New Player: " + username + "\n");
                         System.out.print("Number OF Players in the Game: " + listOfGames.get(ID).getNumberOfPlayers() + "\n");
+                        output.println("You have been added to the game");
                         break;
                     }
                 }

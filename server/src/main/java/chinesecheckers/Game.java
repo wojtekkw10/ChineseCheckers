@@ -95,6 +95,8 @@ public class Game{
                             Packet packet = new Packet();
                             packet.board = regularBoard.getBoard();
 
+                            System.out.println("Name of the game: " + name);
+
                             //Converting HashMap<Field, List<Field>> do HashMap<Field, Field[]>
                             HashMap<Field, Field[]> possibleMovesArray = new HashMap<Field, Field[]>();
                             for (Map.Entry<Field, List<Field>> entry : regularBoard.getPossibleMoves().entrySet()) {
