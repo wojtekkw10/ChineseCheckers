@@ -185,6 +185,50 @@ public class Game{
 
 
                             break;
+                        case SKIP:
+                            System.out.println("Player has skipped");
+                            regularBoard.skip();
+
+                            //To samo co w MOVE_PIN ale bez movePin
+                            for(int i=0; i<players.size(); i++)
+                            {
+                                Command broadcastCommand = new Command();
+
+                                Packet broadcastPacket = new Packet();
+                                broadcastPacket.board = regularBoard.getBoard();
+
+                                broadcastPacket.isMyMove = false;
+
+                                System.out.println("determining the next player...");
+                                System.out.println("CurrentPlayer.Color: "+regularBoard.getCheckerByTurn()+"This.Color"+this.playerColor);
+                                if(regularBoard.getCheckerByTurn().equals('r') && i==1) broadcastPacket.isMyMove = true;
+                                else if(regularBoard.getCheckerByTurn().equals('y') && i==2) broadcastPacket.isMyMove = true;
+                                else if(regularBoard.getCheckerByTurn().equals('b') && i==3) broadcastPacket.isMyMove = true;
+                                else if(regularBoard.getCheckerByTurn().equals('g') && i==4) broadcastPacket.isMyMove = true;
+                                else if(regularBoard.getCheckerByTurn().equals('c') && i==5) broadcastPacket.isMyMove = true;
+                                else if(regularBoard.getCheckerByTurn().equals('w') && i==0) broadcastPacket.isMyMove = true;
+
+
+
+                                //Converting HashMap<Field, List<Field>> do HashMap<Field, Field[]>
+                                HashMap<Field, Field[]> possibleMovesArrayBroadcast = new HashMap<Field, Field[]>();
+                                for (Map.Entry<Field, List<Field>> entry : regularBoard.getPossibleMoves().entrySet()) {
+                                    System.out.println(entry.getKey() + " = " + entry.getValue());
+                                    possibleMovesArrayBroadcast.put(entry.getKey(), entry.getValue().toArray(new Field[0]));
+                                }
+
+                                broadcastPacket.possibleMoves = possibleMovesArrayBroadcast;
+
+
+                                broadcastCommand.commandType = CommandType.GET_BOARD_AND_POSSIBLE_MOVES;
+                                broadcastCommand.content = broadcastPacket.toJSON();
+
+                                System.out.println(broadcastCommand.content);
+
+                                System.out.println(players.size());
+                                players.get(i).output.println(broadcastCommand.toJSON());
+                            }
+
                         case QUIT:
                             return;
 

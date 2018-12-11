@@ -21,5 +21,6 @@ public abstract class Board {
     abstract boolean isOneStepMove(Field oldfField, Field newField);
     abstract boolean isValidPosition(Field field);
     abstract List<Field> getValidFromPositions();
+    abstract void skip();
 
 }

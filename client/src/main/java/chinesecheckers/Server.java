@@ -39,6 +39,15 @@ public class Server {
 
     }
 
+    void skip()
+    {
+        System.out.println("Skipping");
+        Command command = new Command();
+        command.commandType = CommandType.SKIP;
+        Packet packet = new Packet();
+        command.content = packet.toJSON();
+        out.println(command.toJSON());
+    }
 
     //TODO: funkcja requestnewGame()
     public String requestNewGame(String name, int numberOfBots, String username, int maxNumberOfPlayers) {

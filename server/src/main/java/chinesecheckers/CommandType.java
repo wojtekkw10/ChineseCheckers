@@ -13,6 +13,7 @@ public enum CommandType {
         REQUEST_NEW_GAME,
         JOIN_A_GAME,
         REQUEST_ALL_GAMES,
+        SKIP,
 
 
 

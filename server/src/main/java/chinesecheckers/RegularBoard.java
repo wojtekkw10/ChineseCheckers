@@ -17,6 +17,10 @@ public class RegularBoard extends Board {
         board = initializeHomeCorner();
     }
 
+    public void skip()
+    {
+        turnIndex++;
+    }
 
     private HashMap<Color, List<Field>> corners = new HashMap<Color, List<Field>>()     //setting default coordinates for pins at the beginning
     {

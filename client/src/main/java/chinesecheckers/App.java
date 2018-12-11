@@ -133,8 +133,9 @@ public class App //implements WindowListener,ActionListener
 
             //Skip this round
             else if( command.equals( "Skip" ) )  { //bede uzywal do testowania laczenia sie z serverem
-                System.out.print(server.getEmptyString()+"\n");
-                System.out.print("CLIENT: Skip Button has been clicked1\n");
+                //System.out.print(server.getEmptyString()+"\n");
+                //System.out.print("CLIENT: Skip Button has been clicked1\n");
+                server.skip();
             }
 
             //Join selected game
