@@ -40,8 +40,8 @@ public class RequestNewGameWindow extends Window {
                     return;
                 }
                 int number = Integer.parseInt(text);
-                System.out.println("LENGTH: "+length);
-                if(number<2 || number>6 || numberOfBotsTextField.getText().length()>0) return;
+                //System.out.println("LENGTH: "+length);
+                if(number<0 || number>6 || numberOfBotsTextField.getText().length()>0) return;
                 super.replace(fb, offset, length, text, attrs);
             }
         });
