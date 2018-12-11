@@ -86,11 +86,12 @@ public class App
                         System.out.print("New game has been added. Name: " + packet.gameName + " Number of Bots: " + packet.numberOfBots + "\n");
                         System.out.print("New Player: " + packet.username + "\n");
                         System.out.print("Number of games: " + listOfGames.size() + "\n");
-                        Packet id = new Packet();
-                        id.id = listOfGames.size();
-                        command.content = id.toJSON();
-                        command.commandType = CommandType.REQUEST_NEW_GAME;
-                        System.out.println(command.toJSON());
+                        listOfGames.get(listOfGames.size()-1).numberOfBots = packet.numberOfBots;
+                        //Packet id = new Packet();
+                        //id.id = listOfGames.size();
+                        //command.content = id.toJSON();
+                        //command.commandType = CommandType.REQUEST_NEW_GAME;
+                        //System.out.println(command.toJSON());
                         output.println("Welcome");
                         break;
                         //clientNumber++;
