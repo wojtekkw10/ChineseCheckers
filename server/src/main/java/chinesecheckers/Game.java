@@ -17,6 +17,8 @@ public class Game{
     private ArrayList<Player> players = new ArrayList<Player>();
     String name;
     int numberOfBots;
+    int numberOfPlayers;
+
     Board regularBoard = new RegularBoard();
 
 

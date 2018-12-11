@@ -41,7 +41,7 @@ public class Server {
 
 
     //TODO: funkcja requestnewGame()
-    public String requestNewGame(String name, int numberOfBots, String username) {
+    public String requestNewGame(String name, int numberOfBots, String username, int maxNumberOfPlayers) {
         //out.println("-1");
         System.out.print("Requested a new game\n");
         //out.println(name);
@@ -52,6 +52,7 @@ public class Server {
         packet.username = username;
         packet.gameName = name;
         packet.numberOfBots = numberOfBots;
+        packet.numberOfPlayers = maxNumberOfPlayers;
 
         Command command = new Command();
         command.commandType = CommandType.REQUEST_NEW_GAME;

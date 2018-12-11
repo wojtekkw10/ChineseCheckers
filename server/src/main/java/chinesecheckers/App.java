@@ -87,6 +87,8 @@ public class App
                         System.out.print("New Player: " + packet.username + "\n");
                         System.out.print("Number of games: " + listOfGames.size() + "\n");
                         listOfGames.get(listOfGames.size()-1).numberOfBots = packet.numberOfBots;
+                        listOfGames.get(listOfGames.size()-1).numberOfPlayers = packet.numberOfPlayers;
+                        System.out.println(packet.numberOfPlayers);
                         //Packet id = new Packet();
                         //id.id = listOfGames.size();
                         //command.content = id.toJSON();

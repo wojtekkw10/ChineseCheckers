@@ -18,6 +18,7 @@ public class Packet {
     public String username;
     public String gameName;
     public int numberOfBots;
+    public int numberOfPlayers;
 
     //Joining a game
     public int id;

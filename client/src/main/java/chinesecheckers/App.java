@@ -163,7 +163,7 @@ public class App //implements WindowListener,ActionListener
 
                 GameInfo info = requestNewGameWindow.getGameInfo();
                 String username = menuWindow.getUsername();
-                server.requestNewGame(info.name, info.numberOfBots, username);
+                server.requestNewGame(info.name, info.numberOfBots, username, info.maxNumberOfPlayers);
 
                 Packet packet = server.downloadBoardState();
                 boardWindow.charBoard = packet.board.clone();

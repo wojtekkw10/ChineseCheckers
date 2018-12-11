@@ -3,7 +3,7 @@ package chinesecheckers;
 public class GameInfo {
     int id;
     int currentNumberOfPlayers;
-    private int maxNumberOfPlayers;
+    int maxNumberOfPlayers;
     int numberOfBots;
     String name;
 
