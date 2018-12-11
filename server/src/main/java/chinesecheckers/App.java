@@ -37,7 +37,7 @@ public class App
                 System.out.print("Downloading request\n");
 
                 String commandAsJSON = in.readLine();
-                System.out.print(commandAsJSON);
+                //System.out.print(commandAsJSON);
                 Command command = Command.fromJSON(commandAsJSON);
                 Packet packet = new Packet();
                 packet = Packet.fromJSON(command.content);

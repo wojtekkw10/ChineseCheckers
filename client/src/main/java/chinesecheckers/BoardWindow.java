@@ -22,6 +22,7 @@ public class BoardWindow extends Window{
     private MouseListener mouseListener;
     private Board board;
     private BufferedImage image;
+    boolean isMyMove;
 
     public Character[][] charBoard = new Character[18][18];
     public Ellipse2D[][] ovalBoard = new Ellipse2D[18][18];
@@ -38,6 +39,8 @@ public class BoardWindow extends Window{
         this.mouseListener = mouseListener;
         this.addMouseListener(mouseListener);
 
+        isMyMove = false;
+
         try {
             image = ImageIO.read(new File("backtexture.jpg"));
         } catch (IOException ex) {
@@ -53,7 +56,7 @@ public class BoardWindow extends Window{
         this.board = board;
     }
 
-    void display()
+    synchronized void display()
     {
         //System.out.println("drawingBoardWindow...");
         if(this.mouseListener!=null) frame.removeMouseListener(mouseListener);

@@ -85,6 +85,7 @@ public class Server {
         System.out.println(command.toJSON());
         out.println(command.toJSON());
 
+        /*
         String feedback = new String();
 
         while(true)
@@ -95,7 +96,8 @@ public class Server {
             catch(IOException e ) { System.out.print("Error: Didnt start a new game\n");}
             System.out.println(feedback);
             return 0;
-        }
+        }*/
+        return 0;
     }
 
     String joinGame(int id, String username)
@@ -126,8 +128,26 @@ public class Server {
         }
     }
 
+    public Packet listen()
+    {
+        while(true)
+        {
+            String commandAsJSON = new String();
+
+            try{ sleep(100);} catch (InterruptedException e){}
+
+            System.out.println("listening...");
+            try{  commandAsJSON = in.readLine();}
+            catch(IOException e ) { System.out.print("Error: Didnt receive BoardState\n");}
+            System.out.print(commandAsJSON);
+            Command receivedCommand = Command.fromJSON(commandAsJSON);
+            System.out.println(receivedCommand.content);
+            return Packet.fromJSON(receivedCommand.content);
+        }
+    }
+
     //TODO: funkcja downloadBoardState()
-    public Packet downloadBoardState() {
+    public synchronized Packet downloadBoardState() {
 
         System.out.println("Downloading BoardState");
         Command command = new Command();

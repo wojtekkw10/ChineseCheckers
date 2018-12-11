@@ -32,7 +32,9 @@ public class App //implements WindowListener,ActionListener
         FrameState state = FrameState.MENUWINDOW;
         Server server = new Server();
         ArrayList<GameInfo> gameList;
-        boolean isMyMove = false;
+        volatile boolean isMyMove = false;
+        boolean finish = false;
+        ServerListener serverListener = new ServerListener();
 
         Window joinWindow;
         MenuWindow menuWindow;
@@ -52,6 +54,13 @@ public class App //implements WindowListener,ActionListener
             requestNewGameWindow = new RequestNewGameWindow(this, frame);
             frame.addComponentListener(new ResizeListener());
             KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new BoardWindowKeyListener());
+
+
+            serverListener.isMyMove = isMyMove;
+            serverListener.boardWindow = boardWindow;
+            serverListener.server = server;
+            serverListener.finish = finish;
+            serverListener.frame = frame;
 
         }
 
@@ -138,12 +147,14 @@ public class App //implements WindowListener,ActionListener
                 Packet packet = server.downloadBoardState();
                 boardWindow.charBoard = packet.board;
                 boardWindow.possibleMoves = packet.possibleMoves;
+                boardWindow.isMyMove = packet.isMyMove;
                 isMyMove = packet.isMyMove;
 
                 System.out.println("IsMyMove: "+isMyMove);
 
                 boardWindow.display();
                 state = FrameState.BOARDWINDOW;
+                serverListener.start();
             }
             else if( command.equals( "Start" ))  {
                 try{ server.connect(frame);}
@@ -158,11 +169,13 @@ public class App //implements WindowListener,ActionListener
                 boardWindow.charBoard = packet.board.clone();
                 boardWindow.possibleMoves = packet.possibleMoves;
                 isMyMove = packet.isMyMove;
+                boardWindow.isMyMove = packet.isMyMove;
                 System.out.println("IsMyMove: "+isMyMove);
 
                 boardWindow.display();
                 state = FrameState.BOARDWINDOW;
                 System.out.print("CLIENT: Start Button has been clicked\n");
+                serverListener.start();
 
             } else {
                 System.exit(0);
@@ -180,13 +193,13 @@ public class App //implements WindowListener,ActionListener
 
                 }
                 if (e.getKeyCode() == KeyEvent.VK_E) {
-                    pauseWindow.display();
-                    state = FrameState.PAUSEWINDOW;
+                    //pauseWindow.display();
+                    //state = FrameState.PAUSEWINDOW;
 
-                    System.out.print("E Button Pressed");
+                    System.out.println("ISMYMOVE: "+isMyMove);
 
 
-                    Packet packet = server.downloadBoardState();
+                    //Packet packet = server.downloadBoardState();
 
                 }
                 return false;
@@ -240,7 +253,7 @@ public class App //implements WindowListener,ActionListener
                 //System.out.println("Mouse clicked (# of clicks: "
                        // + e.getClickCount() + ")");
 
-                if(isMyMove)
+                if(boardWindow.isMyMove)
                 {
                     for(int i=0; i<18; i++)
                     {
