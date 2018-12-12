@@ -10,7 +10,7 @@ public class RegularBoard extends Board {
     private static final int HEIGHT = 18;
 
     private int numberOfPlayers = 6;
-    private int turnIndex = 1;
+    private int turnIndex = 0;
 
     public RegularBoard()
     {

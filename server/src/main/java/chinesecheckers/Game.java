@@ -201,12 +201,12 @@ public class Game{
 
                                 System.out.println("determining the next player...");
                                 System.out.println("CurrentPlayer.Color: "+regularBoard.getCheckerByTurn()+"This.Color"+this.playerColor);
-                                if(regularBoard.getCheckerByTurn().equals('r') && i==1) broadcastPacket.isMyMove = true;
-                                else if(regularBoard.getCheckerByTurn().equals('y') && i==2) broadcastPacket.isMyMove = true;
-                                else if(regularBoard.getCheckerByTurn().equals('b') && i==3) broadcastPacket.isMyMove = true;
-                                else if(regularBoard.getCheckerByTurn().equals('g') && i==4) broadcastPacket.isMyMove = true;
-                                else if(regularBoard.getCheckerByTurn().equals('c') && i==5) broadcastPacket.isMyMove = true;
-                                else if(regularBoard.getCheckerByTurn().equals('w') && i==0) broadcastPacket.isMyMove = true;
+                                if(regularBoard.getCheckerByTurn().equals('r') && i==0) broadcastPacket.isMyMove = true;
+                                else if(regularBoard.getCheckerByTurn().equals('y') && i==1) broadcastPacket.isMyMove = true;
+                                else if(regularBoard.getCheckerByTurn().equals('b') && i==2) broadcastPacket.isMyMove = true;
+                                else if(regularBoard.getCheckerByTurn().equals('g') && i==3) broadcastPacket.isMyMove = true;
+                                else if(regularBoard.getCheckerByTurn().equals('c') && i==4) broadcastPacket.isMyMove = true;
+                                else if(regularBoard.getCheckerByTurn().equals('w') && i==5) broadcastPacket.isMyMove = true;
 
 
 
