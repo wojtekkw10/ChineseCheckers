@@ -13,7 +13,7 @@ public abstract class Board {
     abstract Optional<Color> checkVictory();
     abstract HashMap<Field, List<Field>> getPossibleMoves();
     abstract HashMap<Color, List<Field>> getPlayerMap();
-    abstract void setNumberOfPlayers();
+    abstract void setNumberOfPlayers(int numberOfPlayers);
     abstract Character[][] getBoard();
     abstract Character[][] initializeHomeCorner();
     abstract Character getCheckerByTurn();
@@ -22,5 +22,6 @@ public abstract class Board {
     abstract boolean isValidPosition(Field field);
     abstract List<Field> getValidFromPositions();
     abstract void skip();
+    abstract int getTurnIndex();
 
 }

@@ -7,20 +7,18 @@ import java.awt.event.ComponentAdapter;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
+import java.io.PrintWriter;import java.net.Socket;
 import java.util.*;
 
 public class Game{
     //Client client = new Client();
-    private ArrayList<SimpleBot> bots = new ArrayList<SimpleBot>();
     private ArrayList<Player> players = new ArrayList<Player>();
     String name;
     int numberOfBots;
     int numberOfPlayers;
 
     Board regularBoard = new RegularBoard();
-
+    Bot simpleBot = new SimpleBot();
 
     public void addPlayer(Player player)
     {
@@ -138,6 +136,24 @@ public class Game{
                             Move move = receivedPacket.move;
                             regularBoard.movePin(move.oldField, move.newField);
                             //output.println("Move received");
+
+                            if (numberOfBots != 0){
+
+                                int thisTurn = regularBoard.getTurnIndex() % numberOfPlayers;
+                                int botsTurn = players.size();
+
+                                if (thisTurn == botsTurn){
+
+                                    for (int i = botsTurn; i < numberOfPlayers; i++){
+
+                                        Field[] moves = simpleBot.getTheBestMove(regularBoard.getPossibleMoves());
+                                        regularBoard.movePin(moves[0], moves[1]);
+
+                                    }
+
+                                }
+
+                            }
 
 
                             for(int i=0; i<players.size(); i++)

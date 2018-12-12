@@ -110,6 +110,7 @@ public class App
                         else if(newPlayerID==5) color='c';
                         else color='w';
 
+
                         listOfGames.get(ID).addPlayer(listOfGames.get(ID).new Player(newPlayerSocket, username, color));
                         System.out.print("New Player: " + username + "\n");
                         System.out.print("Number OF Players in the Game: " + listOfGames.get(ID).getNumberOfPlayers() + "\n");

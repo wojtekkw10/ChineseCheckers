@@ -1,3 +1,4 @@
+
 package chinesecheckers;
 
 import java.util.ArrayList;
@@ -15,6 +16,18 @@ public class RegularBoard extends Board {
     public RegularBoard()
     {
         board = initializeHomeCorner();
+    }
+
+    public void setNumberOfPlayers(int numberOfPlayers){
+
+        this.numberOfPlayers = numberOfPlayers;
+
+    }
+
+    public int getTurnIndex(){
+
+        return turnIndex;
+
     }
 
     public void skip()
@@ -446,31 +459,31 @@ public class RegularBoard extends Board {
 
             public boolean isValidHopMove(Field pos) {
 
-                    if (pos.x == field.x && pos.y == field.y) {
-                        return true;
-                    }
-                    else if (!isValidPosition(pos))
+                if (pos.x == field.x && pos.y == field.y) {
+                    return true;
+                }
+                else if (!isValidPosition(pos))
+                {
+                    return false;
+                }
+
+                hops.add(pos);
+                List<Field> jumps = getValidJumps(pos);
+                boolean valid = false;
+                for (int i = 0; i < jumps.size(); i++){
+
+                    if (!hops.contains(jumps.get(i)))
                     {
-                        return false;
+                        valid |= isValidHopMove(jumps.get(i));
                     }
 
-                 hops.add(pos);
-                 List<Field> jumps = getValidJumps(pos);
-                 boolean valid = false;
-                 for (int i = 0; i < jumps.size(); i++){
+                }
+                if ( !valid ) {
 
-                        if (!hops.contains(jumps.get(i)))
-                        {
-                                valid |= isValidHopMove(jumps.get(i));
-                        }
+                    hops.remove(hops.size() - 1);
 
-                 }
-                 if ( !valid ) {
-
-                     hops.remove(hops.size() - 1);
-
-                 }
-                 return valid;
+                }
+                return valid;
             }
 
 
@@ -505,7 +518,7 @@ public class RegularBoard extends Board {
                     }
                     List<Field> var = isMultiStepMove(pos, newField);
                     if (var.size() > 0){
-                    movesForPin.addAll(var);
+                        movesForPin.addAll(var);
                     }
 
                     if (isOneStepMove(pos, newField)){
@@ -535,3 +548,4 @@ public class RegularBoard extends Board {
     }
 
 }
+
