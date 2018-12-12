@@ -9,7 +9,5 @@ abstract class Window extends JPanel{
 
     abstract void display();
 
-    public void setIdList(ArrayList<GameInfo> gameList) {
-        this.gameList = gameList;
-    }
+
 }

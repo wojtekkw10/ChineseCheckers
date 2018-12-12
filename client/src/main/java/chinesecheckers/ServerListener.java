@@ -1,7 +1,5 @@
 package chinesecheckers;
 
-import java.awt.event.WindowEvent;
-import java.io.IOException;
 import javax.swing.*;
 
 public class ServerListener extends Thread {
@@ -24,7 +22,6 @@ public class ServerListener extends Thread {
             if(finish) break;
             boardWindow.display();
             boardWindow.repaint();
-            //frame.dispatchEvent(new WindowEvent(frame, WindowEvent.COMPONENT_MOVED));
 
         }
     }

@@ -25,8 +25,6 @@ public class PauseWindow extends Window {
         mainFrame.getContentPane().setBackground( java.awt.Color.DARK_GRAY );
         mainFrame.setLayout(new GridBagLayout());
 
-        System.out.print("CLIENT: Drawing Pause window\n");
-
         //Creating the Back Button
         JButton backBTN = new JButton("Back to the Game");
         backBTN.addActionListener(actionListener);

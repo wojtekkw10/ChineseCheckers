@@ -1,19 +1,14 @@
 package chinesecheckers;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.Color;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 
 public class JoinWindow extends Window {
     private ActionListener actionListener;
     private JFrame mainFrame;
-
 
     JoinWindow(ActionListener actionListener, JFrame frame)
     {
@@ -21,12 +16,14 @@ public class JoinWindow extends Window {
         this.mainFrame = frame;
     }
 
+    public void setIdList(ArrayList<GameInfo> gameList) {
+        this.gameList = gameList;
+    }
+
     public void display() {
         mainFrame.getContentPane().removeAll();
         mainFrame.getContentPane().setBackground( java.awt.Color.DARK_GRAY );
         mainFrame.setLayout(new GridBagLayout());
-
-        System.out.print("CLIENT: Drawing Join window\n");
 
         //Creating the Back Button
         JButton backBTN = new JButton("Back");
@@ -46,7 +43,8 @@ public class JoinWindow extends Window {
             GameInfo gameInfo = gameList.get(i);
 
             JButton gameBTN = new JButton("ID: "+gameInfo.id+" "
-                    +gameInfo.name+" Bots: "+gameInfo.numberOfBots+" Players: "+gameInfo.currentNumberOfPlayers+"/6");
+                    +gameInfo.name+" Bots: "+gameInfo.numberOfBots+" Players: "+gameInfo.currentNumberOfPlayers+"/"+
+                    gameInfo.maxNumberOfPlayers);
             gameBTN.addActionListener(actionListener);
             gameBTN.setBackground(Color.BLACK);
             gameBTN.setForeground(Color.white);

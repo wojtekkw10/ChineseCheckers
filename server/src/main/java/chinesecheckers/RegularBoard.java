@@ -10,10 +10,10 @@ public class RegularBoard extends Board {
 
     private static final int HEIGHT = 18;
 
-    private int numberOfPlayers = 6;
+    private int numberOfPlayers;
     private int turnIndex = 0;
 
-    public RegularBoard()
+    public void initialize()
     {
         board = initializeHomeCorner();
     }
@@ -182,8 +182,8 @@ public class RegularBoard extends Board {
             case 2:
                 return new HashMap<Color, List<Field>>() {{   //for 2 players - top and bottom corners
 
-                    put(Color.red, corners.get(Color.red));
-                    put(Color.green, corners.get(Color.green));
+                    put(Color.white, corners.get(Color.white));
+                    put(Color.blue, corners.get(Color.blue));
 
                 }};
 
@@ -240,6 +240,7 @@ public class RegularBoard extends Board {
             List<Field> corner = mapOfCorners.get(color);
 
             for (int j = 0; j < 10; j++) {
+                if(corner!=null)
                 board[corner.get(j).x][corner.get(j).y] = pin;
             }
         }
@@ -256,9 +257,9 @@ public class RegularBoard extends Board {
             switch (counter) {
                 default:
                 case 1:
-                    return colorsWithItsCharacterRepresentation.get(Color.red);
+                    return colorsWithItsCharacterRepresentation.get(Color.white);
                 case 0:
-                    return colorsWithItsCharacterRepresentation.get(Color.green);
+                    return colorsWithItsCharacterRepresentation.get(Color.blue);
             }
         }
 

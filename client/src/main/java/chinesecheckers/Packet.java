@@ -24,9 +24,6 @@ public class Packet {
     //Joining a game
     public int id;
 
-    //deltaAndNextPossibleMoves
-    //public Field[] delta;
-    //public String possibleMovesASJSON;
     public Character currentPlayer;
     @JsonSerialize(keyUsing = FieldSerializer.class)
     @JsonDeserialize(keyUsing = FieldDeserializer.class)
@@ -35,7 +32,6 @@ public class Packet {
 
     public Move move;
 
-    //FullBoardWithPossibleMoves
     public Character[][] board;
 
 

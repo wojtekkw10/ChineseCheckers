@@ -11,15 +11,12 @@ import java.util.ArrayList;
 import static java.lang.Thread.sleep;
 
 public class Server {
-    private Board board;
     private boolean isMyMove;
     private ArrayList<GameInfo> listOfgames = new ArrayList<GameInfo>();
-    private GameVariation gameVariation;
 
     private BufferedReader in;
     private PrintWriter out;
 
-    //TODO: funkcja connect()
     public void connect(JFrame frame) throws IOException {
 
         //Uncomment if the server is on a different computer
@@ -49,16 +46,11 @@ public class Server {
         out.println(command.toJSON());
     }
 
-    //TODO: funkcja requestnewGame()
     public String requestNewGame(String name, int numberOfBots, String username, int maxNumberOfPlayers) {
-        //out.println("-1");
         System.out.print("Requested a new game\n");
-        //out.println(name);
-        //out.println(numberOfBots);
-        //out.println(username);
 
         Packet packet = new Packet();
-        packet.username = username;
+        packet.username = "username";
         packet.gameName = name;
         packet.numberOfBots = numberOfBots;
         packet.numberOfPlayers = maxNumberOfPlayers;
@@ -68,7 +60,6 @@ public class Server {
         command.content = packet.toJSON();
         String welcomeMessage = new String();
 
-        System.out.println(command.toJSON());
         out.println(command.toJSON());
         while(true)
         {
@@ -79,42 +70,20 @@ public class Server {
             System.out.println(welcomeMessage);
             return "";
         }
-
-
-
     }
 
-    //TODO: funkcja uploadBoard
-    public int uploadMove(Move move) {
+    public void uploadMove(Move move) {
         System.out.println("Uploading Move");
         Command command = new Command();
         command.commandType = CommandType.MOVE_PIN;
         Packet packet = new Packet();
         packet.move = move;
         command.content = packet.toJSON();
-        System.out.println(command.toJSON());
         out.println(command.toJSON());
-
-        /*
-        String feedback = new String();
-
-        while(true)
-        {
-            try{ sleep(100);} catch (InterruptedException e){}
-
-            try{  feedback = in.readLine();}
-            catch(IOException e ) { System.out.print("Error: Didnt start a new game\n");}
-            System.out.println(feedback);
-            return 0;
-        }*/
-        return 0;
     }
 
     String joinGame(int id, String username)
     {
-        System.out.print("Joining a game\n");
-
-
         Packet packet = new Packet();
 
         Command command = new Command();
@@ -149,14 +118,11 @@ public class Server {
             System.out.println("listening...");
             try{  commandAsJSON = in.readLine();}
             catch(IOException e ) { System.out.print("Error: Didnt receive BoardState\n");}
-            System.out.print(commandAsJSON);
             Command receivedCommand = Command.fromJSON(commandAsJSON);
-            System.out.println(receivedCommand.content);
             return Packet.fromJSON(receivedCommand.content);
         }
     }
 
-    //TODO: funkcja downloadBoardState()
     public synchronized Packet downloadBoardState() {
 
         System.out.println("Downloading BoardState");
@@ -164,10 +130,9 @@ public class Server {
         command.commandType = CommandType.GET_BOARD_AND_POSSIBLE_MOVES;
         Packet packet = new Packet();
         command.content = packet.toJSON();
-        System.out.println(command.toJSON());
         out.println(command.toJSON());
 
-        Packet receivedPacket = new Packet();
+        Packet receivedPacket;
 
         while(true)
         {
@@ -177,9 +142,7 @@ public class Server {
 
             try{  commandAsJSON = in.readLine();}
             catch(IOException e ) { System.out.print("Error: Didnt receive BoardState\n");}
-            System.out.print(commandAsJSON);
             Command receivedCommand = Command.fromJSON(commandAsJSON);
-            System.out.println(receivedCommand.content);
             receivedPacket = Packet.fromJSON(receivedCommand.content);
 
             return receivedPacket;
@@ -187,55 +150,9 @@ public class Server {
 
     }
 
-    //You have to send something when you connect to get response from the server
-    public void sendEmptyString()
-    {
-        out.println("9999999");
-    }
-
-    //If you want to make sure that you are running in a seperate thread on the server
-    public String getEmptyString()
-    {
-        Command command = new Command();
-        command.commandType = CommandType.NINES;
-        Packet packet = new Packet();
-        command.content = packet.toJSON();
-
-        out.println(command.toJSON());
-        while(true)
-        {
-            try{ sleep(100);} catch (InterruptedException e){}
-
-            try{ return(in.readLine());}
-            catch(IOException e ) { System.out.print("Error\n");}
-        }
-    }
-
-    String listen(BoardWindow BW)
-    {
-        while(true)
-        {
-            try{ sleep(100);} catch (InterruptedException e){}
-
-            BW.display();
-
-            try{ return(in.readLine());}
-            catch(IOException e ) { System.out.print("Error\n");}
-        }
-    }
-
-    public Board getboard() {
-        return board;
-    }
-
-    public boolean isMymove() {
-        return isMyMove;
-    }
-
     //Returns an arrays of IDs
     public ArrayList<GameInfo> downloadAllGames(){
         System.out.print("Requested all games\n");
-
 
         Packet packet = new Packet();
 
@@ -245,45 +162,25 @@ public class Server {
 
         out.println(command.toJSON());
 
-
-
         String receivedGames = null;
         try{ receivedGames = in.readLine();}
         catch(IOException e ){ System.out.println("Error");}
-
 
         //Parsowanie
         ArrayList<GameInfo> availableGames = new ArrayList<>();
         String[] parts = receivedGames.split(" ");
 
-        System.out.println(receivedGames);
-
-        for(int i=0; i/4<parts.length/4; i+=4)
+        for(int i=0; i/5<parts.length/5; i+=5)
         {
             GameInfo gameInfo = new GameInfo();
             gameInfo.id = Integer.parseInt(parts[i]);
             gameInfo.name = parts[i+1];
             gameInfo.numberOfBots = Integer.parseInt(parts[i+2]);
             gameInfo.currentNumberOfPlayers = Integer.parseInt(parts[i+3]);
+            gameInfo.maxNumberOfPlayers = Integer.parseInt(parts[i+4]);
             availableGames.add(gameInfo);
-
         }
         return availableGames;
-    }
-
-    //Unnecessary for now
-    public ArrayList<GameInfo> getAllGames() {
-        return listOfgames;
-    }
-
-    //TODO: funkcja downloadGameVariation();
-    public void downloadGameVariation()
-    {
-        //gameVariation = ?;
-    }
-
-    public GameVariation getGameVariation() {
-        return gameVariation;
     }
 }
 

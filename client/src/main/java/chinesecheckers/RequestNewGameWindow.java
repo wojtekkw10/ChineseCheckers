@@ -11,12 +11,11 @@ import java.util.regex.Pattern;
 public class RequestNewGameWindow extends Window {
     private ActionListener actionListener;
     private JFrame mainFrame;
-    GameInfo gameInfo = new GameInfo();
+    private GameInfo gameInfo = new GameInfo();
 
-    JTextField gameNameTextField = new JTextField(15);
-
-    JTextField numberOfBotsTextField = new JTextField();
-    JTextField numberOfPlayersTextField = new JTextField();
+    private JTextField gameNameTextField = new JTextField();
+    private JTextField numberOfBotsTextField = new JTextField();
+    private JTextField numberOfPlayersTextField = new JTextField();
 
 
     RequestNewGameWindow(ActionListener actionListener, JFrame frame)
@@ -40,7 +39,6 @@ public class RequestNewGameWindow extends Window {
                     return;
                 }
                 int number = Integer.parseInt(text);
-                //System.out.println("LENGTH: "+length);
                 if(number<0 || number>6 || numberOfBotsTextField.getText().length()>0) return;
                 super.replace(fb, offset, length, text, attrs);
             }
@@ -55,13 +53,12 @@ public class RequestNewGameWindow extends Window {
                     return;
                 }
                 int number = Integer.parseInt(text);
-                System.out.println("LENGTH: "+length);
                 if(number<2 || number>6 || numberOfPlayersTextField.getText().length()>0) return;
                 super.replace(fb, offset, length, text, attrs);
             }
         });
 
-        System.out.print("CLIENT: Drawing RequestNewGame window\n");
+        System.out.println("CLIENT: Drawing RequestNewGame window");
 
         JLabel gameNameLabel = new JLabel("Enter the name for your game");
         gameNameLabel.setBackground(Color.BLACK);
@@ -75,27 +72,12 @@ public class RequestNewGameWindow extends Window {
         numberOfBotsLabel.setOpaque(true);
         numberOfBotsLabel.setHorizontalAlignment(JLabel.CENTER);
 
-        //Creating the textField for the number of bots
-        NumberFormat format = NumberFormat.getInstance();
-        NumberFormatter formatter = new NumberFormatter(format);
-        formatter.setValueClass(Integer.class);
-        formatter.setMinimum(0);
-        formatter.setMaximum(6);
-        formatter.setAllowsInvalid(false);
-        // If you want the value to be committed on each keystroke instead of focus lost
-        //formatter.setCommitsOnValidEdit(true);
-        //numberOfBotsTextField = new JFormattedTextField(formatter);
-
         //Number of players label
         JLabel numberOfPlayersLabel = new JLabel("Enter the number of players (including bots)");
         numberOfPlayersLabel.setBackground(Color.BLACK);
         numberOfPlayersLabel.setForeground(Color.white);
         numberOfPlayersLabel.setOpaque(true);
         numberOfPlayersLabel.setHorizontalAlignment(JLabel.CENTER);
-
-        //Creating the textField for the number of total players
-
-        //numberOfPlayersTextField = new JFormattedTextField(formatter);
 
         //Creating the Start Button
         JButton startBTN = new JButton("Start");
@@ -122,8 +104,6 @@ public class RequestNewGameWindow extends Window {
         panel.add(numberOfPlayersTextField);
         panel.add(numberOfBotsLabel);
         panel.add(numberOfBotsTextField);
-
-
         panel.add(backBTN);
 
         //Creating the main (full) window

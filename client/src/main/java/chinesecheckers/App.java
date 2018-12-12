@@ -5,14 +5,10 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
-//TODO: kominikacja na bazie: request od klienta - response od servera
-public class App //implements WindowListener,ActionListener
+public class App
 {
 
     public static void main( String[] args ) {
@@ -27,7 +23,6 @@ public class App //implements WindowListener,ActionListener
     }
 
     public static class MainWindow extends JFrame implements ActionListener{
-        Board board = new RegularBoard();
         JFrame frame;
         FrameState state = FrameState.MENUWINDOW;
         Server server = new Server();
@@ -36,7 +31,7 @@ public class App //implements WindowListener,ActionListener
         boolean finish = false;
         ServerListener serverListener = new ServerListener();
 
-        Window joinWindow;
+        JoinWindow joinWindow;
         MenuWindow menuWindow;
         BoardWindow boardWindow;
         Window pauseWindow;
@@ -50,7 +45,7 @@ public class App //implements WindowListener,ActionListener
             joinWindow = new JoinWindow(this, frame);
             menuWindow = new MenuWindow(this, frame);
             pauseWindow = new PauseWindow(this, frame);
-            boardWindow = new BoardWindow(board, this, new MainWindow.MouseEventListener(), frame);
+            boardWindow = new BoardWindow(this, new MainWindow.MouseEventListener(), frame);
             requestNewGameWindow = new RequestNewGameWindow(this, frame);
             frame.addComponentListener(new ResizeListener());
             KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new BoardWindowKeyListener());
@@ -68,83 +63,49 @@ public class App //implements WindowListener,ActionListener
         public void actionPerformed(ActionEvent e) {
             String command = e.getActionCommand();
 
-            //Create New Game
             if( command.equals( "Create New Game" ))  {
-
-                //W CELACH TESTOWYCH
-                /*
-                try{ server.connect(frame);}
-                catch (IOException ex){System.out.print("CLIENT: ERROR: Couldn't connect to the server\n");}
-                server.requestNewGame("default", 1, "Username");
-
-                Packet packet = server.downloadBoardState();
-                boardWindow.charBoard = packet.board.clone();
-                System.out.println("Received possible moves");
-                //TODO: przesylanie possible moves
-                boardWindow.possibleMoves = packet.possibleMoves;
-
-                boardWindow.display();
-                state = FrameState.BOARDWINDOW;
-                System.out.print("CLIENT: Start Button has been clicked\n");
-                */
-                //W CELACH TESTOWYCH
-
-                //try{ server.connect(frame);}
-                //catch (IOException ex){System.out.print("CLIENT: ERROR: Couldn't connect to the server\n");}
-                //server.requestNewGame();
-
-                // UNCOMMENT LATER
                 requestNewGameWindow.display();
                 state = FrameState.REQUESTNEWGAMEWINDOW;
-                System.out.print("CLIENT: Create New Game Button has been clicked\n");
 
-
-                //Show available games
             } else if( command.equals( "Join an existing game" ) ) {
+                finish = false;
                 try{ server.connect(frame);}
                 catch (IOException ex){System.out.print("CLIENT: ERROR: Couldn't connect to the server\n");}
                 gameList = server.downloadAllGames();
                 joinWindow.setIdList(gameList);
                 joinWindow.display();
                 state = FrameState.JOINWINDOW;
-                System.out.print("CLIENT: Join Button has been clicked\n");
             }
 
-            //Go back
             else if( command.equals( "Back" ) ) {
+                finish = true;
                 menuWindow.display();
                 state = FrameState.MENUWINDOW;
-                System.out.print("CLIENT: Back Button has been clicked\n");
             }
 
-            //Go back to the game
             else if( command.equals( "Back to the Game" ) )  {
                 boardWindow.display();
                 state = FrameState.BOARDWINDOW;
-                System.out.print("CLIENT: Back to the game Button has been clicked\n");
             }
 
-            //Go back to menu
             else if( command.equals( "Back to Menu" ) ) {
                 menuWindow.display();
                 state = FrameState.MENUWINDOW;
-                System.out.print("CLIENT: Back to Menu Button has been clicked\n");
             }
 
-            //Skip this round
-            else if( command.equals( "Skip" ) )  { //bede uzywal do testowania laczenia sie z serverem
-                //System.out.print(server.getEmptyString()+"\n");
-                //System.out.print("CLIENT: Skip Button has been clicked1\n");
+            else if( command.equals( "Skip" ) )  {
                 server.skip();
             }
 
-            //Join selected game
             else if( command.startsWith( "ID" ) )  {
+                finish = false;
                 int i = new Scanner(command).useDelimiter("\\D+").nextInt();
 
                 try{ server.connect(frame);}
                 catch (IOException ex){System.out.print("CLIENT: ERROR: Couldn't connect to the server\n");}
+
                 server.joinGame(gameList.get(i).id, menuWindow.getUsername());
+
                 Packet packet = server.downloadBoardState();
                 boardWindow.charBoard = packet.board;
                 boardWindow.possibleMoves = packet.possibleMoves;
@@ -184,30 +145,18 @@ public class App //implements WindowListener,ActionListener
 
         }
 
-        //Show pauseWindow when Escape Key pressed
         class BoardWindowKeyListener implements KeyEventDispatcher {
             @Override
             public boolean dispatchKeyEvent(final KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
                     pauseWindow.display();
                     state = FrameState.PAUSEWINDOW;
-
-                }
-                if (e.getKeyCode() == KeyEvent.VK_E) {
-                    //pauseWindow.display();
-                    //state = FrameState.PAUSEWINDOW;
-
-                    System.out.println("ISMYMOVE: "+isMyMove);
-
-
-                    //Packet packet = server.downloadBoardState();
-
                 }
                 return false;
             }
         }
 
-        //Reapint the window when it's moved
+        //Repaint the window when it's moved
         class ResizeListener implements ComponentListener {
             public void componentResized(ComponentEvent e) {
                 if(state.equals(FrameState.BOARDWINDOW)) boardWindow.display();
@@ -219,40 +168,24 @@ public class App //implements WindowListener,ActionListener
             }
 
             @Override
-            public void componentShown(ComponentEvent e) {
-
-            }
+            public void componentShown(ComponentEvent e) { }
 
             @Override
-            public void componentHidden(ComponentEvent e) {
-
-            }
+            public void componentHidden(ComponentEvent e) { }
 
         }
 
         public class MouseEventListener implements MouseListener {
 
-            public void mousePressed(MouseEvent e) {
-                //System.out.println("Mouse pressed; # of clicks: "
-                      //  + e.getClickCount());
-            }
+            public void mousePressed(MouseEvent e) { }
 
-            public void mouseReleased(MouseEvent e) {
-                //System.out.println("Mouse released; # of clicks: "
-                    //    + e.getClickCount());
-            }
+            public void mouseReleased(MouseEvent e) { }
 
-            public void mouseEntered(MouseEvent e) {
-                //System.out.println("Mouse entered");
-            }
+            public void mouseEntered(MouseEvent e) { }
 
-            public void mouseExited(MouseEvent e) {
-                //System.out.println("Mouse exited");
-            }
+            public void mouseExited(MouseEvent e) { }
 
             public void mouseClicked(MouseEvent e) {
-                //System.out.println("Mouse clicked (# of clicks: "
-                       // + e.getClickCount() + ")");
 
                 if(boardWindow.isMyMove)
                 {
@@ -261,36 +194,25 @@ public class App //implements WindowListener,ActionListener
                         for(int j=0; j<18; j++)
                         {
                             if(boardWindow.ovalBoard[i][j]!=null && boardWindow.charBoard[i][j]!=null)
-                            {//(e.getButton() == 1 &&)
+                            {
                                 //Sprawdzanie ktory przycisk zostal nacisniety
                                 if ( boardWindow.ovalBoard[i][j].contains(e.getX()-108, e.getY()-30) ) {
-                                    //wtedy narysuj x,y tego pinu
-                                    System.out.println("oval.x: " + boardWindow.ovalBoard[i][j].getX() +
-                                            " oval.y: " + boardWindow.ovalBoard[i][j].getX());
-                                    System.out.println("x: "+i+" y: "+j);
-
 
                                     Field clicked = new Field();
                                     clicked.setX(i);
                                     clicked.setY(j);
 
-                                    System.out.println("Previously clicked:  x: "+boardWindow.clickedField.getX()+" y: "+boardWindow.clickedField.getY());
-                                    System.out.println("Now clicked:  x: "+clicked.getX()+" y: "+clicked.getY());
-
                                     if(boardWindow.isPossibleMoveField(clicked))
                                     {
-                                        System.out.println("Move has been done");
                                         Move move = new Move();
                                         move.oldField = boardWindow.clickedField;
                                         move.newField = clicked;
                                         server.uploadMove(move);
 
-
                                         Packet packet = server.downloadBoardState();
                                         boardWindow.charBoard = packet.board.clone();
                                         boardWindow.possibleMoves = packet.possibleMoves;
                                         isMyMove = packet.isMyMove;
-                                        System.out.println("IsMyMove: "+isMyMove);
 
                                     }
 

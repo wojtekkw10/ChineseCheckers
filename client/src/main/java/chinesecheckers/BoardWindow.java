@@ -20,7 +20,6 @@ import java.util.Map;
 public class BoardWindow extends Window{
     private ActionListener actionListener;
     private MouseListener mouseListener;
-    private Board board;
     private BufferedImage image;
     boolean isMyMove;
 
@@ -31,10 +30,9 @@ public class BoardWindow extends Window{
 
     Field clickedField = new Field();
 
-    BoardWindow(Board board, ActionListener actionListener, MouseListener mouseListener, JFrame frame)
+    BoardWindow(ActionListener actionListener, MouseListener mouseListener, JFrame frame)
     {
         this.actionListener = actionListener;
-        this.board = board;
         this.frame = frame;
         this.mouseListener = mouseListener;
         this.addMouseListener(mouseListener);
@@ -52,34 +50,28 @@ public class BoardWindow extends Window{
 
     }
 
-    void setBoard(Board board) {
-        this.board = board;
-    }
 
     synchronized void display()
     {
-        //System.out.println("drawingBoardWindow...");
         if(this.mouseListener!=null) frame.removeMouseListener(mouseListener);
         frame.getContentPane().removeAll();
         frame.revalidate();
 
-        JPanel p = new BoardWindow(board, actionListener,mouseListener, frame);
+        BoardWindow p = new BoardWindow(actionListener,mouseListener, frame);
         p.addMouseListener(mouseListener);
         frame.addMouseListener(mouseListener);
 
-        ((BoardWindow) p).charBoard = charBoard;
-        ((BoardWindow) p).ovalBoard = ovalBoard;
-        ((BoardWindow) p).possibleMoves = possibleMoves;
-        ((BoardWindow) p).clickedField = clickedField;
-        ((BoardWindow) p).possibleMovesCirclesBoard = possibleMovesCirclesBoard;
-        ((BoardWindow) p).frame = frame;
+        p.charBoard = charBoard;
+        p.ovalBoard = ovalBoard;
+        p.possibleMoves = possibleMoves;
+        p.clickedField = clickedField;
+        p.possibleMovesCirclesBoard = possibleMovesCirclesBoard;
+        p.frame = frame;
 
         p.setBounds(100,0,760,800);
         frame.getContentPane().setBackground(Color.white);
 
         frame.repaint();
-        //p.repaint();
-        //System.out.println("BoardWindow drawn");
     }
 
     boolean isPossibleMoveField(Field field)
@@ -100,10 +92,8 @@ public class BoardWindow extends Window{
     }
     @Override
     protected void paintComponent(Graphics g) {
-        //System.out.println("painting component...");
         super.paintComponent ( g );
         Graphics2D g2d = (Graphics2D) g;
-        //frame.getContentPane().setBackground(Color.white);
 
         //Czyszczenie tablicy
         for(int i=0; i<possibleMovesCirclesBoard.length; i++)
@@ -117,23 +107,6 @@ public class BoardWindow extends Window{
             }
         }
 
-        /*
-        g.setColor ( Color.RED );
-        frame.getContentPane().removeAll();
-        g.drawImage(image, 0, 0, this);
-
-        board.getSampleBoard();
-        ArrayList<PlayingSpace> PS = board.getBoard();
-
-        for(int i=0; i<PS.size(); i++)
-        {
-            int x=PS.get(i).getX();
-            int y=PS.get(i).getY();
-            int radius = 24;
-
-            g.fillOval(x-radius, y-radius, 2*radius, 2*radius);
-        }
-        */
         frame.getContentPane().removeAll();
         g.drawImage(image, 0, 0, this);
 
@@ -282,38 +255,24 @@ public class BoardWindow extends Window{
                 else if(i==13 && j==11) { x=384; y=564; }
                 else if(i==13 && j==12) { x=444; y=564; }
                 else if(i==13 && j==13) { x=504; y=564; }
-
                 else {
-
                     x = 20-((int) ((i * 30) * Math.cos(Math.toRadians(90))) - (int) ((j * 46) * Math.sin(Math.toRadians(90))));
                     y = ((int) ((j * 46) * Math.cos(Math.toRadians(90))) + (int) ((i * 30) * Math.sin(Math.toRadians(90))));
-
                 }
 
                 if(k!=' ' && !(k=='y'||k=='b'||k=='c'||k=='g'||k=='r'||k=='w')) {
-                    //System.out.println(i+" "+j);
                     g2d.setColor(Color.CYAN);
                 }
 
-
-
-                //&& (k=='y'||k=='b'||k=='c'||k=='g'||k=='r'||k=='w')
                 if(k!=' ' )
                 {
-                    //g.fillOval(x-radius, y-radius, 2*radius, 2*radius);
                     ovalBoard[i][j] = new Ellipse2D.Double(x-radius, y-radius, 48, 48);
                 }
-
-
-
             }
-
-
         }
 
         //Mapowanie possibleMoves
         for (Map.Entry<Field, Field[]> entry : possibleMoves.entrySet()) {
-            //System.out.println(entry.getKey() + ":" + entry.getValue());
 
             Field[] moves = entry.getValue();
             Field field = entry.getKey();
@@ -325,14 +284,6 @@ public class BoardWindow extends Window{
                     int i = moves[l].getX();
                     int j = moves[l].getY();
 
-                /*char k = charBoard[i][j];
-                if(k == 'b') { g2d.setPaint ( Color.BLUE );  }
-                else if(k == 'y') {g2d.setColor ( Color.YELLOW );}
-                else if(k == 'c') { g2d.setColor ( Color.BLACK ); }
-                else if(k == 'g') { g2d.setColor ( Color.GREEN );}
-                else if(k == 'r') {g2d.setColor ( Color.RED );}
-                else if(k == 'w') g2d.setColor ( Color.GRAY );
-                */
                     g2d.setColor ( Color.MAGENTA );
                     int radius = 24;
 
@@ -464,27 +415,11 @@ public class BoardWindow extends Window{
                     else if(i==13 && j==11) { x=384; y=564; }
                     else if(i==13 && j==12) { x=444; y=564; }
                     else if(i==13 && j==13) { x=504; y=564; }
-
                     else {
-
                         x = 20-((int) ((i * 30) * Math.cos(Math.toRadians(90))) - (int) ((j * 46) * Math.sin(Math.toRadians(90))));
                         y = ((int) ((j * 46) * Math.cos(Math.toRadians(90))) + (int) ((i * 30) * Math.sin(Math.toRadians(90))));
-
                     }
-
-                /*if(k!=' ' && !(k=='y'||k=='b'||k=='c'||k=='g'||k=='r'||k=='w')) {
-                    //System.out.println(i+" "+j);
-                    g2d.setColor(Color.CYAN);
-                }*/
-
-
-
-                    //&& (k=='y'||k=='b'||k=='c'||k=='g'||k=='r'||k=='w')
-                    //if(k!=' ' )
-                    //{
-                    //g.fillOval(x-radius, y-radius, 2*radius, 2*radius);
                     possibleMovesCirclesBoard[i][j] = new Ellipse2D.Double(x-radius, y-radius, 36, 36);
-                    //}
                 }
             }
 
@@ -509,19 +444,14 @@ public class BoardWindow extends Window{
                     else if(k == 'r') {g2d.setPaint ( Color.RED );g2d.fill(ovalBoard[i][j]);}
                     else if(k == 'w') { g2d.setPaint ( Color.GRAY );g2d.fill(ovalBoard[i][j]);}
                 }
-
-
-
             }
         }
         for (Map.Entry<Field, Field[]> entry : possibleMoves.entrySet()) {
-            //System.out.println(entry.getKey() + ":" + entry.getValue());
 
             Field[] moves = entry.getValue();
             Field field = entry.getKey();
 
             Field clicked = clickedField;
-            //System.out.println("Clicked Field: "+clicked.getX()+" "+clicked.getY());
 
             if(clicked.getX() == field.getX() && clicked.getY() == field.getY())
             {
@@ -531,7 +461,6 @@ public class BoardWindow extends Window{
                     int j = moves[l].getY();
 
                     if(possibleMovesCirclesBoard[i][j]!=null ){
-                        //System.out.println("I: "+i+"J: "+j);
                         g2d.setColor ( Color.MAGENTA );
                         int x1 = (int)possibleMovesCirclesBoard[i][j].getCenterX();
                         int y1 = (int)possibleMovesCirclesBoard[i][j].getCenterY();
@@ -554,36 +483,8 @@ public class BoardWindow extends Window{
                         g2d.setStroke(oldStroke);
                         g2d.setColor(oldColor);
                     }
-
-
-
-                }
-            }
-
-
-
-        }
-
-        /*
-        //Testowanie
-        System.out.println("PossibleMovesRightNow");
-        for(int i=0; i<possibleMovesCirclesBoard.length; i++)
-        {
-            for(int j=0; j<possibleMovesCirclesBoard[i].length; j++)
-            {
-                if(possibleMovesCirclesBoard[i][j]!=null)
-                {
-                    System.out.println("X: "+i+" Y: "+j);
                 }
             }
         }
-        */
-
-        //System.out.println("Component drawn...");
-
-
     }
-
-
-
 }

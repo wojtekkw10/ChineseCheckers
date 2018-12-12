@@ -15,8 +15,7 @@ public class MenuWindow extends Window{
     private ArrayList<JButton> buttons = new ArrayList<JButton>();
 
     //Creating the textField for Username
-    JTextField usernameTextField = new JTextField(15);
-    String username;
+    private JTextField usernameTextField = new JTextField(15);
 
     MenuWindow(ActionListener actionListener, JFrame frame)
     {
@@ -70,8 +69,8 @@ public class MenuWindow extends Window{
         panel.setBounds(0,0,500 ,500);
         panel.setPreferredSize(new Dimension(300, 200));
         panel.setBackground(Color.DARK_GRAY);
-        panel.add(username);
-        panel.add(usernameTextField);
+        //panel.add(username);
+        //panel.add(usernameTextField);
         panel.add(createNewGameBTN);
         panel.add(joinGameBTN);
         panel.add(exitBTN);

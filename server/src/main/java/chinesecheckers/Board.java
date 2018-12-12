@@ -23,5 +23,6 @@ public abstract class Board {
     abstract List<Field> getValidFromPositions();
     abstract void skip();
     abstract int getTurnIndex();
+    abstract void initialize();
 
 }
