@@ -17,33 +17,32 @@ public class RegularBoardTest {
     RegularBoard regularBoard;
 
     @Test
-    public void shouldAnswerWithTrue()
-    {
-        assertTrue( true );
+    public void shouldAnswerWithTrue() {
+        assertTrue(true);
     }
 
     @Before
-    public void beforeMethod(){
+    public void beforeMethod() {
 
         regularBoard = new RegularBoard();
-
+        regularBoard.setNumberOfPlayers(6);
+        regularBoard.initialize();
     }
 
 
-    public void PrintBoard()
-    {
+    public void PrintBoard() {
         Character[][] boardContent = regularBoard.getBoard();
 
         int c = 0;
         System.out.print(" ");
-        for(int i = 0; i <15; i++)
-            System.out.print(i%10);
+        for (int i = 0; i < 15; i++)
+            System.out.print(i % 10);
 
         System.out.println("");
 
         for (Character[] row : boardContent) {
-            System.out.print(c++%10);
-            for (Character sign : row){
+            System.out.print(c++ % 10);
+            for (Character sign : row) {
                 System.out.print(sign);
             }
             System.out.println("");
@@ -51,18 +50,18 @@ public class RegularBoardTest {
     }
 
     @Test
-    public void performSingleCorrectMove(){
+    public void performSingleCorrectMove() {
 
         Character[][] boardContent = regularBoard.getBoard();
 
-        Field oldField = new Field(5,4);
-        Field newField = new Field(5,5);
+        Field oldField = new Field(5, 4);
+        Field newField = new Field(5, 5);
+
+
+
+        regularBoard.movePin(oldField, newField);
 
         PrintBoard();
-
-        Field[] moves = regularBoard.movePin(oldField, newField);
-
-       // PrintBoard();
 
         char a = boardContent[4][5];
         char b = boardContent[5][5];
@@ -73,89 +72,130 @@ public class RegularBoardTest {
 
 
     @Test
-    public void checkPossibleMoves()
-    {
-
-        Character[][] boardContetnt = regularBoard.getBoard();
+    public void checkPossibleMoves() {
 
 
+        Field oldField = new Field(5, 4);
+        Field newField = new Field(6, 5);
 
-        Field oldField = new Field(5,4);
-        Field newField = new Field(6,5);
+
+        //regularBoard.movePin(oldField, newField);
 
 
-       //regularBoard.movePin(oldField, newField);
-
-        PrintBoard();
         HashMap<Field, List<Field>> possibleMoves = regularBoard.getPossibleMoves();
 
-        for (Field name : possibleMoves.keySet())
-        {
+        HashMap<Field, List<Field>> expected = new HashMap<Field, List<Field>>() {{
 
-            System.out.println(name.x + " " + name.y +"key ");
-            List<Field> value = possibleMoves.get(name);
+                put(new Field(4, 5), new ArrayList<Field>() {
+                    {
 
+                        add(new Field(5, 5));
+                        add(new Field(5, 6));
+                    }
+                });
+                put(new Field(3, 5), new ArrayList<Field>() {
+                    {
 
+                        add(new Field(5, 5));
+                        add(new Field(5, 7));
+                    }
+                });
+                put(new Field(4, 6), new ArrayList<Field>() {
+                    {
 
-            for (Field f : value){
+                        add(new Field(5, 6));
+                        add(new Field(5, 7));
+                    }
+                });
+                put(new Field(2, 5), new ArrayList<Field>());
 
-                System.out.print(f.x + " " + f.y + "|");
+                put(new Field(3, 6), new ArrayList<Field>() {
+                    {
 
-            }
+                        add(new Field(5, 6));
+                        add(new Field(5, 8));
+                    }
+                });
+                put(new Field(4, 7), new ArrayList<Field>() {
+                    {
 
-            System.out.println( " " );
+                        add(new Field(5, 7));
+                        add(new Field(5, 8));
+                    }
+                });
+                put(new Field(1, 5), new ArrayList<Field>());
 
-        }
+                put(new Field(2, 6), new ArrayList<Field>());
 
+                put(new Field(3, 7), new ArrayList<Field>() {
+                    {
+
+                        add(new Field(5, 7));
+                        add(new Field(5, 9));
+                    }
+                });
+                put(new Field(4, 8), new ArrayList<Field>() {
+                    {
+
+                        add(new Field(5, 8));
+                        add(new Field(5, 9));
+                    }
+                });
+
+            }};
+
+        assertEquals(expected, possibleMoves);
     }
 
     @Test
-    public void testValidJumps(){
+    public void testValidJumps() {
 
-        Field oldField = new Field(6,4);
-        Field newField = new Field(6,5);
+
+        Field oldField = new Field(6, 4);
+        Field newField = new Field(6, 5);
 
         regularBoard.movePin(oldField, newField);
 
-        Field a = new Field(5,3);
+        Field a = new Field(5, 3);
 
         List<Field> jumpsy = regularBoard.getValidJumps(a);
         List<Field> expected = new ArrayList<Field>();
 
-        expected.add(new Field(5,5));
+        expected.add(new Field(5, 5));
 
-        Assert.assertEquals(jumpsy, expected);
+        Assert.assertEquals(expected, jumpsy);
     }
 
     @Test
-    public void testMultiStepMove(){
+    public void testMultiStepMove() {
 
-        Field oldField = new Field(6,4);
-        Field newField = new Field(6,5);
+        Field oldField = new Field(6, 4);
+        Field newField = new Field(6, 5);
 
         regularBoard.movePin(oldField, newField);
 
-        Field a = new Field(5,3);
-        Field b = new Field(7,5);
+        Field a = new Field(5, 3);
+        Field b = new Field(7, 5);
 
-        List<Field> multiMove = regularBoard.isMultiStepMove(a,b);
+        List<Field> multiMove = regularBoard.isMultiStepMove(a, b);
         List<Field> expected = new ArrayList<Field>();
 
-        expected.add(new Field(5,3));
-        expected.add(new Field(5,5));
-        expected.add(new Field(7,5));
+        expected.add(new Field(5, 3));
+        expected.add(new Field(5, 5));
+        expected.add(new Field(7, 5));
 
-        Assert.assertEquals(multiMove, expected);
+        Assert.assertEquals(expected, multiMove);
 
     }
 
     @Test
-    public void changePlayerTest(){
+    public void changePlayerTest() {
+
 
         char player1 = regularBoard.getCheckerByTurn();
 
-        Field oldField = new Field(6,4);
-        Field newField = new Field(6,5);
+        Field oldField = new Field(6, 4);
+        Field newField = new Field(6, 5);
 
 
         regularBoard.movePin(oldField, newField);
@@ -182,18 +222,18 @@ public class RegularBoardTest {
 
         char player7 = regularBoard.getCheckerByTurn();
 
-        Assert.assertEquals(player1, 'r');
-        Assert.assertEquals(player2, 'y');
-        Assert.assertEquals(player3, 'b');
-        Assert.assertEquals(player4, 'g');
-        Assert.assertEquals(player5, 'c');
-        Assert.assertEquals(player6, 'w');
-        Assert.assertEquals(player7, 'r');
+        Assert.assertEquals(player1, 'w');
+        Assert.assertEquals(player2, 'r');
+        Assert.assertEquals(player3, 'y');
+        Assert.assertEquals(player4, 'b');
+        Assert.assertEquals(player5, 'g');
+        Assert.assertEquals(player6, 'c');
+        Assert.assertEquals(player7, 'w');
 
     }
 
     @Test
-    public void checkVictoryTest(){
+    public void checkVictoryTest() {
 
         Field a1 = new Field(5, 1);
         Field a2 = new Field(5, 2);
@@ -236,6 +276,55 @@ public class RegularBoardTest {
         Assert.assertEquals(regularBoard.checkVictory(), Optional.of(Color.red));
 
     }
+
+    @Test
+    public void getPlayerMapTest() {
+
+        regularBoard.setNumberOfPlayers(2);
+
+        HashMap<Color, List<Field>> maps = regularBoard.getPlayerMap();
+
+
+        HashMap<Color, List<Field>> expected = new HashMap<Color, List<Field>>() {
+
+            {
+                {
+                    put(Color.white, new ArrayList<Field>() {
+                        {
+                            add(new Field(1, 5));
+                            add(new Field(2, 5));
+                            add(new Field(2, 6));
+                            add(new Field(3, 5));
+                            add(new Field(3, 6));
+                            add(new Field(3, 7));
+                            add(new Field(4, 5));
+                            add(new Field(4, 6));
+                            add(new Field(4, 7));
+                            add(new Field(4, 8));
+                        }
+                    });
+                    put(Color.blue, new ArrayList<Field>() {
+                        {
+                            add(new Field(14, 10));
+                            add(new Field(14, 11));
+                            add(new Field(14, 12));
+                            add(new Field(14, 13));
+                            add(new Field(15, 11));
+                            add(new Field(15, 12));
+                            add(new Field(15, 13));
+                            add(new Field(16, 12));
+                            add(new Field(16, 13));
+                            add(new Field(17, 13));
+                        }
+                    });
+
+                }
+            }
+        };
+
+        Assert.assertEquals(expected, maps);
+
+    }
+
+
 }
-
-
