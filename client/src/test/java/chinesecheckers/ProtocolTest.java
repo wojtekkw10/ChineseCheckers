@@ -1,5 +1,6 @@
 package chinesecheckers;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -26,7 +27,23 @@ public class ProtocolTest {
 
         String json = packet.toJSON();
         System.out.println(json);
-        Packet newPacket = Packet.fromJSON(json);
+
+        String expected = "{\r\n" +
+                "  \"username\" : \"elo\",\r\n" +
+                "  \"gameName\" : \"elo\",\r\n" +
+                "  \"numberOfBots\" : 0,\r\n" +
+                "  \"numberOfPlayers\" : 0,\r\n" +
+                "  \"id\" : 0,\r\n" +
+                "  \"currentPlayer\" : \"r\",\r\n" +
+                "  \"possibleMoves\" : {\r\n" +
+                "    \"\\\"(x: 4, y: 3)\\\"\" : [ \"(x: 2, y: 1)\", \"(x: 6, y: 5)\" ]\r\n" +
+                "  },\r\n" +
+                "  \"isMyMove\" : false,\r\n" +
+                "  \"move\" : null,\r\n" +
+                "  \"board\" : null\r\n" +
+                "}";
+
+        Assert.assertEquals(expected, json);
 
     }
 }
