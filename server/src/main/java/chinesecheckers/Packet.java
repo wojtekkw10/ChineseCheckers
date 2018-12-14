@@ -29,6 +29,7 @@ public class Packet {
     public Character currentPlayer;
     public HashMap<Field, Field[]> possibleMoves;
     public boolean isMyMove;
+    public Character whoseTurnIsit;
 
     public Move move;
 

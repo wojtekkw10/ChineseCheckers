@@ -110,6 +110,7 @@ public class App
                 boardWindow.charBoard = packet.board;
                 boardWindow.possibleMoves = packet.possibleMoves;
                 boardWindow.isMyMove = packet.isMyMove;
+                boardWindow.whoseTurnIsit = packet.whoseTurnIsit;
                 isMyMove = packet.isMyMove;
 
                 System.out.println("IsMyMove: "+isMyMove);
@@ -132,6 +133,7 @@ public class App
                 boardWindow.possibleMoves = packet.possibleMoves;
                 isMyMove = packet.isMyMove;
                 boardWindow.isMyMove = packet.isMyMove;
+                boardWindow.whoseTurnIsit = packet.whoseTurnIsit;
                 System.out.println("IsMyMove: "+isMyMove);
 
                 boardWindow.display();
@@ -213,6 +215,7 @@ public class App
                                         boardWindow.charBoard = packet.board.clone();
                                         boardWindow.possibleMoves = packet.possibleMoves;
                                         isMyMove = packet.isMyMove;
+                                        boardWindow.whoseTurnIsit = packet.whoseTurnIsit;
 
                                     }
 

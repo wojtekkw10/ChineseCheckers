@@ -257,18 +257,19 @@ public class RegularBoard extends Board {
             switch (counter) {
                 default:
                 case 1:
-                    return colorsWithItsCharacterRepresentation.get(Color.white);
-                case 0:
                     return colorsWithItsCharacterRepresentation.get(Color.blue);
+                case 0:
+                    return colorsWithItsCharacterRepresentation.get(Color.white);
+
             }
         }
 
         if (numberOfPlayers == 3) {
             switch (counter) {
                 default:
-                case 1:
-                    return colorsWithItsCharacterRepresentation.get(Color.yellow);
                 case 2:
+                    return colorsWithItsCharacterRepresentation.get(Color.yellow);
+                case 1:
                     return colorsWithItsCharacterRepresentation.get(Color.red);
                 case 0:
                     return colorsWithItsCharacterRepresentation.get(Color.white);
@@ -278,14 +279,15 @@ public class RegularBoard extends Board {
         if (numberOfPlayers == 4) {
             switch (counter) {
                 default:
-                case 1:
-                    return colorsWithItsCharacterRepresentation.get(Color.white);
-                case 2:
-                    return colorsWithItsCharacterRepresentation.get(Color.yellow);
                 case 3:
+                    return colorsWithItsCharacterRepresentation.get(Color.black);
+                case 1:
+                    return colorsWithItsCharacterRepresentation.get(Color.yellow);
+                case 2:
                     return colorsWithItsCharacterRepresentation.get(Color.blue);
                 case 0:
-                    return colorsWithItsCharacterRepresentation.get(Color.black);
+                    return colorsWithItsCharacterRepresentation.get(Color.white);
+
             }
         } else {
             switch (counter) {

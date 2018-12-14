@@ -27,6 +27,7 @@ public class BoardWindow extends Window{
     public Ellipse2D[][] ovalBoard = new Ellipse2D[18][18];
     public Ellipse2D[][] possibleMovesCirclesBoard = new Ellipse2D[18][18];
     public Map<Field, Field[]> possibleMoves;
+    Character whoseTurnIsit;
 
     Field clickedField = new Field();
 
@@ -67,6 +68,7 @@ public class BoardWindow extends Window{
         p.clickedField = clickedField;
         p.possibleMovesCirclesBoard = possibleMovesCirclesBoard;
         p.frame = frame;
+        p.whoseTurnIsit = whoseTurnIsit;
 
         p.setBounds(100,0,760,800);
         frame.getContentPane().setBackground(Color.white);
@@ -485,6 +487,17 @@ public class BoardWindow extends Window{
                     }
                 }
             }
+
+            Rectangle rec = new Rectangle();
+            rec.setLocation(700, 30);
+            rec.setSize(100, 20);
+            if(whoseTurnIsit.equals('r')) g2d.setPaint(Color.red);
+            else if(whoseTurnIsit.equals('g')) g2d.setPaint(Color.green);
+            else if(whoseTurnIsit.equals('b')) g2d.setPaint(Color.blue);
+            else if(whoseTurnIsit.equals('w')) g2d.setPaint(Color.gray);
+            else if(whoseTurnIsit.equals('c')) g2d.setPaint(Color.black);
+            else if(whoseTurnIsit.equals('y')) g2d.setPaint(Color.yellow);
+            g2d.fill(rec);
         }
     }
 }

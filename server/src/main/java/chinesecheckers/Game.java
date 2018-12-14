@@ -94,7 +94,7 @@ public class Game{
                             packet.board = regularBoard.getBoard();
 
                             System.out.println("Board Download request");
-                            //System.out.println("CurrentPlayer.Color: "+regularBoard.getCheckerByTurn()+"This.Color"+this.playerColor);
+                            System.out.println("CurrentPlayer.Color: "+regularBoard.getCheckerByTurn()+"This.Color"+this.playerColor);
                             if(regularBoard.getCheckerByTurn().equals(this.playerColor)) packet.isMyMove = true;
                             else packet.isMyMove = false;
 
@@ -105,6 +105,7 @@ public class Game{
                             }
 
                             packet.possibleMoves = possibleMovesArray;
+                            packet.whoseTurnIsit = regularBoard.getCheckerByTurn();
 
                             reply.commandType = CommandType.GET_BOARD_AND_POSSIBLE_MOVES;
                             reply.content = packet.toJSON();
@@ -142,20 +143,8 @@ public class Game{
 
                                 System.out.println("determining the next player...");
                                 //System.out.println("CurrentPlayer.Color: "+regularBoard.getCheckerByTurn()+"This.Color"+this.playerColor);
-                                if(numberOfPlayers==2)
-                                {
-                                    if(regularBoard.getCheckerByTurn().equals('w') && i==0) broadcastPacket.isMyMove = true;
-                                    else if(regularBoard.getCheckerByTurn().equals('b') && i==1) broadcastPacket.isMyMove = true;
-                                }
-                                if(numberOfPlayers==6)
-                                {
-                                    if(regularBoard.getCheckerByTurn().equals('r') && i==1) broadcastPacket.isMyMove = true;
-                                    else if(regularBoard.getCheckerByTurn().equals('y') && i==2) broadcastPacket.isMyMove = true;
-                                    else if(regularBoard.getCheckerByTurn().equals('b') && i==3) broadcastPacket.isMyMove = true;
-                                    else if(regularBoard.getCheckerByTurn().equals('g') && i==4) broadcastPacket.isMyMove = true;
-                                    else if(regularBoard.getCheckerByTurn().equals('c') && i==5) broadcastPacket.isMyMove = true;
-                                    else if(regularBoard.getCheckerByTurn().equals('w') && i==0) broadcastPacket.isMyMove = true;
-                                }
+
+                                if(regularBoard.getTurnIndex()%numberOfPlayers==i) broadcastPacket.isMyMove = true;
 
                                 //Converting HashMap<Field, List<Field>> do HashMap<Field, Field[]>
                                 HashMap<Field, Field[]> possibleMovesArrayBroadcast = new HashMap<Field, Field[]>();
@@ -165,6 +154,7 @@ public class Game{
                                 broadcastPacket.possibleMoves = possibleMovesArrayBroadcast;
 
                                 broadcastCommand.commandType = CommandType.GET_BOARD_AND_POSSIBLE_MOVES;
+                                broadcastPacket.whoseTurnIsit = regularBoard.getCheckerByTurn();
                                 broadcastCommand.content = broadcastPacket.toJSON();
 
                                 players.get(i).output.println(broadcastCommand.toJSON());
@@ -216,6 +206,7 @@ public class Game{
                                 broadcastPacket.possibleMoves = possibleMovesArrayBroadcast;
 
                                 broadcastCommand.commandType = CommandType.GET_BOARD_AND_POSSIBLE_MOVES;
+                                broadcastPacket.whoseTurnIsit = regularBoard.getCheckerByTurn();
                                 broadcastCommand.content = broadcastPacket.toJSON();
 
                                 players.get(i).output.println(broadcastCommand.toJSON());
