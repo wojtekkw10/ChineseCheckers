@@ -105,7 +105,8 @@ public class Game{
                             }
 
                             packet.possibleMoves = possibleMovesArray;
-                            packet.whoseTurnIsit = regularBoard.getCheckerByTurn();
+                            packet.whoseTurnIsIt = regularBoard.getCheckerByTurn();
+                            packet.yourColor = this.playerColor;
 
                             reply.commandType = CommandType.GET_BOARD_AND_POSSIBLE_MOVES;
                             reply.content = packet.toJSON();
@@ -154,7 +155,8 @@ public class Game{
                                 broadcastPacket.possibleMoves = possibleMovesArrayBroadcast;
 
                                 broadcastCommand.commandType = CommandType.GET_BOARD_AND_POSSIBLE_MOVES;
-                                broadcastPacket.whoseTurnIsit = regularBoard.getCheckerByTurn();
+                                broadcastPacket.whoseTurnIsIt = regularBoard.getCheckerByTurn();
+                                broadcastPacket.yourColor = players.get(i).playerColor;
                                 broadcastCommand.content = broadcastPacket.toJSON();
 
                                 players.get(i).output.println(broadcastCommand.toJSON());
@@ -206,7 +208,7 @@ public class Game{
                                 broadcastPacket.possibleMoves = possibleMovesArrayBroadcast;
 
                                 broadcastCommand.commandType = CommandType.GET_BOARD_AND_POSSIBLE_MOVES;
-                                broadcastPacket.whoseTurnIsit = regularBoard.getCheckerByTurn();
+                                broadcastPacket.whoseTurnIsIt = regularBoard.getCheckerByTurn();
                                 broadcastCommand.content = broadcastPacket.toJSON();
 
                                 players.get(i).output.println(broadcastCommand.toJSON());

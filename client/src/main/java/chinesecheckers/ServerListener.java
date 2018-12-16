@@ -16,8 +16,11 @@ public class ServerListener extends Thread {
             Packet packet = server.listen();
             boardWindow.charBoard = packet.board;
             boardWindow.possibleMoves = packet.possibleMoves;
+            boardWindow.whoseTurnIsIt = packet.whoseTurnIsIt;
             isMyMove = packet.isMyMove;
             boardWindow.isMyMove = packet.isMyMove;
+            boardWindow.yourColor = packet.yourColor;
+            System.out.println("Current Player Color: "+packet.whoseTurnIsIt);
             System.out.println("ISMYMOVE: "+isMyMove);
             if(finish) break;
             boardWindow.display();

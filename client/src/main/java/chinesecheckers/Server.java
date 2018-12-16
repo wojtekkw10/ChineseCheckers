@@ -145,6 +145,8 @@ public class Server {
             Command receivedCommand = Command.fromJSON(commandAsJSON);
             receivedPacket = Packet.fromJSON(receivedCommand.content);
 
+            System.out.println("Current Player Color: "+receivedPacket.whoseTurnIsIt);
+
             return receivedPacket;
         }
 

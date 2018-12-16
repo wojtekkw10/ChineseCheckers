@@ -86,9 +86,9 @@ public class App
                         }
                         else if(numberOfPlayers==4)
                         {
-                            if(newPlayerID==1) color='b';
-                            else if(newPlayerID==2) color='y';
+                            if(newPlayerID==1) color='y';
                             else if(newPlayerID==2) color='b';
+                            else if(newPlayerID==3) color='c';
                         }
                         else if(numberOfPlayers==6)
                         {

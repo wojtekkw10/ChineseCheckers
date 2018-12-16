@@ -27,7 +27,8 @@ public class BoardWindow extends Window{
     public Ellipse2D[][] ovalBoard = new Ellipse2D[18][18];
     public Ellipse2D[][] possibleMovesCirclesBoard = new Ellipse2D[18][18];
     public Map<Field, Field[]> possibleMoves;
-    Character whoseTurnIsit;
+    Character whoseTurnIsIt;
+    Character yourColor;
 
     Field clickedField = new Field();
 
@@ -68,7 +69,9 @@ public class BoardWindow extends Window{
         p.clickedField = clickedField;
         p.possibleMovesCirclesBoard = possibleMovesCirclesBoard;
         p.frame = frame;
-        p.whoseTurnIsit = whoseTurnIsit;
+        p.whoseTurnIsIt = whoseTurnIsIt;
+        p.yourColor = yourColor;
+
 
         p.setBounds(100,0,760,800);
         frame.getContentPane().setBackground(Color.white);
@@ -489,14 +492,27 @@ public class BoardWindow extends Window{
             }
 
             Rectangle rec = new Rectangle();
-            rec.setLocation(700, 30);
+            rec.setLocation(700, 60);
             rec.setSize(100, 20);
-            if(whoseTurnIsit.equals('r')) g2d.setPaint(Color.red);
-            else if(whoseTurnIsit.equals('g')) g2d.setPaint(Color.green);
-            else if(whoseTurnIsit.equals('b')) g2d.setPaint(Color.blue);
-            else if(whoseTurnIsit.equals('w')) g2d.setPaint(Color.gray);
-            else if(whoseTurnIsit.equals('c')) g2d.setPaint(Color.black);
-            else if(whoseTurnIsit.equals('y')) g2d.setPaint(Color.yellow);
+            g2d.setPaint(Color.black);
+            g2d.drawString("Current Player: ", 600, 70);
+            if(whoseTurnIsIt.equals('r')) g2d.setPaint(Color.red);
+            else if(whoseTurnIsIt.equals('g')) g2d.setPaint(Color.green);
+            else if(whoseTurnIsIt.equals('b')) g2d.setPaint(Color.blue);
+            else if(whoseTurnIsIt.equals('w')) g2d.setPaint(Color.gray);
+            else if(whoseTurnIsIt.equals('c')) g2d.setPaint(Color.black);
+            else if(whoseTurnIsIt.equals('y')) g2d.setPaint(Color.yellow);
+            g2d.fill(rec);
+
+            g2d.setPaint(Color.black);
+            g2d.drawString("You: ", 600, 45);
+            rec.setLocation(700, 35);
+            if(yourColor.equals('r')) g2d.setPaint(Color.red);
+            else if(yourColor.equals('g')) g2d.setPaint(Color.green);
+            else if(yourColor.equals('b')) g2d.setPaint(Color.blue);
+            else if(yourColor.equals('w')) g2d.setPaint(Color.gray);
+            else if(yourColor.equals('c')) g2d.setPaint(Color.black);
+            else if(yourColor.equals('y')) g2d.setPaint(Color.yellow);
             g2d.fill(rec);
         }
     }
