@@ -16,6 +16,7 @@ public class Game{
     String name;
     int numberOfBots;
     int numberOfPlayers;
+    boolean exists = true;
 
     Board regularBoard = new RegularBoard();
     Bot simpleBot = new SimpleBot();
@@ -215,6 +216,22 @@ public class Game{
                             }
                             break;
                         case QUIT:
+                            Character color = this.playerColor;
+                            for(int i=0; i<players.size(); i++)
+                            {
+
+                                Command killingCommand = new Command();
+
+                                Packet killingPacket = new Packet();
+                                killingCommand.commandType = CommandType.QUIT;
+                                killingCommand.content = killingPacket.toJSON();
+
+                                players.get(i).output.println(killingCommand.toJSON());
+                                if(players.get(i).playerColor.equals(color)) players.remove(i);
+                            }
+
+                            if(players.size()==0) exists = false;
+
                             return;
 
 

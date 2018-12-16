@@ -17,6 +17,7 @@ public class App
         frame.setSize(new Dimension(1000,800));
         frame.setResizable(false);
 
+
         MainWindow mainWindow = new MainWindow(frame);
         mainWindow.start();
 
@@ -49,6 +50,15 @@ public class App
             requestNewGameWindow = new RequestNewGameWindow(this, frame);
             frame.addComponentListener(new ResizeListener());
             KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new BoardWindowKeyListener());
+
+            frame.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    System.out.println("Window closing");
+                    server.quit();
+                    System.exit(0);
+                }
+            });
 
 
             serverListener.isMyMove = isMyMove;
@@ -91,6 +101,11 @@ public class App
             else if( command.equals( "Back to Menu" ) ) {
                 menuWindow.display();
                 state = FrameState.MENUWINDOW;
+
+                System.out.println("Thread yet to be killed");
+                System.out.println("Thread killed");
+                server.quit();
+
             }
 
             else if( command.equals( "Skip" ) )  {
@@ -118,6 +133,12 @@ public class App
 
                 boardWindow.display();
                 state = FrameState.BOARDWINDOW;
+
+                ServerListener newServerListener = new ServerListener();
+                newServerListener.server = serverListener.server;
+                newServerListener.boardWindow = serverListener.boardWindow;
+                newServerListener.frame = this.frame;
+                serverListener = newServerListener;
                 serverListener.start();
             }
             else if( command.equals( "Start" ))  {
@@ -141,6 +162,12 @@ public class App
                 boardWindow.display();
                 state = FrameState.BOARDWINDOW;
                 System.out.print("CLIENT: Start Button has been clicked\n");
+
+                ServerListener newServerListener = new ServerListener();
+                newServerListener.server = serverListener.server;
+                newServerListener.boardWindow = serverListener.boardWindow;
+                newServerListener.frame = this.frame;
+                serverListener = newServerListener;
                 serverListener.start();
 
             } else {

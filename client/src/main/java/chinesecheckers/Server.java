@@ -72,7 +72,20 @@ public class Server {
         }
     }
 
-    public void uploadMove(Move move) {
+    public void quit() {
+        System.out.print("Quitting\n");
+
+        Packet packet = new Packet();
+
+        Command command = new Command();
+        command.commandType = CommandType.QUIT;
+        command.content = packet.toJSON();
+
+        out.println(command.toJSON());
+    }
+
+
+        public void uploadMove(Move move) {
         System.out.println("Uploading Move");
         Command command = new Command();
         command.commandType = CommandType.MOVE_PIN;
@@ -107,7 +120,7 @@ public class Server {
         }
     }
 
-    public Packet listen()
+    public Command listen()
     {
         while(true)
         {
@@ -119,7 +132,8 @@ public class Server {
             try{  commandAsJSON = in.readLine();}
             catch(IOException e ) { System.out.print("Error: Didnt receive BoardState\n");}
             Command receivedCommand = Command.fromJSON(commandAsJSON);
-            return Packet.fromJSON(receivedCommand.content);
+            if(receivedCommand!=null) return receivedCommand;
+            else return new Command();
         }
     }
 

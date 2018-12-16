@@ -43,16 +43,20 @@ public class App
                         System.out.print("AllGamesRequested");
                         StringBuffer gameList = new StringBuffer();
                         for (int i = 0; i < listOfGames.size(); i++) {
-                            gameList.append(i);
-                            gameList.append(" ");
-                            gameList.append(listOfGames.get(i).name);
-                            gameList.append(" ");
-                            gameList.append(listOfGames.get(i).numberOfBots);
-                            gameList.append(" ");
-                            gameList.append(listOfGames.get(i).getNumberOfPlayers());
-                            gameList.append(" ");
-                            gameList.append(listOfGames.get(i).numberOfPlayers);
-                            gameList.append(" ");
+                            if(listOfGames.get(i).exists)
+                            {
+                                gameList.append(i);
+                                gameList.append(" ");
+                                gameList.append(listOfGames.get(i).name);
+                                gameList.append(" ");
+                                gameList.append(listOfGames.get(i).numberOfBots);
+                                gameList.append(" ");
+                                gameList.append(listOfGames.get(i).getNumberOfPlayers());
+                                gameList.append(" ");
+                                gameList.append(listOfGames.get(i).numberOfPlayers);
+                                gameList.append(" ");
+                            }
+
                         }
                         output.println(gameList.toString());
                         newPlayerSocket.close();
