@@ -33,6 +33,7 @@ public class Server {
         in = new BufferedReader(
                 new InputStreamReader(socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true);
+        System.out.println(socket);
 
     }
 

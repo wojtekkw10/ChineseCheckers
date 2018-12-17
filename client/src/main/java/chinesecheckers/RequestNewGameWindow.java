@@ -97,14 +97,15 @@ public class RequestNewGameWindow extends Window {
         panel.setPreferredSize(new Dimension(300, 350));
         panel.setBackground(Color.DARK_GRAY);
 
-        panel.add(startBTN);
+        panel.add(backBTN);
         panel.add(gameNameLabel);
         panel.add(gameNameTextField);
         panel.add(numberOfPlayersLabel);
         panel.add(numberOfPlayersTextField);
         panel.add(numberOfBotsLabel);
         panel.add(numberOfBotsTextField);
-        panel.add(backBTN);
+        panel.add(startBTN);
+
 
         //Creating the main (full) window
         JPanel main = new JPanel();

@@ -63,14 +63,16 @@ public class BoardWindow extends Window{
         p.addMouseListener(mouseListener);
         frame.addMouseListener(mouseListener);
 
+
         p.charBoard = charBoard;
         p.ovalBoard = ovalBoard;
-        p.possibleMoves = possibleMoves;
+        p.possibleMoves  = possibleMoves;
         p.clickedField = clickedField;
         p.possibleMovesCirclesBoard = possibleMovesCirclesBoard;
         p.frame = frame;
         p.whoseTurnIsIt = whoseTurnIsIt;
         p.yourColor = yourColor;
+
 
 
         p.setBounds(100,0,760,800);

@@ -119,7 +119,10 @@ public class App
                 try{ server.connect(frame);}
                 catch (IOException ex){System.out.print("CLIENT: ERROR: Couldn't connect to the server\n");}
 
-                server.joinGame(gameList.get(i).id, menuWindow.getUsername());
+                for(int k=0; k<gameList.size(); k++)
+                {
+                    if(gameList.get(k).id==i) server.joinGame(i, "Default");
+                }
 
                 Packet packet = server.downloadBoardState();
                 boardWindow.charBoard = packet.board;

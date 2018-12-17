@@ -29,21 +29,25 @@ public class App
                 System.out.println("Client connected");
                 BufferedReader in = new BufferedReader(
                         new InputStreamReader(newPlayerSocket.getInputStream()));
-                System.out.println("Downloading request");
+                //System.out.println("Downloading request");
 
                 String commandAsJSON = in.readLine();
                 Command command = Command.fromJSON(commandAsJSON);
                 Packet packet = Packet.fromJSON(command.content);
 
-                System.out.println("Downloaded request");
+                //System.out.println("Downloaded request");
                 PrintWriter output = new PrintWriter(newPlayerSocket.getOutputStream(), true);
 
                 switch(command.commandType) {
                     case REQUEST_ALL_GAMES: {
                         System.out.print("AllGamesRequested");
                         StringBuffer gameList = new StringBuffer();
+                        for(int i=listOfGames.size()-1; i>=0 ; i--)
+                        {
+                            if(!listOfGames.get(i).exists) listOfGames.remove(i);
+                        }
                         for (int i = 0; i < listOfGames.size(); i++) {
-                            if(listOfGames.get(i).exists)
+                            if(!listOfGames.get(i).full)
                             {
                                 gameList.append(i);
                                 gameList.append(" ");
@@ -51,7 +55,7 @@ public class App
                                 gameList.append(" ");
                                 gameList.append(listOfGames.get(i).numberOfBots);
                                 gameList.append(" ");
-                                gameList.append(listOfGames.get(i).getNumberOfPlayers());
+                                gameList.append(listOfGames.get(i).getNumberOfPlayers()+listOfGames.get(i).numberOfBots);
                                 gameList.append(" ");
                                 gameList.append(listOfGames.get(i).numberOfPlayers);
                                 gameList.append(" ");

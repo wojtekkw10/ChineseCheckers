@@ -17,6 +17,7 @@ public class Game{
     int numberOfBots;
     int numberOfPlayers;
     boolean exists = true;
+    boolean full = false;
 
     Board regularBoard = new RegularBoard();
     Bot simpleBot = new SimpleBot();
@@ -25,6 +26,7 @@ public class Game{
     {
         players.add(player);
         players.get(players.size()-1).start();
+        if(players.size()+numberOfBots==numberOfPlayers) full = true;
     }
 
     Game(String name, int numberOfBots)
@@ -136,6 +138,7 @@ public class Game{
 
                             for(int i=0; i<players.size(); i++)
                             {
+                                System.out.println("Player size: "+players.size());
                                 Command broadcastCommand = new Command();
 
                                 Packet broadcastPacket = new Packet();
@@ -144,7 +147,7 @@ public class Game{
                                 broadcastPacket.isMyMove = false;
 
                                 System.out.println("determining the next player...");
-                                //System.out.println("CurrentPlayer.Color: "+regularBoard.getCheckerByTurn()+"This.Color"+this.playerColor);
+                                System.out.println("CurrentPlayer.Color: "+regularBoard.getCheckerByTurn()+"This.Color"+this.playerColor);
 
                                 if(regularBoard.getTurnIndex()%numberOfPlayers==i) broadcastPacket.isMyMove = true;
 
@@ -159,6 +162,9 @@ public class Game{
                                 broadcastPacket.whoseTurnIsIt = regularBoard.getCheckerByTurn();
                                 broadcastPacket.yourColor = players.get(i).playerColor;
                                 broadcastCommand.content = broadcastPacket.toJSON();
+
+                                System.out.println(players.get(i).playerColor+" "+broadcastPacket.isMyMove);
+                                System.out.println(players.get(i).socket);
 
                                 players.get(i).output.println(broadcastCommand.toJSON());
                             }
@@ -175,15 +181,16 @@ public class Game{
                                 if (thisTurn == botsTurn){
 
                                     for (int i = botsTurn; i < numberOfPlayers; i++){
+
                                         Field[] moves = simpleBot.getTheBestMove(regularBoard.getPossibleMoves());
                                         regularBoard.movePin(moves[0], moves[1]);
                                     }
                                 }
                             }
 
-                            //To samo co w MOVE_PIN ale bez movePin
                             for(int i=0; i<players.size(); i++)
                             {
+                                System.out.println("Player size: "+players.size());
                                 Command broadcastCommand = new Command();
 
                                 Packet broadcastPacket = new Packet();
@@ -192,25 +199,24 @@ public class Game{
                                 broadcastPacket.isMyMove = false;
 
                                 System.out.println("determining the next player...");
-                                //System.out.println("CurrentPlayer.Color: "+regularBoard.getCheckerByTurn()+"This.Color"+this.playerColor);
-                                if(regularBoard.getCheckerByTurn().equals('r') && i==1) broadcastPacket.isMyMove = true;
-                                else if(regularBoard.getCheckerByTurn().equals('y') && i==2) broadcastPacket.isMyMove = true;
-                                else if(regularBoard.getCheckerByTurn().equals('b') && i==3) broadcastPacket.isMyMove = true;
-                                else if(regularBoard.getCheckerByTurn().equals('g') && i==4) broadcastPacket.isMyMove = true;
-                                else if(regularBoard.getCheckerByTurn().equals('c') && i==5) broadcastPacket.isMyMove = true;
-                                else if(regularBoard.getCheckerByTurn().equals('w') && i==0) broadcastPacket.isMyMove = true;
+                                System.out.println("CurrentPlayer.Color: "+regularBoard.getCheckerByTurn()+"This.Color"+this.playerColor);
+
+                                if(regularBoard.getTurnIndex()%numberOfPlayers==i) broadcastPacket.isMyMove = true;
 
                                 //Converting HashMap<Field, List<Field>> do HashMap<Field, Field[]>
                                 HashMap<Field, Field[]> possibleMovesArrayBroadcast = new HashMap<Field, Field[]>();
                                 for (Map.Entry<Field, List<Field>> entry : regularBoard.getPossibleMoves().entrySet()) {
                                     possibleMovesArrayBroadcast.put(entry.getKey(), entry.getValue().toArray(new Field[0]));
                                 }
-
                                 broadcastPacket.possibleMoves = possibleMovesArrayBroadcast;
 
                                 broadcastCommand.commandType = CommandType.GET_BOARD_AND_POSSIBLE_MOVES;
                                 broadcastPacket.whoseTurnIsIt = regularBoard.getCheckerByTurn();
+                                broadcastPacket.yourColor = players.get(i).playerColor;
                                 broadcastCommand.content = broadcastPacket.toJSON();
+
+                                System.out.println(players.get(i).playerColor+" "+broadcastPacket.isMyMove);
+                                System.out.println(players.get(i).socket);
 
                                 players.get(i).output.println(broadcastCommand.toJSON());
                             }

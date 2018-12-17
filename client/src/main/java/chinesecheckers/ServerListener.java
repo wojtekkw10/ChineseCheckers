@@ -13,9 +13,8 @@ public class ServerListener extends Thread {
     {
         while(true)
         {
-            Command command = new Command();
-            if(server!=null) command = server.listen();
-            try{ if(command.commandType==CommandType.QUIT) this.join(); break;  } catch(InterruptedException e){}
+            Command command = server.listen();
+            try{ if(command.commandType==CommandType.QUIT) this.join();  } catch(InterruptedException e){}
             Packet packet = Packet.fromJSON(command.content);
             boardWindow.charBoard = packet.board;
             boardWindow.possibleMoves = packet.possibleMoves;
