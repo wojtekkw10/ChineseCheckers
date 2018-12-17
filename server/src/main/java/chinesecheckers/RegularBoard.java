@@ -147,6 +147,17 @@ public class RegularBoard extends Board {
 
     }};
 
+    private HashMap<Character, Color> charsAsColors = new HashMap<Character, Color>() {{
+        put('r', Color.red);
+        put('g',Color.green);
+        put('y', Color.yellow);
+        put('c', Color.black);
+        put('b', Color.blue);
+        put('w', Color.white);
+
+    }};
+
+
     /*
     setting board
     a - available field
@@ -506,8 +517,12 @@ public class RegularBoard extends Board {
 
         HashMap<Field, List<Field>> possibleMoves = new HashMap<Field, List<Field>>();
         List<Field> validFromPosition = getValidFromPositions();
+        List<Field> positionInOppositeCorner = new ArrayList<Field>();
 
         for (Field pos : validFromPosition) {
+
+            Color currentPlayerColor = charsAsColors.get(getCheckerByTurn());
+           positionInOppositeCorner = corners.get(mapOfOppositeColors.get(currentPlayerColor));
 
             possibleMoves.put(pos, new ArrayList<Field>());
             List<Field> movesForPin = possibleMoves.get(pos);
@@ -529,6 +544,18 @@ public class RegularBoard extends Board {
                     }
                 }
                 while(movesForPin.remove(pos)){}
+            }
+
+           if (positionInOppositeCorner.contains(pos)) {
+                for (Field field : movesForPin) {
+
+                    if (!positionInOppositeCorner.contains(field)) {
+
+                        movesForPin.remove(field);
+
+                    }
+
+                }
             }
         }
 
