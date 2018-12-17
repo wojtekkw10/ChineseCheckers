@@ -6,14 +6,22 @@ public class ServerListener extends Thread {
     public Server server;
     public BoardWindow boardWindow;
     public MenuWindow menuWindow;
-    JFrame frame;
+    public JFrame frame;
+    public FrameState frameState = new FrameState();
 
     public void run()
     {
         while(true)
         {
             Command command = server.listen();
-            try{ if(command.commandType==CommandType.QUIT) { menuWindow.display(); this.join(); } } catch(InterruptedException e){}
+            try{
+                if(command.commandType==CommandType.QUIT) {
+                menuWindow.display();
+                frameState.state = FrameStateEnum.MENUWINDOW;
+                this.join();
+
+                }
+            } catch(InterruptedException e){}
 
             Packet packet = Packet.fromJSON(command.content);
             boardWindow.charBoard = packet.board;
@@ -21,7 +29,7 @@ public class ServerListener extends Thread {
             boardWindow.whoseTurnIsIt = packet.whoseTurnIsIt;
             boardWindow.isMyMove = packet.isMyMove;
             boardWindow.yourColor = packet.yourColor;
-            System.out.println("Current Player Color: "+packet.whoseTurnIsIt);
+            System.out.println("Current Player Color: "+packet.whoseTurnIsIt+packet.isMyMove);
             boardWindow.display();
             boardWindow.repaint();
 

@@ -1,9 +1,5 @@
 package chinesecheckers;
 
-public enum FrameState {
-    MENUWINDOW,
-    JOINWINDOW,
-    BOARDWINDOW,
-    PAUSEWINDOW,
-    REQUESTNEWGAMEWINDOW
+public class FrameState {
+    public FrameStateEnum state;
 }

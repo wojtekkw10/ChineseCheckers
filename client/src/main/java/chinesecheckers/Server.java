@@ -47,7 +47,7 @@ public class Server {
         out.println(command.toJSON());
     }
 
-    public void requestNewGame(String name, int numberOfBots, int maxNumberOfPlayers) {
+    public String requestNewGame(String name, int numberOfBots, int maxNumberOfPlayers) {
         System.out.print("Requested a new game\n");
 
         Packet packet = new Packet();
@@ -66,7 +66,7 @@ public class Server {
         try{  welcomeMessage = in.readLine();}
         catch(IOException e ) { System.out.print("Error: Didnt start a new game\n");}
 
-        System.out.println(welcomeMessage);
+        return welcomeMessage;
     }
 
     public void quit() {
@@ -112,8 +112,7 @@ public class Server {
 
             try{  feedback = in.readLine();}
             catch(IOException e ) { System.out.print("Error: Didnt start a new game\n");}
-            System.out.println(feedback);
-            return "";
+            return feedback;
         }
     }
 

@@ -25,11 +25,10 @@ public class App
 
     public static class MainWindow extends JFrame implements ActionListener{
         JFrame frame;
-        FrameState state = FrameState.MENUWINDOW;
+        FrameState state = new FrameState();
         Server server = new Server();
         ArrayList<GameInfo> gameList;
         volatile boolean isMyMove = false;
-        boolean finish = false;
         ServerListener serverListener = new ServerListener();
 
         JoinWindow joinWindow;
@@ -45,6 +44,8 @@ public class App
             this.frame = frame;
             this.frame.addMouseListener(new MouseEventListener());
             this.frame.addComponentListener(new ResizeListener());
+
+            state.state = FrameStateEnum.MENUWINDOW;
 
             joinWindow = new JoinWindow(this, frame);
             menuWindow = new MenuWindow(this, frame);
@@ -67,6 +68,7 @@ public class App
             serverListener.server = server;
             serverListener.frame = frame;
             serverListener.menuWindow = menuWindow;
+            serverListener.frameState = state;
 
         }
 
@@ -76,7 +78,7 @@ public class App
 
             if( command.equals( "Create New Game" ))  {
                 requestNewGameWindow.display();
-                state = FrameState.REQUESTNEWGAMEWINDOW;
+                state.state = FrameStateEnum.REQUESTNEWGAMEWINDOW;
 
             } else if( command.equals( "Join an existing game" ) ) {
                 try{ server.connect(frame);}
@@ -84,29 +86,33 @@ public class App
                 gameList = server.downloadAllGames();
                 joinWindow.setIdList(gameList);
                 joinWindow.display();
-                state = FrameState.JOINWINDOW;
+                state.state = FrameStateEnum.JOINWINDOW;
             }
 
             else if( command.equals( "Back" ) ) {
                 menuWindow.display();
-                state = FrameState.MENUWINDOW;
+                state.state = FrameStateEnum.MENUWINDOW;
             }
 
             else if( command.equals( "Back to the Game" ) )  {
                 boardWindow.display();
-                state = FrameState.BOARDWINDOW;
+                state.state = FrameStateEnum.BOARDWINDOW;
             }
 
             else if( command.equals( "Back to Menu" ) ) {
                 menuWindow.display();
-                state = FrameState.MENUWINDOW;
+                state.state = FrameStateEnum.MENUWINDOW;
 
                 server.quit();
 
             }
 
             else if( command.equals( "Skip" ) )  {
-                server.skip();
+                if( boardWindow.isMyMove) {
+                    server.skip();
+                    boardWindow.display();
+                    state.state = FrameStateEnum.BOARDWINDOW;
+                }
             }
 
             else if( command.startsWith( "ID" ) )  {
@@ -131,7 +137,7 @@ public class App
                 System.out.println("IsMyMove: "+isMyMove);
 
                 boardWindow.display();
-                state = FrameState.BOARDWINDOW;
+                state.state = FrameStateEnum.BOARDWINDOW;
 
                 ServerListener newServerListener = new ServerListener();
                 newServerListener.server = serverListener.server;
@@ -159,7 +165,7 @@ public class App
                 System.out.println("IsMyMove: "+isMyMove);
 
                 boardWindow.display();
-                state = FrameState.BOARDWINDOW;
+                state.state = FrameStateEnum.BOARDWINDOW;
                 System.out.print("CLIENT: Start Button has been clicked\n");
 
                 ServerListener newServerListener = new ServerListener();
@@ -181,7 +187,7 @@ public class App
             public boolean dispatchKeyEvent(final KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
                     pauseWindow.display();
-                    state = FrameState.PAUSEWINDOW;
+                    state.state = FrameStateEnum.PAUSEWINDOW;
                 }
                 return false;
             }
@@ -190,12 +196,12 @@ public class App
         //Repaint the window when it's moved
         class ResizeListener implements ComponentListener {
             public void componentResized(ComponentEvent e) {
-                if(state.equals(FrameState.BOARDWINDOW)) boardWindow.display();
+                if(state.equals(FrameStateEnum.BOARDWINDOW)) boardWindow.display();
             }
 
             @Override
             public void componentMoved(ComponentEvent e) {
-                if(state.equals(FrameState.BOARDWINDOW)) boardWindow.display();
+                if(state.equals(FrameStateEnum.BOARDWINDOW)) boardWindow.display();
             }
 
             @Override
@@ -218,7 +224,7 @@ public class App
 
             public void mouseClicked(MouseEvent e) {
 
-                if(boardWindow.isMyMove && state==FrameState.BOARDWINDOW)
+                if(boardWindow.isMyMove && state.state== FrameStateEnum.BOARDWINDOW)
                 {
                     for(int i=0; i<18; i++)
                     {
