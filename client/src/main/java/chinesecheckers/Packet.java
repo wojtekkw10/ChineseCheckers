@@ -21,9 +21,8 @@ public class Packet {
     public int numberOfBots;
     public int numberOfPlayers;
 
-    //Joining a game
+    //In the game
     public int id;
-
     public Character currentPlayer;
     @JsonSerialize(keyUsing = FieldSerializer.class)
     @JsonDeserialize(keyUsing = FieldDeserializer.class)
@@ -31,11 +30,8 @@ public class Packet {
     public boolean isMyMove;
     public Character whoseTurnIsIt;
     public Character yourColor;
-
     public Move move;
-
     public Character[][] board;
-
 
 
     public String toJSON(){

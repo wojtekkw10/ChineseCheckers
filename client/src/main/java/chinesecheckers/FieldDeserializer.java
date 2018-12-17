@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public class FieldDeserializer extends KeyDeserializer {
     @Override
-    public Object deserializeKey(String key, DeserializationContext deserializationContext) throws IOException {
+    public Object deserializeKey(String key, DeserializationContext deserializationContext){
         return new Field(key);
     }
 }

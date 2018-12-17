@@ -29,13 +29,11 @@ public class App
                 System.out.println("Client connected");
                 BufferedReader in = new BufferedReader(
                         new InputStreamReader(newPlayerSocket.getInputStream()));
-                //System.out.println("Downloading request");
 
                 String commandAsJSON = in.readLine();
                 Command command = Command.fromJSON(commandAsJSON);
                 Packet packet = Packet.fromJSON(command.content);
 
-                //System.out.println("Downloaded request");
                 PrintWriter output = new PrintWriter(newPlayerSocket.getOutputStream(), true);
 
                 switch(command.commandType) {

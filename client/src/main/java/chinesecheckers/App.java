@@ -43,14 +43,16 @@ public class App
         MainWindow(JFrame frame)
         {
             this.frame = frame;
+            this.frame.addMouseListener(new MouseEventListener());
+            this.frame.addComponentListener(new ResizeListener());
+
             joinWindow = new JoinWindow(this, frame);
             menuWindow = new MenuWindow(this, frame);
             pauseWindow = new PauseWindow(this, frame);
-            boardWindow = new BoardWindow(this, new MainWindow.MouseEventListener(), frame);
+            boardWindow = new BoardWindow(frame);
             requestNewGameWindow = new RequestNewGameWindow(this, frame);
-            frame.addComponentListener(new ResizeListener());
-            KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new BoardWindowKeyListener());
 
+            KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new BoardWindowKeyListener());
             frame.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosing(WindowEvent e) {
@@ -61,11 +63,10 @@ public class App
             });
 
 
-            serverListener.isMyMove = isMyMove;
             serverListener.boardWindow = boardWindow;
             serverListener.server = server;
-            serverListener.finish = finish;
             serverListener.frame = frame;
+            serverListener.menuWindow = menuWindow;
 
         }
 
@@ -78,7 +79,6 @@ public class App
                 state = FrameState.REQUESTNEWGAMEWINDOW;
 
             } else if( command.equals( "Join an existing game" ) ) {
-                finish = false;
                 try{ server.connect(frame);}
                 catch (IOException ex){System.out.print("CLIENT: ERROR: Couldn't connect to the server\n");}
                 gameList = server.downloadAllGames();
@@ -88,7 +88,6 @@ public class App
             }
 
             else if( command.equals( "Back" ) ) {
-                finish = true;
                 menuWindow.display();
                 state = FrameState.MENUWINDOW;
             }
@@ -102,8 +101,6 @@ public class App
                 menuWindow.display();
                 state = FrameState.MENUWINDOW;
 
-                System.out.println("Thread yet to be killed");
-                System.out.println("Thread killed");
                 server.quit();
 
             }
@@ -113,7 +110,6 @@ public class App
             }
 
             else if( command.startsWith( "ID" ) )  {
-                finish = false;
                 int i = new Scanner(command).useDelimiter("\\D+").nextInt();
 
                 try{ server.connect(frame);}
@@ -121,7 +117,7 @@ public class App
 
                 for(int k=0; k<gameList.size(); k++)
                 {
-                    if(gameList.get(k).id==i) server.joinGame(i, "Default");
+                    if(gameList.get(k).id==i) server.joinGame(i);
                 }
 
                 Packet packet = server.downloadBoardState();
@@ -140,6 +136,7 @@ public class App
                 ServerListener newServerListener = new ServerListener();
                 newServerListener.server = serverListener.server;
                 newServerListener.boardWindow = serverListener.boardWindow;
+                newServerListener.menuWindow = serverListener.menuWindow;
                 newServerListener.frame = this.frame;
                 serverListener = newServerListener;
                 serverListener.start();
@@ -150,8 +147,7 @@ public class App
 
 
                 GameInfo info = requestNewGameWindow.getGameInfo();
-                String username = menuWindow.getUsername();
-                server.requestNewGame(info.name, info.numberOfBots, username, info.maxNumberOfPlayers);
+                server.requestNewGame(info.name, info.numberOfBots, info.maxNumberOfPlayers);
 
                 Packet packet = server.downloadBoardState();
                 boardWindow.charBoard = packet.board.clone();
@@ -169,6 +165,7 @@ public class App
                 ServerListener newServerListener = new ServerListener();
                 newServerListener.server = serverListener.server;
                 newServerListener.boardWindow = serverListener.boardWindow;
+                newServerListener.menuWindow = serverListener.menuWindow;
                 newServerListener.frame = this.frame;
                 serverListener = newServerListener;
                 serverListener.start();
@@ -221,7 +218,7 @@ public class App
 
             public void mouseClicked(MouseEvent e) {
 
-                if(boardWindow.isMyMove)
+                if(boardWindow.isMyMove && state==FrameState.BOARDWINDOW)
                 {
                     for(int i=0; i<18; i++)
                     {
@@ -262,10 +259,7 @@ public class App
                         }
                     }
                 }
-
-
             }
-
         }
 
         void start()

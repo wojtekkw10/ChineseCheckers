@@ -13,7 +13,6 @@ public class PauseWindow extends Window {
     private ActionListener actionListener;
     private JFrame mainFrame;
 
-
     PauseWindow(ActionListener actionListener, JFrame frame)
     {
         this.actionListener = actionListener;

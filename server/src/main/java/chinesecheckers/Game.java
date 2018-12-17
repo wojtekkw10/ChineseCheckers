@@ -223,7 +223,7 @@ public class Game{
                             break;
                         case QUIT:
                             Character color = this.playerColor;
-                            for(int i=0; i<players.size(); i++)
+                            for(int i=players.size()-1; i>=0; i--)
                             {
 
                                 Command killingCommand = new Command();
@@ -233,7 +233,7 @@ public class Game{
                                 killingCommand.content = killingPacket.toJSON();
 
                                 players.get(i).output.println(killingCommand.toJSON());
-                                if(players.get(i).playerColor.equals(color)) players.remove(i);
+                                players.remove(i);
                             }
 
                             if(players.size()==0) exists = false;

@@ -8,21 +8,16 @@ public class Command {
     String content;
 
     public String toJSON(){
-
         String[] classContent = new String[2];
         classContent[0] = String.valueOf(commandType.ordinal());
         classContent[1] = content;
 
         Gson gson = new Gson();
-
         return gson.toJson(classContent);
     }
 
     public static Command fromJSON(String JSON){
-
-
         Gson gson = new Gson();
-
         String[] classContent = gson.fromJson(JSON, String[].class);
 
         Command command = new Command();

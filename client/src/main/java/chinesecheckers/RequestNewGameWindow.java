@@ -22,12 +22,6 @@ public class RequestNewGameWindow extends Window {
     {
         this.actionListener = actionListener;
         this.mainFrame = frame;
-    }
-
-    public void display() {
-        mainFrame.getContentPane().removeAll();
-        mainFrame.getContentPane().setBackground( java.awt.Color.DARK_GRAY );
-        mainFrame.setLayout(new GridBagLayout());
 
         ((AbstractDocument) numberOfBotsTextField.getDocument()).setDocumentFilter(new DocumentFilter() {
             Pattern regEx = Pattern.compile("\\d+");
@@ -39,7 +33,7 @@ public class RequestNewGameWindow extends Window {
                     return;
                 }
                 int number = Integer.parseInt(text);
-                if(number<0 || number>6 || numberOfBotsTextField.getText().length()>0) return;
+                if(number<0 || number>5 || numberOfBotsTextField.getText().length()>0) return;
                 super.replace(fb, offset, length, text, attrs);
             }
         });
@@ -57,6 +51,12 @@ public class RequestNewGameWindow extends Window {
                 super.replace(fb, offset, length, text, attrs);
             }
         });
+    }
+
+    public void display() {
+        mainFrame.getContentPane().removeAll();
+        mainFrame.getContentPane().setBackground( java.awt.Color.DARK_GRAY );
+        mainFrame.setLayout(new GridBagLayout());
 
         System.out.println("CLIENT: Drawing RequestNewGame window");
 
@@ -130,7 +130,7 @@ public class RequestNewGameWindow extends Window {
         String numberOfBotsString = numberOfBotsTextField.getText();
         int numberOfBots = Integer.parseInt(numberOfBotsString);
         gameInfo.numberOfBots = numberOfBots;
-        System.out.print("Poddano: "+gameInfo.name+" #Bots: "+ numberOfBots+"\n");
+        System.out.print("Name: "+gameInfo.name+" #Bots: "+ numberOfBots+"\n");
         return gameInfo;
     }
 }

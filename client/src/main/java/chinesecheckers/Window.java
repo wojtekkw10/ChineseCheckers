@@ -8,6 +8,4 @@ abstract class Window extends JPanel{
     protected ArrayList<GameInfo> gameList;
 
     abstract void display();
-
-
 }

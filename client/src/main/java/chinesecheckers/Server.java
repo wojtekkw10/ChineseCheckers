@@ -47,7 +47,7 @@ public class Server {
         out.println(command.toJSON());
     }
 
-    public String requestNewGame(String name, int numberOfBots, String username, int maxNumberOfPlayers) {
+    public void requestNewGame(String name, int numberOfBots, int maxNumberOfPlayers) {
         System.out.print("Requested a new game\n");
 
         Packet packet = new Packet();
@@ -62,15 +62,11 @@ public class Server {
         String welcomeMessage = new String();
 
         out.println(command.toJSON());
-        while(true)
-        {
-            try{ sleep(1000);} catch (InterruptedException e){}
 
-            try{  welcomeMessage = in.readLine();}
-            catch(IOException e ) { System.out.print("Error: Didnt start a new game\n");}
-            System.out.println(welcomeMessage);
-            return "";
-        }
+        try{  welcomeMessage = in.readLine();}
+        catch(IOException e ) { System.out.print("Error: Didnt start a new game\n");}
+
+        System.out.println(welcomeMessage);
     }
 
     public void quit() {
@@ -86,7 +82,7 @@ public class Server {
     }
 
 
-        public void uploadMove(Move move) {
+    public void uploadMove(Move move) {
         System.out.println("Uploading Move");
         Command command = new Command();
         command.commandType = CommandType.MOVE_PIN;
@@ -96,7 +92,7 @@ public class Server {
         out.println(command.toJSON());
     }
 
-    String joinGame(int id, String username)
+    String joinGame(int id)
     {
         Packet packet = new Packet();
 
@@ -107,7 +103,7 @@ public class Server {
         out.println(command.toJSON());
 
         out.println(id);
-        out.println(username);
+        out.println("default");
 
         String feedback = new String();
         while(true)
