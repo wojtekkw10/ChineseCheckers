@@ -530,10 +530,15 @@ public class RegularBoard extends Board {
             for (int j = 0; j < 18; j++) {
                 for (int k = 1; k < board[j].length; k++) {
 
+
+
                     Field newField = new Field(j,k);
                     if (pos.equals(newField)){
                         continue;
                     }
+
+
+
                     List<Field> var = isMultiStepMove(pos, newField);
                     if (var.size() > 0){
                         movesForPin.addAll(var);
@@ -542,21 +547,43 @@ public class RegularBoard extends Board {
                     if (isOneStepMove(pos, newField)){
                         movesForPin.add(newField);
                     }
+
                 }
                 while(movesForPin.remove(pos)){}
+
             }
 
-           if (positionInOppositeCorner.contains(pos)) {
-                for (Field field : movesForPin) {
 
-                    if (!positionInOppositeCorner.contains(field)) {
 
-                        movesForPin.remove(field);
+
+
+            }
+
+
+        List<Field> movesForPin = new ArrayList<Field>();
+
+        for (Field pos : possibleMoves.keySet()){
+
+            if (positionInOppositeCorner.contains(pos)) {
+
+                List<Field> toRemove = new ArrayList<Field>();
+
+                movesForPin = possibleMoves.get(pos);
+
+                for (Field newField : movesForPin){
+
+                    if (!positionInOppositeCorner.contains(newField)) {
+
+                        toRemove.add(newField);
 
                     }
 
                 }
+
+                movesForPin.removeAll(toRemove);
+
             }
+
         }
 
         return possibleMoves;
