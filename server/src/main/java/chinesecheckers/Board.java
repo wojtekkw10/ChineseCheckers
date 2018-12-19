@@ -24,5 +24,6 @@ public abstract class Board {
     abstract void skip();
     abstract int getTurnIndex();
     abstract void initialize();
+    abstract boolean isDraw();
 
 }

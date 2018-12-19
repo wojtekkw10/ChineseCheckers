@@ -13,25 +13,23 @@ public class RegularBoard extends Board {
     private int numberOfPlayers;
     private int turnIndex = 0;
 
-    public void initialize()
-    {
+    public void initialize() {
         board = initializeHomeCorner();
     }
 
-    public void setNumberOfPlayers(int numberOfPlayers){
+    public void setNumberOfPlayers(int numberOfPlayers) {
 
         this.numberOfPlayers = numberOfPlayers;
 
     }
 
-    public int getTurnIndex(){
+    public int getTurnIndex() {
 
         return turnIndex;
 
     }
 
-    public void skip()
-    {
+    public void skip() {
         turnIndex++;
     }
 
@@ -133,7 +131,6 @@ public class RegularBoard extends Board {
         put(Color.black, 'c');
         put(Color.blue, 'b');
         put(Color.white, 'w');
-
     }};
 
     private HashMap<Color, Color> mapOfOppositeColors = new HashMap<Color, Color>() {{ //map of opposite colors for checking victory
@@ -144,17 +141,15 @@ public class RegularBoard extends Board {
         put(Color.black, Color.yellow);
         put(Color.white, Color.blue);
         put(Color.blue, Color.white);
-
     }};
 
     private HashMap<Character, Color> charsAsColors = new HashMap<Character, Color>() {{
         put('r', Color.red);
-        put('g',Color.green);
+        put('g', Color.green);
         put('y', Color.yellow);
         put('c', Color.black);
         put('b', Color.blue);
         put('w', Color.white);
-
     }};
 
 
@@ -228,7 +223,6 @@ public class RegularBoard extends Board {
                     put(Color.black, corners.get(Color.black));
                     put(Color.blue, corners.get(Color.blue));
                 }};
-
         }
     }
 
@@ -237,7 +231,6 @@ public class RegularBoard extends Board {
     }
 
     public Character[][] getBoard() {
-
         return board;
     }
 
@@ -251,8 +244,8 @@ public class RegularBoard extends Board {
             List<Field> corner = mapOfCorners.get(color);
 
             for (int j = 0; j < 10; j++) {
-                if(corner!=null)
-                board[corner.get(j).x][corner.get(j).y] = pin;
+                if (corner != null)
+                    board[corner.get(j).x][corner.get(j).y] = pin;
             }
         }
         return board;
@@ -260,8 +253,7 @@ public class RegularBoard extends Board {
 
     //check who's turn is it
 
-    public Character getCheckerByTurn()
-    {
+    public Character getCheckerByTurn() {
         int counter = turnIndex % numberOfPlayers;
 
         if (numberOfPlayers == 2) {
@@ -271,7 +263,6 @@ public class RegularBoard extends Board {
                     return colorsWithItsCharacterRepresentation.get(Color.blue);
                 case 0:
                     return colorsWithItsCharacterRepresentation.get(Color.white);
-
             }
         }
 
@@ -298,7 +289,6 @@ public class RegularBoard extends Board {
                     return colorsWithItsCharacterRepresentation.get(Color.blue);
                 case 0:
                     return colorsWithItsCharacterRepresentation.get(Color.white);
-
             }
         } else {
             switch (counter) {
@@ -318,7 +308,6 @@ public class RegularBoard extends Board {
 
             }
         }
-
     }
 
     /*
@@ -340,13 +329,10 @@ public class RegularBoard extends Board {
                 }
                 counter++;
             }
-
             if (counter == 10) {
                 return Optional.of(currentColorChecking);
             }
-
         }
-
         return Optional.ofNullable(null);
     }
 
@@ -366,10 +352,7 @@ public class RegularBoard extends Board {
                 if (board[i][j] == turnChecker)
                     validPositions.add(new Field(j, i));
             }
-
-
         }
-
         return validPositions;
     }
 
@@ -387,7 +370,7 @@ public class RegularBoard extends Board {
 
     public boolean isOneStepMove(Field oldfField, Field newField) {
 
-        if (oldfField.equals(newField)){
+        if (oldfField.equals(newField)) {
             return false;
         }
         if ((Math.abs(oldfField.x - newField.x) + Math.abs(oldfField.y - newField.y) == 1 ||
@@ -395,10 +378,7 @@ public class RegularBoard extends Board {
                 (newField.x == oldfField.x - 1 && newField.y == oldfField.y - 1)) && isValidPosition(newField) && board[newField.x][newField.y] == 'a') {
 
             return true;
-
-
         }
-
         return false;
     }
 
@@ -452,8 +432,6 @@ public class RegularBoard extends Board {
 
     interface SubfunctionHelper {
         boolean isValidHopMove(Field newField);
-
-
     }
     /*
         checking if it's multi step move - with jumps,
@@ -465,55 +443,42 @@ public class RegularBoard extends Board {
 
         List<Field> hops = new ArrayList<Field>();
 
-        if (oldField.equals(field)){
+        if (oldField.equals(field)) {
             return hops;
         }
-
         SubfunctionHelper isValidHopMove = new SubfunctionHelper() {
 
             public boolean isValidHopMove(Field pos) {
 
                 if (pos.x == field.x && pos.y == field.y) {
                     return true;
-                }
-                else if (!isValidPosition(pos))
-                {
+                } else if (!isValidPosition(pos)) {
                     return false;
                 }
 
                 hops.add(pos);
                 List<Field> jumps = getValidJumps(pos);
                 boolean valid = false;
-                for (int i = 0; i < jumps.size(); i++){
+                for (Field jump : jumps) {
 
-                    if (!hops.contains(jumps.get(i)))
-                    {
-                        valid |= isValidHopMove(jumps.get(i));
+                    if (!hops.contains(jump)) {
+                        valid |= isValidHopMove(jump);
                     }
-
                 }
-                if ( !valid ) {
-
+                if (!valid) {
                     hops.remove(hops.size() - 1);
-
                 }
                 return valid;
             }
-
-
-
         };
-
-        if (  isValidHopMove.isValidHopMove(oldField))
-        {
+        if (isValidHopMove.isValidHopMove(oldField)) {
             hops.add(field);
             return hops;
         }
-
         return new ArrayList<Field>(); // returns empty ArrayList if it's not Multi Step Move
     }
 
-    HashMap<Field, List<Field>> getPossibleMoves(){
+    HashMap<Field, List<Field>> getPossibleMoves() {
 
         HashMap<Field, List<Field>> possibleMoves = new HashMap<Field, List<Field>>();
         List<Field> validFromPosition = getValidFromPositions();
@@ -522,7 +487,7 @@ public class RegularBoard extends Board {
         for (Field pos : validFromPosition) {
 
             Color currentPlayerColor = charsAsColors.get(getCheckerByTurn());
-           positionInOppositeCorner = corners.get(mapOfOppositeColors.get(currentPlayerColor));
+            positionInOppositeCorner = corners.get(mapOfOppositeColors.get(currentPlayerColor));
 
             possibleMoves.put(pos, new ArrayList<Field>());
             List<Field> movesForPin = possibleMoves.get(pos);
@@ -530,62 +495,41 @@ public class RegularBoard extends Board {
             for (int j = 0; j < 18; j++) {
                 for (int k = 1; k < board[j].length; k++) {
 
-
-
-                    Field newField = new Field(j,k);
-                    if (pos.equals(newField)){
+                    Field newField = new Field(j, k);
+                    if (pos.equals(newField)) {
                         continue;
                     }
-
-
-
                     List<Field> var = isMultiStepMove(pos, newField);
-                    if (var.size() > 0){
+                    if (var.size() > 0) {
                         movesForPin.addAll(var);
                     }
-
-                    if (isOneStepMove(pos, newField)){
+                    if (isOneStepMove(pos, newField)) {
                         movesForPin.add(newField);
                     }
-
                 }
-                while(movesForPin.remove(pos)){}
-
+                while (movesForPin.remove(pos)) {
+                }
             }
-
-
-
-
-
-            }
-
+        }
 
         List<Field> movesForPin = new ArrayList<Field>();
 
-        for (Field pos : possibleMoves.keySet()){
+        for (Field pos : possibleMoves.keySet()) {
 
             if (positionInOppositeCorner.contains(pos)) {
 
                 List<Field> toRemove = new ArrayList<Field>();
-
                 movesForPin = possibleMoves.get(pos);
 
-                for (Field newField : movesForPin){
+                for (Field newField : movesForPin) {
 
                     if (!positionInOppositeCorner.contains(newField)) {
-
                         toRemove.add(newField);
-
                     }
-
                 }
-
                 movesForPin.removeAll(toRemove);
-
             }
-
         }
-
         return possibleMoves;
     }
 
@@ -604,5 +548,42 @@ public class RegularBoard extends Board {
 
     }
 
+    boolean isDraw() {
+
+        HashMap<Field, List<Field>> possibleMoves = new HashMap<Field, List<Field>>();
+        Color currentPlayerColor = charsAsColors.get(getCheckerByTurn());
+        List<Field> validFromPosition = corners.get(mapOfOppositeColors.get(currentPlayerColor));
+
+        for (Field pos : validFromPosition) {
+
+            if (board[pos.x][pos.y] != 'a') {
+                possibleMoves.put(pos, new ArrayList<Field>());
+                List<Field> movesForPin = possibleMoves.get(pos);
+
+                for (int j = 0; j < 18; j++) {
+                    for (int k = 1; k < board[j].length; k++) {
+
+                        Field newField = new Field(j, k);
+                        if (pos.equals(newField)) {
+                            continue;
+                        }
+
+                        List<Field> var = isMultiStepMove(pos, newField);
+                        if (var.size() > 0) {
+                            movesForPin.addAll(var);
+                        }
+                        if (isOneStepMove(pos, newField)) {
+                            movesForPin.add(newField);
+                        }
+                    }
+                }
+            }
+            if (possibleMoves.get(pos).isEmpty())
+                possibleMoves.remove(pos);
+        }
+        return possibleMoves.isEmpty();
+    }
 }
+
+
 
